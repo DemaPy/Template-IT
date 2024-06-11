@@ -1,6 +1,6 @@
 type Layout = {
     id: string
-    section_id: string
+    sectionId: string
 
     order: number,
     renderOn: RenderOn

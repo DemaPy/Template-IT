@@ -2,7 +2,7 @@ import Heading from "@/components/Heading"
 import PageContainer from "@/components/PageContainer"
 import { Edit, Trash } from "lucide-react"
 import { useEffect, useState } from "react"
-import { redirect, useLocation, useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import CampaignTemplateHandler from "./components/CampaignTemplateHandler"
 import { useCampaignUpdateModal } from "@/store/campaignUpdateModal"
 import UpdateCampaign from "../components/UpdateCampaign"
@@ -42,11 +42,11 @@ const Campaign = () => {
 
   const handleDelete = async () => {
     const response = await CampaignService.delete(campaign.id!)
-    if (response) {
-      redirect("/campaigns")
+    if (response.status === "success") {
+      navigate("/campaigns")
       return
     }
-    console.error("Something went wrong")
+    console.error("Something went wrong", response)
   }
 
   const handleUpdate = () => {

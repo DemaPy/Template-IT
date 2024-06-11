@@ -5,14 +5,12 @@ import { useCallback } from "react"
 type Props = {
     items: Section[] | null
     layouts: Layout[]
-    campaign_id: Campaign["id"]
     handleSwap: (dragIndex: number, hoverIndex: number, section_id: string) => void
 }
 
 const CampaignLayout = ({
     items,
     layouts,
-    campaign_id,
     handleSwap
 }: Props) => {
     const moveCard = useCallback((dragIndex: number, hoverIndex: number, section_id: string) => {
@@ -23,10 +21,9 @@ const CampaignLayout = ({
         (section: Section, index: number) => {
             return (
                 <SectionLayout
-                    layout={layouts.find(item => item.section_id === section.id)!}
+                    layout={layouts.find(item => item.sectionId === section.id)!}
                     item={section}
                     key={section.id}
-                    campaign_id={campaign_id}
                     index={index}
                     id={section.id}
                     moveCard={moveCard}

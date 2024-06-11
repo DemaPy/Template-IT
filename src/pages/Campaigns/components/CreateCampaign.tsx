@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { TemplateService } from "@/services/DI/Template"
 import { CampaignService } from "@/services/DI/Campaign"
+import { useCampaignUpdateModal } from "@/store/campaignUpdateModal"
 
 
 const CreateCampaign = () => {
@@ -22,12 +23,24 @@ const CreateCampaign = () => {
     const setClose = useCampaignCreateModal(state => state.setClose)
     const [campaignName, setCampaignName] = useState("")
     const [css, setCss] = useState("")
+    const setCampaign = useCampaignUpdateModal(state => state.setCampaign)
     const [template_id, setTemplateId] = useState<string | null>(null)
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         if (campaignName.length >= 3 && template_id && css.length > 10) {
-            CampaignService.create({ title: campaignName, templateId: template_id, css })
+            const response = await CampaignService.create({ title: campaignName, templateId: template_id, css })
+            if (response.error instanceof Error) {
+                alert(response.message)
+                setClose()
+                return
+            }
+            if (response.status === "success") {
+                alert("Campaign created")
+            }
+            setCampaign(response.data!)
             setClose()
+        } else {
+            alert("Minimum length 3")
         }
     }
 
@@ -66,7 +79,7 @@ const CreateCampaign = () => {
                             Template
                         </Label>
                         <Select
-                            value={campaignName}
+                            value={template_id || ""}
                             onValueChange={value => setTemplateId(value)}
                         >
                             <SelectTrigger className="col-span-4">

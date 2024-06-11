@@ -12,7 +12,6 @@ type Props = {
     item: Section
     index: number
     id: string
-    campaign_id: Campaign["id"]
     layout: Layout
     moveCard: (dragIndex: number, hoverIndex: number, section_id: string) => void
 }
@@ -28,7 +27,9 @@ export const ItemTypes = {
     SECTION: 'SECTION'
 }
 
-const SectionLayout = ({ campaign_id, layout, item, id, index, moveCard }: Props) => {
+const SectionLayout = ({ layout, item, id, index, moveCard }: Props) => {
+    const [isActive, setIsActive] = useState(layout.is_active)
+    const [isLoading, setIsLoading] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
     const [{ handlerId }, drop] = useDrop<
@@ -105,8 +106,22 @@ const SectionLayout = ({ campaign_id, layout, item, id, index, moveCard }: Props
     const opacity = isDragging ? 0 : 1
     drag(drop(ref))
 
-    const handleLayoutIsActive = (layout: Layout) => {
-        CampaignService.updateLayoutIsActive(layout)
+    const handleLayoutIsActive = async (layout: Layout) => {
+        setIsLoading(true)
+        const response = await CampaignService.updateLayoutIsActive({...layout, is_active: !isActive})
+        if (response.error instanceof Error) {
+            alert(response.message)
+            setIsLoading(false)
+            return
+        }
+        if (response.status === "success" && response.data) {
+            alert("Layout toggled")
+            setIsLoading(false)
+            setIsActive(response.data?.is_active)
+            return
+        }
+        console.error(response);
+        setIsLoading(false)
     }
 
     const handleSlugRenderConditionChange = (slug: { [key: string]: boolean }) => {
@@ -116,7 +131,6 @@ const SectionLayout = ({ campaign_id, layout, item, id, index, moveCard }: Props
         <>
             <div ref={ref}
                 className={`flex items-center gap-2 w-full`}
-                draggable={!layout.is_active}
                 style={{ opacity: opacity }}
                 data-handler-id={handlerId}
             >
@@ -131,7 +145,7 @@ const SectionLayout = ({ campaign_id, layout, item, id, index, moveCard }: Props
                     <GripVertical className={"w-4 h-4"} />
                     <Title size='xs' title={item.title} />
                 </div>
-                <Switchh text={layout.is_active ? "On" : "Off"} isActive={layout.is_active} onChange={() => handleLayoutIsActive(layout)} />
+                <Switchh isDisabled={isLoading} text={isActive ? "On" : "Off"} isActive={isActive} onChange={() => handleLayoutIsActive(layout)} />
 
             </div>
             {isOpen && layout.renderOn && <SectionSlugs onChange={handleSlugRenderConditionChange} slugs={layout.renderOn} />}

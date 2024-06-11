@@ -12,17 +12,26 @@ import { useState } from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import { useComponentCreateModal } from '@/store/componentCreateModal'
 import { ComponentService } from "@/services/DI/Component"
+import { useComponentUpdateModal } from "@/store/componentUpdateModal"
 
 
 const CreateComponent = () => {
     const isOpen = useComponentCreateModal(state => state.isOpen)
     const setClose = useComponentCreateModal(state => state.setClose)
+    const setComponent = useComponentUpdateModal(state => state.setComponent)
+
     const [componentName, setComponentName] = useState("")
     const [content, setContent] = useState("")
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         if (componentName.length > 3) {
-            ComponentService.create({ title: componentName, content })
+            const response = await ComponentService.create({ title: componentName, content })
+            if (response.error instanceof Error) {
+                alert(response.message)
+                setClose()
+                return
+            }
+            setComponent(response.data!)
             setClose()
         }
     }

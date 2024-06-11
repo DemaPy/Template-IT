@@ -9,8 +9,8 @@ const ComponentHandler = ({ component }: {
 
   return (
     <div className="flex gap-4 mt-6">
-      <Sidebar sections={[component]} />
-      <TemplateBuilder sections={[component]} />
+      <Sidebar components={[component]} />
+      <TemplateBuilder components={[component]} />
     </div>
   )
 }

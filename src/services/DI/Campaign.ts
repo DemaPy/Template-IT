@@ -14,9 +14,9 @@ class _CampaignService {
         layout
       );
       return result;
-    } catch (error) {
-      console.error(error);
-      return null;
+    } catch (err) {
+      const error = ensureError(err);
+      return error;
     }
   };
 
@@ -26,21 +26,21 @@ class _CampaignService {
         campaign_id
       );
       return result;
-    } catch (error) {
-      console.error(error);
-      return null;
+    } catch (err) {
+      const error = ensureError(err);
+      return error;
     }
   };
 
-  create = async (campaign: Omit<Campaign, "id" | "userId">) => {
+  create = async (campaign: Omit<Campaign, "id" | "userId" | "layout" | "data">) => {
     try {
       const result: ServerResponse<Campaign> = await this.service.create(
         campaign
       );
       return result;
-    } catch (error) {
-      console.error(error);
-      return null;
+    } catch (err) {
+      const error = ensureError(err);
+      return error;
     }
   };
 
@@ -81,7 +81,7 @@ class _CampaignService {
     placeholders: Placeholder[] | null,
     section_id: string
   ) => {
-    if (!data || !placeholders) return [];
+    if (Object.keys(data).length === 0 || !placeholders) return [];
     const dataToReturn: DataToReturn = [];
     for (const placeholder of placeholders || []) {
       const placeholderData = data[section_id];

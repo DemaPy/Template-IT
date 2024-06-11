@@ -110,7 +110,7 @@ export class TemplateServiceDB {
 
   static async deletePlaceholder(placeholder_id: Placeholder["id"]) {
     try {
-      const response = await fetch(BASE_URL + `/placeholders/${placeholder_id}`, {
+      const response = await fetch(BASE_URL + `/section-palceholders/${placeholder_id}`, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
@@ -125,7 +125,7 @@ export class TemplateServiceDB {
 
   static async createSectionPlaceholder(placeholder: Omit<Placeholder, "id">) {
     try {
-      const response = await fetch(BASE_URL + `/placeholders/`, {
+      const response = await fetch(BASE_URL + `/section-palceholders/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

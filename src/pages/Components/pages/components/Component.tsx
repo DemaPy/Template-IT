@@ -11,10 +11,9 @@ import { useEffect, useRef, useState } from 'react'
 
 type Props = {
   item: Component
-  template_id: string
 }
 
-const Component = ({ item, template_id }: Props) => {
+const Component = ({ item }: Props) => {
   const [isOpen, setIsOpenTextArea] = useState(false)
   const setIsOpen = useSectionUpdateModal(state => state.setOpen)
   const setComponent = useComponentUpdateModal(state => state.setComponent)

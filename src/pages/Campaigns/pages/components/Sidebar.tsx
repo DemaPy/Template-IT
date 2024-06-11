@@ -55,7 +55,7 @@ const Sidebar = ({ setSelectedSlug, slug, campaign, sections, handleSwap, inActi
         <TabsContent value="layout">
           <div className="flex flex-col gap-4">
             <Title size='sm' title={"Swap layout sections"} />
-            <CampaignLayout campaign_id={campaign.id} layouts={campaign.layout} handleSwap={handleSwap} items={inActiveSections} />
+            <CampaignLayout layouts={campaign.layout} handleSwap={handleSwap} items={inActiveSections} />
           </div>
         </TabsContent>
       </Tabs>

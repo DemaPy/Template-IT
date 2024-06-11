@@ -3,8 +3,8 @@ type Campaign = {
     userId: string
     title: string
     templateId: string
-    template: Template
-    data?: CampaignData
+    template?: Template
+    data: CampaignData
     css: string
     layout: Layout[]
 }

@@ -30,8 +30,7 @@ export class Auth {
         credentials: "include",
         body: JSON.stringify(data),
       });
-      const loggedUser: ServerResponse<{ token: string }> =
-        await response.json();
+      const loggedUser: ServerResponse<{token: string}> = await response.json();
       return loggedUser;
     } catch (err) {
       const error = ensureError(err);

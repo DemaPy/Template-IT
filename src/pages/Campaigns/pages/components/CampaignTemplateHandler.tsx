@@ -10,7 +10,7 @@ type Props = {
 
 const CampaignTemplateHandler = ({ campaign }: Props) => {
   const [slug, setSelectedSlug] = useState<string | null>(null)
-  const [_sections, setSections] = useState<Section[]>(campaign.template.sections)
+  const [_sections, setSections] = useState<Section[]>(campaign.template!.sections)
   const [layout, setLayout] = useState<Layout[]>(campaign.layout.toSorted((a, b) => a.order - b.order))
 
   const sortedSections: Section[] = []
@@ -18,10 +18,10 @@ const CampaignTemplateHandler = ({ campaign }: Props) => {
   for (const section_layout of layout) {
     for (let index = 0; index < _sections.length; index++) {
       const section = _sections[index];
-      if (section_layout.section_id === section.id && section_layout.is_active) {
+      if (section_layout.sectionId === section.id && section_layout.is_active) {
         sortedSections.push(section)
       }
-      if (section_layout.section_id === section.id) {
+      if (section_layout.sectionId === section.id) {
         sortedSectionsWithInactive.push(section)
       }
     }

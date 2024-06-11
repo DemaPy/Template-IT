@@ -13,9 +13,9 @@ class _ComponentService {
         component
       );
       return result;
-    } catch (error) {
-      console.error(error);
-      return null;
+    } catch (err) {
+      const error = ensureError(err);
+      return error;
     }
   };
 
@@ -25,9 +25,9 @@ class _ComponentService {
         component
       );
       return result;
-    } catch (error) {
-      console.error(error);
-      return null;
+    } catch (err) {
+      const error = ensureError(err);
+      return error;
     }
   };
 
@@ -47,6 +47,17 @@ class _ComponentService {
     try {
       const result: ServerResponse<Placeholder> =
         await this.service.deletePlaceholder(placeholder_id);
+      return result;
+    } catch (err: unknown) {
+      const error = ensureError(err);
+      return error;
+    }
+  }
+
+  createComponentPlaceholder = async (placeholder: Omit<Placeholder, "id">) => {
+    try {
+      const result: ServerResponse<Placeholder> =
+        await this.service.createComponentPlaceholder(placeholder);
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);

@@ -8,6 +8,7 @@ import CampaignCard from "./components/CampaignCard";
 import { useEffect, useState } from "react";
 import { CampaignService } from "@/services/DI/Campaign";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useCampaignUpdateModal } from "@/store/campaignUpdateModal";
 
 const Campaigns = () => {
   const location = useLocation()
@@ -15,6 +16,7 @@ const Campaigns = () => {
   const [campaigns, setCampaigns] = useState<Array<Campaign> | null>(null)
   const setIsOpen = useCampaignCreateModal(state => state.setOpen)
   const IsOpen = useCampaignCreateModal(state => state.isOpen)
+  const campaign = useCampaignUpdateModal(state => state.campaign)
 
   useEffect(() => {
     (async () => {
@@ -31,7 +33,7 @@ const Campaigns = () => {
       }
       setCampaigns(response.data)
     })()
-  }, [])
+  }, [campaign])
 
   return (
     <PageContainer>

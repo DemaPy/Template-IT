@@ -1,30 +1,27 @@
 
 type Props = {
-    sections: Array<Section | Component> | null
+    components: Component[]
 }
 
-const TemplateBuilder = ({ sections }: Props) => {
+const TemplateBuilder = ({ components }: Props) => {
 
     let html = ''
 
-    if (sections) {
-
-        for (const section of sections) {
-            let shift = 0
-            const sectionPlaceholdersSort = section.placeholders?.toSorted((a, b) => a.position - b.position)
-            const document = section.content.split("")
-            // If data appears, placeholders also.
-            for (const placeholder of sectionPlaceholdersSort!) {
-                document.splice(placeholder.position + shift, 0, placeholder.fallback)
-                shift++
-            }
-
-            html += document.join("")
+    for (const component of components) {
+        let shift = 0
+        const sectionPlaceholdersSort = component.placeholders?.toSorted((a, b) => a.position - b.position)
+        const document = component.content.split("")
+        // If data appears, placeholders also.
+        for (const placeholder of sectionPlaceholdersSort!) {
+            document.splice(placeholder.position + shift, 0, placeholder.fallback)
+            shift++
         }
+
+        html += document.join("")
     }
 
 
-    if (!sections) {
+    if (!components) {
         return (
             <div className='w-full flex items-center justify-center flex-col text-md font-semibold text-center md:text-3xl'>Start adding sections</div>
         )

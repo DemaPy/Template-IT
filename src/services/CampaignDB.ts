@@ -12,7 +12,7 @@ export class CampaignServiceDB {
         body: JSON.stringify(campaign),
       });
       const data: ServerResponse<Campaign> = await response.json();
-      return data.data;
+      return data;
     } catch (error) {
       throw error;
     }
@@ -21,15 +21,15 @@ export class CampaignServiceDB {
   static async updateLayoutIsActive(layout: Layout) {
     try {
       const response = await fetch(BASE_URL + "/layouts", {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({...layout, is_active: !layout.is_active}),
+        body: JSON.stringify(layout),
       });
       const data: ServerResponse<Campaign> = await response.json();
-      return data.data;
+      return data;
     } catch (error) {
       throw error;
     }
@@ -44,7 +44,7 @@ export class CampaignServiceDB {
         },
       });
       const data: ServerResponse<Campaign> = await response.json();
-      return data.data;
+      return data;
     } catch (error) {
       throw error;
     }

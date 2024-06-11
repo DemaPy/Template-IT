@@ -13,7 +13,8 @@ const Component = () => {
     const navigate = useNavigate();
 
     const setOpen = useComponentCreateModal(state => state.setOpen)
-    const setComponentStroe = useComponentUpdateModal(state => state.setComponent)
+    const setComponentStore = useComponentUpdateModal(state => state.setComponent)
+    const _component = useComponentUpdateModal(state => state.component)
     const params = useParams<{ id: string; }>()
     const [component, setComponent] = useState<Component | null>()
 
@@ -38,7 +39,7 @@ const Component = () => {
             }
             setComponent(response.data)
         })()
-    }, [])
+    }, [_component])
 
     if (!component) return null
 
@@ -50,7 +51,7 @@ const Component = () => {
     }
 
     const handleUpdate = () => {
-        setComponentStroe(component)
+        setComponentStore(component)
         setOpen()
     }
 

@@ -50,11 +50,28 @@ export class ComponentServiceDB {
 
   static async deletePlaceholder(placeholder_id: Placeholder["id"]) {
     try {
-      const response = await fetch(BASE_URL + `/placeholders/${placeholder_id}`, {
+      const response = await fetch(BASE_URL + `/component-palceholders/${placeholder_id}`, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
+      });
+      const data: ServerResponse<Placeholder> = await response.json();
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async createComponentPlaceholder(placeholder: Omit<Placeholder, "id">) {
+    try {
+      const response = await fetch(BASE_URL + `/component-palceholders/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify(placeholder),
       });
       const data: ServerResponse<Placeholder> = await response.json();
       return data;

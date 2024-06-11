@@ -19,8 +19,8 @@ import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useSectionFromComponentCreateModal } from '@/store/sectionFromComponentCreateModal'
 import { Textarea } from '@/components/ui/textarea'
-import TemplateBuilder from './TemplateBuilder'
 import { TemplateService } from '@/services/DI/Template'
+import TemplateBuilder from '@/pages/Components/pages/components/TemplateBuilder'
 
 type Props = {
     template_id: string
@@ -31,15 +31,15 @@ const CreateSectionFromComponent = ({ template_id, components }: Props) => {
     const isOpen = useSectionFromComponentCreateModal(state => state.isOpen)
     const setClose = useSectionFromComponentCreateModal(state => state.setClose)
     const setIsOpen = useSectionFromComponentCreateModal(state => state.setOpen)
+
     const [title, setTitle] = useState("")
-    const [content, setContent] = useState("")
     const [component_id, setComponent] = useState<string | null>(null)
-    const component = components?.find(item => item.id === component_id)
+    const component = components.find(item => item.id === component_id)
 
     const onSubmit = async () => {
         if (title.length > 3 && component_id) {
             if (!component) return
-            const response = await TemplateService.createSectionFromComponent({ templateId: template_id, content: content, placeholders: component.placeholders, title: title })
+            const response = await TemplateService.createSectionFromComponent({ templateId: template_id, content: component.content, placeholders: component.placeholders, title: title })
             if (response.error instanceof Error) {
                 alert(response.message)
                 setClose()
@@ -98,12 +98,12 @@ const CreateSectionFromComponent = ({ template_id, components }: Props) => {
                                             <Textarea
                                                 id="content"
                                                 value={component.content}
-                                                onChange={ev => setContent(ev.target.value)}
+                                                disabled={true}
                                                 className="col-span-4 resize-none w-full min-h-60"
                                             />
                                         </TabsContent>
                                         <TabsContent value="preview">
-                                            <TemplateBuilder sections={[component]} />
+                                            <TemplateBuilder components={[component]} />
                                         </TabsContent>
                                     </Tabs>
 

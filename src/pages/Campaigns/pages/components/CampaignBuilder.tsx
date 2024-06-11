@@ -20,7 +20,7 @@ const CampaignBuilder = ({ layout, slug, sections, campaign }: Props) => {
                 continue
             }
 
-            const sectionLayout = layout.find(item => item.section_id === section.id)
+            const sectionLayout = layout.find(item => item.sectionId === section.id)
             if (!sectionLayout?.renderOn![slug]) {
                 continue
             }

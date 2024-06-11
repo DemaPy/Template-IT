@@ -10,35 +10,38 @@ import { Label } from "@/components/ui/label"
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
 import { usePlaceholderCreateModal } from "@/store/placeholderCreateModal"
-import { useSectionUpdateModal } from "@/store/sectionUpdateModal"
-import { TemplateService } from "@/services/DI/Template"
-import { useSectionCreateModal } from "@/store/sectionCreateModal"
+import { useComponentUpdateModal } from "@/store/componentUpdateModal"
+import { ComponentService } from "@/services/DI/Component"
 
 const CreatePlaceholder = () => {
     const isOpen = usePlaceholderCreateModal(state => state.isOpen)
     const setClose = usePlaceholderCreateModal(state => state.setClose)
     const placeholder = usePlaceholderCreateModal(state => state.placeholder)
 
-    const section = useSectionUpdateModal(state => state.section)
-    const setSection = useSectionCreateModal(state => state.setSection)
+    const component = useComponentUpdateModal(state => state.component)
+    const setComponentStore = useComponentUpdateModal(state => state.setComponent)
+
 
     const [_placeholder, setPlaceholder] = useState<number>()
     const [title, setPlaceholderTitle] = useState<string>('')
     const [fallback, setFallback] = useState<string>('')
 
     const onSubmit = async () => {
-        if (_placeholder && section && title.length >= 3 && fallback.length >= 3) {
-            const response = await TemplateService.createSectionPlaceholder({ title, position: _placeholder, sectionId: section.id, fallback })
+        if (_placeholder && component && title.length >= 3 && fallback.length >= 3) {
+            const response = await ComponentService.createComponentPlaceholder({ title, position: _placeholder, componentId: component.id, fallback })
             if (response.error instanceof Error) {
                 alert(response.message)
                 setClose()
                 return
             }
             if (response.data) {
-                setSection({
-                    ...section,
-                    placeholders: [...section.placeholders, response.data]
+                setComponentStore({
+                    ...component,
+                    placeholders: [...component.placeholders, response.data]
                 })
+            }
+            if (response.status === "success") {
+                alert("Placeholder created")
             }
             setClose()
         } else {
