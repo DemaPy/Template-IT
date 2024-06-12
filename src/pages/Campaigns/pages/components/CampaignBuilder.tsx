@@ -14,18 +14,23 @@ const CampaignBuilder = ({ layout, slug, sections, campaign }: Props) => {
     if (campaign.data && sections && slug) {
 
         for (const section of sections) {
+
+            const sectionLayout = layout.find(item => item.sectionId === section.id)
+            
+            // Check if current section can be rendered
+            if (!sectionLayout?.renderOn![slug]) {
+                continue
+            }
+
             // for paddings
             if (!(section.id in campaign.data)) {
                 html += section.content
                 continue
             }
 
-            const sectionLayout = layout.find(item => item.sectionId === section.id)
-            if (!sectionLayout?.renderOn![slug]) {
-                continue
-            }
             let shift = 0
             const sectionPlaceholdersSort = section.placeholders?.toSorted((a, b) => a.position - b.position)
+
             const document = section.content.split("")
             const content = campaign.data[section.id] as { [key: string]: { [key: string]: string } }
             if (!content) continue
@@ -33,15 +38,12 @@ const CampaignBuilder = ({ layout, slug, sections, campaign }: Props) => {
             if (!keys.length) continue
             // If data appears, placeholders also.
             for (const placeholder of sectionPlaceholdersSort!) {
-                if (!(placeholder.id in content)) {
+                if (!(placeholder.id in content) || !(slug in content[placeholder.id])) {
+                    document.splice(placeholder.position + shift, 0, placeholder.fallback)
+                    shift++
                     continue
                 }
-
-                if (!(slug in content[placeholder.id])) {
-                    document.splice(placeholder.position + shift, 0, content[placeholder.id][placeholder.fallback])
-                } else {
-                    document.splice(placeholder.position + shift, 0, content[placeholder.id][slug])
-                }
+                document.splice(placeholder.position + shift, 0, content[placeholder.id][slug])
                 shift++
             }
 

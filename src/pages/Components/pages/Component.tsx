@@ -2,7 +2,7 @@ import Heading from "@/components/Heading"
 import PageContainer from "@/components/PageContainer"
 import { Edit, Trash } from "lucide-react"
 import { useEffect, useState } from "react"
-import { redirect, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { useComponentCreateModal } from "@/store/componentCreateModal"
 import { useComponentUpdateModal } from "@/store/componentUpdateModal"
 import ComponentHandler from "./components/ComponentHandler"
@@ -46,7 +46,7 @@ const Component = () => {
     const handleDelete = async () => {
         const response = await ComponentService.delete(component.id!)
         if (response) {
-            redirect("/components")
+            navigate("/components")
         }
     }
 

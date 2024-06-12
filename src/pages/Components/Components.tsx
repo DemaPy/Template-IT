@@ -8,13 +8,14 @@ import { useComponentCreateModal } from "@/store/componentCreateModal";
 import CreateComponent from "./components/CreateComponent";
 import { ComponentService } from "@/services/DI/Component";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useComponentUpdateModal } from "@/store/componentUpdateModal";
 
 const Components = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const [components, setComponents] = useState<Array<Component> | null>(null)
     const setIsOpen = useComponentCreateModal(state => state.setOpen)
-
+    const component = useComponentUpdateModal(state => state.component)
 
     useEffect(() => {
         (async () => {
@@ -31,7 +32,7 @@ const Components = () => {
             }
             setComponents(response.data)
         })()
-    }, [])
+    }, [component])
 
     return (
         <PageContainer>

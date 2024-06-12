@@ -17,16 +17,18 @@ const SectionItemData = ({ placeholder }: Props) => {
             const placeholderData = data[key];
             elements.push(<div key={key} className='grid grid-cols-4 items-center'>
                 <Title size='xxs' title={key} />
-                <Input className='col-span-3' defaultValue={placeholderData} />
+                <Input disabled className='col-span-3' defaultValue={placeholderData} />
             </div>)
         }
         return elements
     }
+    
     return (
         <div>
             <Heading
                 title={placeholder.title} size='xs'
                 action={{
+                    isLoading: !placeholder.data,
                     icon: isOpen ? <ChevronUpIcon className='w-4 h-4 mr-2' /> : <ChevronDown className='w-4 h-4 mr-2' />,
                     title: "Show content",
                     onClick: () => setIsOpen(!isOpen)

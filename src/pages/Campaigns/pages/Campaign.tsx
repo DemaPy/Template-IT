@@ -7,16 +7,18 @@ import CampaignTemplateHandler from "./components/CampaignTemplateHandler"
 import { useCampaignUpdateModal } from "@/store/campaignUpdateModal"
 import UpdateCampaign from "../components/UpdateCampaign"
 import { CampaignService } from "@/services/DI/Campaign"
+import { useLayoutUpdate } from "@/store/layoutUpdate"
 
 const Campaign = () => {
   const location = useLocation()
   const setOpen = useCampaignUpdateModal(state => state.setOpen)
   const setCampaignStore = useCampaignUpdateModal(state => state.setCampaign)
+  const layout = useLayoutUpdate(state => state.layout)
   const params = useParams<{ id: string; }>()
   const [campaign, setCampaign] = useState<Campaign | null>()
   const navigate = useNavigate();
   if (!("id" in params)) return null
-
+  
   useEffect(() => {
     (async () => {
       const response = await CampaignService.getOne(params.id!)
@@ -36,7 +38,7 @@ const Campaign = () => {
       }
       setCampaign(response.data)
     })()
-  }, [])
+  }, [layout])
 
   if (!campaign) return null
 

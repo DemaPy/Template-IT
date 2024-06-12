@@ -8,11 +8,11 @@ import {
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { useAddDataToPlaceholderModal } from "@/store/addDataToPlaceholderModal"
-import { useSectionUpdateModal } from "@/store/sectionUpdateModal"
 import CSVReader, { IFileInfo } from "react-csv-reader"
 import SelectCSV from "./SelectCSV"
 import Title from "@/components/Title"
 import { CampaignService } from "@/services/DI/Campaign"
+import { useCampaignUpdateModal } from "@/store/campaignUpdateModal"
 
 
 const ConnectDataWithPlaceholder = () => {
@@ -22,19 +22,29 @@ const ConnectDataWithPlaceholder = () => {
   const isOpen = useAddDataToPlaceholderModal(state => state.isOpen)
   const setClose = useAddDataToPlaceholderModal(state => state.setClose)
   const placeholder = useAddDataToPlaceholderModal(state => state.placeholder)
-  const section = useSectionUpdateModal(state => state.section)
+  const campaign = useCampaignUpdateModal(state => state.campaign)
+  const setCampaign = useCampaignUpdateModal(state => state.setCampaign)
 
-  const onSubmit = () => {
-    if (placeholder && section && parsedCSV && column) {
+  const onSubmit = async () => {
+    if (placeholder && campaign && parsedCSV && column) {
       const data: Record<string, string> = {}
       for (const slug_data of parsedCSV) {
         data[slug_data.slug] = slug_data[column.toLowerCase()]
       }
       let newConnection: Record<string, Record<string, Record<string, string>>> = {}
-      newConnection[section.id] = {
+      newConnection[placeholder.sectionId!] = {
         [placeholder.id]: data
       }
-      CampaignService.savePlaceholderData(data, placeholder.id)
+      const response = await CampaignService.savePlaceholderData({ campaignId: campaign.id, data: newConnection })
+      if (response.error instanceof Error) {
+        alert(response.message)
+        setClose()
+        return
+      }
+      if (response.status === "success") {
+        alert(response.message)
+      }
+      setCampaign(response.data!)
       setClose()
     }
 

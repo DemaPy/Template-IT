@@ -105,9 +105,9 @@ class _CampaignService {
     }
   }
 
-  savePlaceholderData = async (data: Record<string, string>, placeholderId: Placeholder['id']) => {
+  savePlaceholderData = async (data: {campaignId: Campaign['id'], data: Record<string, Record<string, Record<string, string>>>}) => {
     try {
-      const result: ServerResponse<Campaign> = await this.service.savePlaceholderData(data, placeholderId);
+      const result: ServerResponse<Campaign> = await this.service.savePlaceholderData(data);
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);

@@ -24,7 +24,7 @@ function Login() {
     const [email, setEmail] = useState<string>("")
 
     const handleLogin = async () => {
-        if (email.trim().length > 6 && password.trim().length >= 4) {
+        if (email.trim().length > 6 && password.trim().length >= 4 || password.trim().length <= 10) {
             const response = await Auth.login({ email, password })
             if (response.error instanceof Error) {
                 alert(response.message)
@@ -41,6 +41,8 @@ function Login() {
                 const redirect = location.search.split("=")[1]
                 navigate(redirect ? redirect : '/templates')
             }
+        } else {
+            alert("Minimum length 4, maximum length 10 symbols")
         }
     }
 

@@ -15,7 +15,7 @@ const NavbarBuilder = ({ html, campaign }: Props) => {
     return (
         <div className='sticky flex gap-2 items-center top-0'>
             <Button asChild size={"sm"} variant={"outline"}>
-                <Link className='text-sm font-semibold' to={`/templates/${campaign.template_id}`}>Go to template</Link>
+                <Link className='text-sm font-semibold' target='_blank' to={`/templates/${campaign.templateId}`}>Go to template</Link>
             </Button>
             <Button onClick={handleCopy} className='flex gap-2 items-center' size={"sm"} variant={"outline"}>
                 <Copy className='w-4 h-4' />

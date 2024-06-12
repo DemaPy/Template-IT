@@ -21,6 +21,7 @@ import { useSectionFromComponentCreateModal } from '@/store/sectionFromComponent
 import { Textarea } from '@/components/ui/textarea'
 import { TemplateService } from '@/services/DI/Template'
 import TemplateBuilder from '@/pages/Components/pages/components/TemplateBuilder'
+import { useSectionCreateModal } from '@/store/sectionCreateModal'
 
 type Props = {
     template_id: string
@@ -31,13 +32,14 @@ const CreateSectionFromComponent = ({ template_id, components }: Props) => {
     const isOpen = useSectionFromComponentCreateModal(state => state.isOpen)
     const setClose = useSectionFromComponentCreateModal(state => state.setClose)
     const setIsOpen = useSectionFromComponentCreateModal(state => state.setOpen)
+    const setSection = useSectionCreateModal(state => state.setSection)
 
     const [title, setTitle] = useState("")
     const [component_id, setComponent] = useState<string | null>(null)
     const component = components.find(item => item.id === component_id)
 
     const onSubmit = async () => {
-        if (title.length > 3 && component_id) {
+        if (title.length >= 3 && component_id) {
             if (!component) return
             const response = await TemplateService.createSectionFromComponent({ templateId: template_id, content: component.content, placeholders: component.placeholders, title: title })
             if (response.error instanceof Error) {
@@ -45,7 +47,10 @@ const CreateSectionFromComponent = ({ template_id, components }: Props) => {
                 setClose()
                 return
             }
+            setSection(response.data!)
             setClose()
+        } else {
+            alert("Minimum length 3 symbols")
         }
     }
 

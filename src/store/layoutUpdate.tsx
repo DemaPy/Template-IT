@@ -3,15 +3,15 @@ import { create } from 'zustand'
 type Store = {
     isOpen: boolean
     setOpen: () => void
-    setCampaign: (campaign: Campaign | null) => void
+    setLayout: (component: Layout) => void
     setClose: () => void
-    campaign: Campaign | null
+    layout: Layout | null
 }
 
-export const useCampaignUpdateModal = create<Store>()((set) => ({
+export const useLayoutUpdate = create<Store>()((set) => ({
     isOpen: false,
-    campaign: null,
+    layout: null,
     setOpen: () => set(() => ({ isOpen: true })),
-    setCampaign: (campaign) => set(() => ({ campaign })),
+    setLayout: (layout) => set(() => ({ layout })),
     setClose: () => set(() => ({ isOpen: false })),
 }))

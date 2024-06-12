@@ -2,7 +2,7 @@ import Heading from "@/components/Heading"
 import PageContainer from "@/components/PageContainer"
 import { Edit, Trash } from "lucide-react"
 import { useEffect, useState } from "react"
-import { useParams, redirect, useNavigate, useLocation } from "react-router-dom"
+import { useParams, useNavigate, useLocation } from "react-router-dom"
 import TemplateHandler from "./components/TemplateHandler"
 import { TemplateService } from "@/services/DI/Template"
 import { useTemplateUpdateModal } from "@/store/templateUpdateModal"
@@ -56,7 +56,7 @@ const Template = () => {
   const handleDelete = async () => {
     const response = await TemplateService.delete(template.id)
     if (response) {
-      redirect("/templates")
+      navigate("/templates")
     }
   }
 

@@ -31,6 +31,8 @@ const CreateTemplate = () => {
             }
             setTemplate(response.data!)
             setClose()
+        } else {
+            alert("Minimum length: 3 symbols.")
         }
     }
     return (

@@ -7,6 +7,8 @@ import { Switchh } from '@/components/Switch'
 import { Button } from '@/components/ui/button'
 import SectionSlugs from './SectionSlugs'
 import { CampaignService } from '@/services/DI/Campaign'
+import { useCampaignUpdateModal } from '@/store/campaignUpdateModal'
+import { useLayoutUpdate } from '@/store/layoutUpdate'
 
 type Props = {
     item: Section
@@ -28,6 +30,8 @@ export const ItemTypes = {
 }
 
 const SectionLayout = ({ layout, item, id, index, moveCard }: Props) => {
+  const setLayout = useLayoutUpdate(state => state.setLayout)
+
     const [isActive, setIsActive] = useState(layout.is_active)
     const [isLoading, setIsLoading] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
@@ -108,7 +112,7 @@ const SectionLayout = ({ layout, item, id, index, moveCard }: Props) => {
 
     const handleLayoutIsActive = async (layout: Layout) => {
         setIsLoading(true)
-        const response = await CampaignService.updateLayoutIsActive({...layout, is_active: !isActive})
+        const response = await CampaignService.updateLayoutIsActive({ ...layout, is_active: !isActive })
         if (response.error instanceof Error) {
             alert(response.message)
             setIsLoading(false)
@@ -118,6 +122,7 @@ const SectionLayout = ({ layout, item, id, index, moveCard }: Props) => {
             alert("Layout toggled")
             setIsLoading(false)
             setIsActive(response.data?.is_active)
+            setLayout(response.data)
             return
         }
         console.error(response);

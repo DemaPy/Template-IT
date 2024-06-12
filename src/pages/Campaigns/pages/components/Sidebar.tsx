@@ -22,6 +22,21 @@ type Props = {
 
 const Sidebar = ({ setSelectedSlug, slug, campaign, sections, handleSwap, inActiveSections }: Props) => {
 
+  const generateSlugs = () => {
+    const _slugs = [""]
+    const allSlugs = Object.values(Object.values(campaign.data)[0])
+    for (const iterator of allSlugs) {
+        const slugs = Object.keys(iterator)
+        for (const slug of slugs) {
+          if (_slugs.includes(slug)) {
+            continue
+          } else {
+            _slugs.push(slug)
+          }
+        }
+    }
+    return _slugs.filter(Boolean)
+  }
 
   return (
     <div className='w-3/4 overflow-auto max-h-[80vh]'>
@@ -40,7 +55,7 @@ const Sidebar = ({ setSelectedSlug, slug, campaign, sections, handleSwap, inActi
                 <SelectValue placeholder="Select slug" />
               </SelectTrigger>
               <SelectContent>
-                {["DE", "UK", "PL"].map((item, idx) => <SelectItem className='text-sm font-semibold' key={idx} value={item}>{item}</SelectItem>)}
+                {generateSlugs().map((item, idx) => <SelectItem className='text-sm font-semibold' key={idx} value={item}>{item}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
