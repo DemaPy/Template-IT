@@ -21,7 +21,7 @@ const Campaigns = () => {
   useEffect(() => {
     (async () => {
       const response = await CampaignService.getAll()
-      if (response.error instanceof Error) {
+      if (response.status === "error") {
         alert(response.message)
         return
       }

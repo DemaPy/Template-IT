@@ -18,7 +18,7 @@ const Sidebar = ({ sections, template_id }: Props) => {
   useEffect(() => {
     (async () => {
       const response = await ComponentService.getAll()
-      if (response.error instanceof Error) {
+      if (response.status === "error") {
         alert(response.message)
         return
       }

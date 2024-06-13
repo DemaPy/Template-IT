@@ -1,7 +1,10 @@
-type ServerResponse<T> = {
-    status: "error" | "success",
+type ServerResponseSuccess<T> = {
+    status: "success",
     message: string,
-    error: Error
     data: T
-    code?: number
+}
+
+type ServerResponseError = {
+    status: "error",
+    message: string,
 }

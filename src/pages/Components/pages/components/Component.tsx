@@ -5,8 +5,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { ComponentService } from '@/services/DI/Component'
 import { useComponentUpdateModal } from '@/store/componentUpdateModal'
 import { usePlaceholderCreateModal } from '@/store/placeholderCreateModal'
-import { useSectionUpdateModal } from '@/store/sectionUpdateModal'
-import { ChevronDown, ChevronUpIcon, CopyIcon, Edit2Icon, TrashIcon } from 'lucide-react'
+import { ChevronDown, ChevronUpIcon, Edit2Icon, TrashIcon } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 type Props = {
@@ -15,7 +14,7 @@ type Props = {
 
 const Component = ({ item }: Props) => {
   const [isOpen, setIsOpenTextArea] = useState(false)
-  const setIsOpen = useSectionUpdateModal(state => state.setOpen)
+  const setIsOpen = useComponentUpdateModal(state => state.setOpen)
   const setComponent = useComponentUpdateModal(state => state.setComponent)
   const ref = useRef<HTMLTextAreaElement | null>(null)
   const setIsPlaceholderOpen = usePlaceholderCreateModal(state => state.setOpen)
@@ -46,7 +45,7 @@ const Component = ({ item }: Props) => {
 
   const handleDeleteClick = async (placeholderId: Placeholder['id']) => {
     const response = await ComponentService.deletePlaceholder(placeholderId)
-    if (response.error instanceof Error) {
+    if (response.status === "error") {
       alert(response.message)
       return
     }
@@ -60,11 +59,6 @@ const Component = ({ item }: Props) => {
     title: "Delete",
     icon: <TrashIcon className='w-4 h-4 mr-2 text-red-400' />,
     onClick: () => ComponentService.deleteSection(item.id)
-  },
-  {
-    title: "Copy",
-    icon: <CopyIcon className='w-4 h-4 mr-2 text-blue-400' />,
-    onClick: () => ComponentService.duplicateSection(item.id)
   }]
 
   const addPlaceholdersToContent = () => {
@@ -74,7 +68,7 @@ const Component = ({ item }: Props) => {
   return (
     <li className='w-full flex flex-col gap-4 border rounded-md p-4'>
       <Heading title={item.title} actions={actions} size='xs' action={{ icon: <Edit2Icon className='w-4 h-4 mr-2 text-yellow-400' />, title: "Edit", onClick: handleClick }} />
-      {isOpen && <Textarea ref={ref} defaultValue={addPlaceholdersToContent()} className='resize-none w-full min-h-60 max-h-72' />}
+      {isOpen && <Textarea disabled ref={ref} defaultValue={addPlaceholdersToContent()} className='resize-none w-full min-h-60 max-h-72' />}
       {item.placeholders && <Title title={"Placeholders"} size='xs' />}
       {item.placeholders && (
         item.placeholders.map(item => (

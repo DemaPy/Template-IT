@@ -10,9 +10,8 @@ class _CampaignService {
 
   saveLayout = async (layout: Layout[]) => {
     try {
-      const result: ServerResponse<Layout[]> = await this.service.saveLayout(
-        layout
-      );
+      const result: ServerResponseSuccess<Layout[]> =
+        await this.service.saveLayout(layout);
       return result;
     } catch (err) {
       const error = ensureError(err);
@@ -22,7 +21,7 @@ class _CampaignService {
 
   delete = async (campaign_id: Campaign["id"]) => {
     try {
-      const result: ServerResponse<Campaign> = await this.service.delete(
+      const result: ServerResponseSuccess<Campaign> = await this.service.delete(
         campaign_id
       );
       return result;
@@ -32,9 +31,11 @@ class _CampaignService {
     }
   };
 
-  create = async (campaign: Omit<Campaign, "id" | "userId" | "layout" | "data">) => {
+  create = async (
+    campaign: Omit<Campaign, "id" | "userId" | "layout" | "data">
+  ) => {
     try {
-      const result: ServerResponse<Campaign> = await this.service.create(
+      const result: ServerResponseSuccess<Campaign> = await this.service.create(
         campaign
       );
       return result;
@@ -46,7 +47,7 @@ class _CampaignService {
 
   update = async (campaign: Campaign) => {
     try {
-      const result: ServerResponse<Campaign> = await this.service.update(
+      const result: ServerResponseSuccess<Campaign> = await this.service.update(
         campaign
       );
       return result;
@@ -58,7 +59,8 @@ class _CampaignService {
 
   getAll = async () => {
     try {
-      const result: ServerResponse<Campaign[]> = await this.service.getAll();
+      const result: ServerResponseSuccess<Campaign[]> =
+        await this.service.getAll();
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);
@@ -68,7 +70,9 @@ class _CampaignService {
 
   getOne = async (id: Campaign["id"]) => {
     try {
-      const result: ServerResponse<Campaign> = await this.service.getOne(id);
+      const result: ServerResponseSuccess<Campaign> = await this.service.getOne(
+        id
+      );
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);
@@ -95,25 +99,39 @@ class _CampaignService {
     return dataToReturn;
   };
 
-  updateLayoutIsActive = async (layout: Layout) => {
+  updateLayout = async (layout: Layout) : Promise<ServerResponseSuccess<Campaign> | ServerResponseError> => {
     try {
-      const result: ServerResponse<Layout> = await this.service.updateLayoutIsActive(layout);
+      const result: ServerResponseSuccess<Campaign> =
+        await this.service.updateLayout(layout);
       return result;
     } catch (err: unknown) {
-      const error = ensureError(err);
-      return error;
+      return err as ServerResponseError
     }
-  }
+  };
 
-  savePlaceholderData = async (data: {campaignId: Campaign['id'], data: Record<string, Record<string, Record<string, string>>>}) => {
+  updateLayoutsOrder = async (layout: Layout[]) : Promise<ServerResponseSuccess<Campaign> | ServerResponseError> => {
     try {
-      const result: ServerResponse<Campaign> = await this.service.savePlaceholderData(data);
+      const result: ServerResponseSuccess<Campaign> =
+        await this.service.updateLayoutsOrder(layout);
+      return result;
+    } catch (err: unknown) {
+      return err as ServerResponseError
+    }
+  };
+
+  savePlaceholderData = async (data: {
+    campaignId: Campaign["id"];
+    data: Record<string, Record<string, Record<string, string>>>;
+  }) => {
+    try {
+      const result: ServerResponseSuccess<Campaign> =
+        await this.service.savePlaceholderData(data);
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);
       return error;
     }
-  }
+  };
 }
 
 export const CampaignService = new _CampaignService(CampaignServiceDB);

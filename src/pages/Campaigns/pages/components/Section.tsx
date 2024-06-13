@@ -35,7 +35,7 @@ const Section = ({ campaign, item }: Props) => {
 
   return (
     <li className='w-full flex flex-col gap-4 border rounded-md p-2'>
-      <Heading title={item.title} size='xs' actions={[{ isLoading: Object.keys(campaign.data).length === 0, icon: isDataOpen ? <ChevronUpIcon className='w-4 h-4 mr-2' /> : <ChevronDown className='w-4 h-4 mr-2' />, title: "Show data", onClick: () => setIsDataOpen(!isDataOpen) }]} action={{ icon: isOpen ? <ChevronUpIcon className='w-4 h-4 mr-2' /> : <ChevronDown className='w-4 h-4 mr-2' />, title: "Show content", onClick: () => setIsOpen(!isOpen) }} />
+      <Heading title={item.title} size='xs' actions={[{ isLoading: Object.keys(campaign.data).length === 0, icon: isDataOpen ? <ChevronUpIcon className='w-4 h-4 mr-2' /> : <ChevronDown className='w-4 h-4 mr-2' />, title: "Show data", onClick: () => setIsDataOpen(!isDataOpen) }]} action={{ icon: isOpen ? <ChevronUpIcon className='w-4 h-4' /> : <ChevronDown className='w-4 h-4' />, onClick: () => setIsOpen(!isOpen) }} />
       {isOpen && <Textarea disabled={true} defaultValue={item.content} className='resize-none w-full min-h-60 max-h-72' />}
       {isDataOpen && <SectionData data={connectData(campaign.data)} />}
       <Placeholders handleClick={handleClick} placeholders={item.placeholders} />

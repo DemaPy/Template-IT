@@ -29,7 +29,7 @@ const CreatePlaceholder = () => {
     const onSubmit = async () => {
         if (_placeholder && component && title.length >= 3 && fallback.length >= 3) {
             const response = await ComponentService.createComponentPlaceholder({ title, position: _placeholder, componentId: component.id, fallback })
-            if (response.error instanceof Error) {
+            if (response.status === "error") {
                 alert(response.message)
                 setClose()
                 return

@@ -29,7 +29,7 @@ const CreateCampaign = () => {
     const onSubmit = async () => {
         if (campaignName.length >= 3 && template_id && css.length > 10) {
             const response = await CampaignService.create({ title: campaignName, templateId: template_id, css })
-            if (response.error instanceof Error) {
+            if (response.status === "error") {
                 alert(response.message)
                 setClose()
                 return
@@ -47,7 +47,7 @@ const CreateCampaign = () => {
     useEffect(() => {
         (async () => {
             const response = await TemplateService.getAll()
-            if (response.error instanceof Error) {
+            if (response.status === "error") {
                 alert(response.message)
                 return
             }

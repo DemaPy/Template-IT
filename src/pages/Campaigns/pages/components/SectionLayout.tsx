@@ -8,14 +8,12 @@ import { Button } from '@/components/ui/button'
 import SectionSlugs from './SectionSlugs'
 import { CampaignService } from '@/services/DI/Campaign'
 import { useCampaignUpdateModal } from '@/store/campaignUpdateModal'
-import { useLayoutUpdate } from '@/store/layoutUpdate'
 
 type Props = {
     item: Section
     index: number
     id: string
-    layout: Layout
-    moveCard: (dragIndex: number, hoverIndex: number, section_id: string) => void
+    layouts: Layout[]
 }
 
 interface DragItem {
@@ -29,10 +27,10 @@ export const ItemTypes = {
     SECTION: 'SECTION'
 }
 
-const SectionLayout = ({ layout, item, id, index, moveCard }: Props) => {
-  const setLayout = useLayoutUpdate(state => state.setLayout)
+const SectionLayout = ({ layouts, item, id, index }: Props) => {
+    const layout = layouts.find(layout => layout.sectionId === item.id)!
+    const setCampaign = useCampaignUpdateModal(state => state.setCampaign)
 
-    const [isActive, setIsActive] = useState(layout.is_active)
     const [isLoading, setIsLoading] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
@@ -47,7 +45,7 @@ const SectionLayout = ({ layout, item, id, index, moveCard }: Props) => {
                 handlerId: monitor.getHandlerId(),
             }
         },
-        hover(item: DragItem, monitor) {
+        drop(item: DragItem, monitor) {
             if (!ref.current) {
                 return
             }
@@ -87,7 +85,7 @@ const SectionLayout = ({ layout, item, id, index, moveCard }: Props) => {
             }
 
             // Time to actually perform the action
-            moveCard(dragIndex, hoverIndex, item.section_id)
+            handleSwap(dragIndex, hoverIndex)
 
             // Note: we're mutating the monitor item here!
             // Generally it's better to avoid mutations,
@@ -110,26 +108,81 @@ const SectionLayout = ({ layout, item, id, index, moveCard }: Props) => {
     const opacity = isDragging ? 0 : 1
     drag(drop(ref))
 
+    const handleSwap = async (dragIndex: number, hoverIndex: number) => {
+
+        // UPDATE LAYOUT ORDERING
+        const layoutDrag = layouts.find(item => item.order === dragIndex)!
+        const layoutDrop = layouts.find(item => item.order === hoverIndex)!
+
+        const data = [
+            {
+                ...layoutDrag,
+                order: hoverIndex
+            },
+            {
+                ...layoutDrop,
+                order: dragIndex
+            },
+        ]
+        const response = await CampaignService.updateLayoutsOrder(data)
+        if (response.status === "error") {
+            console.error(response.message)
+            setIsLoading(false)
+            return
+        } else {
+            setIsLoading(false)
+            setCampaign(response.data)
+        }
+        // const newLayout = layout.map(item => {
+        //   if (item.order === dragIndex) {
+        //     return {
+        //       ...item,
+        //       order: hoverIndex
+        //     }
+        //   }
+
+        //   if (item.order === hoverIndex) {
+        //     return {
+        //       ...item,
+        //       order: dragIndex
+        //     }
+        //   }
+        //   return item
+        // })
+        // setLayout(newLayout.toSorted((a, b) => a.order - b.order))
+
+    }
+
     const handleLayoutIsActive = async (layout: Layout) => {
         setIsLoading(true)
-        const response = await CampaignService.updateLayoutIsActive({ ...layout, is_active: !isActive })
-        if (response.error instanceof Error) {
+        const response = await CampaignService.updateLayout({ ...layout, is_active: !layout.is_active })
+        if (response.status === "error") {
             alert(response.message)
             setIsLoading(false)
             return
-        }
-        if (response.status === "success" && response.data) {
-            alert("Layout toggled")
+        } else {
             setIsLoading(false)
-            setIsActive(response.data?.is_active)
-            setLayout(response.data)
-            return
+            setCampaign(response.data)
         }
-        console.error(response);
-        setIsLoading(false)
     }
 
-    const handleSlugRenderConditionChange = (slug: { [key: string]: boolean }) => {
+    const handleSlugRenderConditionChange = async (slug: { [key: string]: boolean }) => {
+        const newLayout: Layout = {
+            ...layout,
+            renderOn: {
+                ...layout.renderOn,
+                ...slug
+            }
+        }
+        const response = await CampaignService.updateLayout(newLayout)
+        if (response.status === "error") {
+            alert(response.message)
+            setIsLoading(false)
+            return
+        } else {
+            setIsLoading(false)
+            setCampaign(response.data)
+        }
     }
 
     return (
@@ -150,10 +203,10 @@ const SectionLayout = ({ layout, item, id, index, moveCard }: Props) => {
                     <GripVertical className={"w-4 h-4"} />
                     <Title size='xs' title={item.title} />
                 </div>
-                <Switchh isDisabled={isLoading} text={isActive ? "On" : "Off"} isActive={isActive} onChange={() => handleLayoutIsActive(layout)} />
+                <Switchh isDisabled={isLoading} text={layout.is_active ? "On" : "Off"} isActive={layout.is_active} onChange={() => handleLayoutIsActive(layout)} />
 
             </div>
-            {isOpen && layout.renderOn && <SectionSlugs onChange={handleSlugRenderConditionChange} slugs={layout.renderOn} />}
+            {isOpen && layout.renderOn && <SectionSlugs isLoading={isLoading} onChange={handleSlugRenderConditionChange} slugs={layout.renderOn} />}
         </>
     )
 }

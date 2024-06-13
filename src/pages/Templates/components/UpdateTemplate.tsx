@@ -31,7 +31,7 @@ const UpdateTemplate = () => {
         if (template && title.length > 4) {
             setLoading(true)
             const response = await TemplateService.update({ ...template, title: title })
-            if (response.error instanceof Error) {
+            if (response.status === "error") {
                 alert(response.message)
                 setClose()
                 return

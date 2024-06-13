@@ -29,7 +29,7 @@ const CreatePlaceholder = () => {
     const onSubmit = async () => {
         if (_placeholder && section && title.length >= 3 && fallback.length >= 3) {
             const response = await TemplateService.createSectionPlaceholder({ title, position: _placeholder, sectionId: section.id, fallback })
-            if (response.error instanceof Error) {
+            if (response.status === "error") {
                 alert(response.message)
                 setClose()
                 return

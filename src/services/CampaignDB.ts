@@ -11,14 +11,14 @@ export class CampaignServiceDB {
         },
         body: JSON.stringify(campaign),
       });
-      const data: ServerResponse<Campaign> = await response.json();
+      const data: ServerResponseSuccess<Campaign> = await response.json();
       return data;
     } catch (error) {
       throw error;
     }
   }
 
-  static async updateLayoutIsActive(layout: Layout) {
+  static async updateLayout(layout: Layout) {
     try {
       const response = await fetch(BASE_URL + "/layouts", {
         method: "PATCH",
@@ -28,10 +28,47 @@ export class CampaignServiceDB {
         },
         body: JSON.stringify(layout),
       });
-      const data: ServerResponse<Campaign> = await response.json();
+      if (!response.ok) {
+        const err: ServerResponseError = await response.json()
+        throw err
+      }
+      const data: ServerResponseSuccess<Layout> = await response.json();
       return data;
     } catch (error) {
-      throw error;
+      if (error instanceof Error) {
+        throw {
+          status: 'error',
+          message: error.message
+        };
+      }
+      throw error
+    }
+  }
+
+  static async updateLayoutsOrder(layouts: Layout[]) {
+    try {
+      const response = await fetch(BASE_URL + "/layouts/order", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify({layouts: layouts}),
+      });
+      if (!response.ok) {
+        const err: ServerResponseError = await response.json()
+        throw err
+      }
+      const data: ServerResponseSuccess<Layout> = await response.json();
+      return data;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw {
+          status: 'error',
+          message: error.message
+        };
+      }
+      throw error
     }
   }
 
@@ -45,7 +82,7 @@ export class CampaignServiceDB {
         },
         body: JSON.stringify(_data.data),
       });
-      const data: ServerResponse<Campaign> = await response.json();
+      const data: ServerResponseSuccess<Campaign> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -60,7 +97,7 @@ export class CampaignServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponse<Campaign> = await response.json();
+      const data: ServerResponseSuccess<Campaign> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -77,7 +114,7 @@ export class CampaignServiceDB {
         },
         body: JSON.stringify(campaign),
       });
-      const data: ServerResponse<Campaign> = await response.json();
+      const data: ServerResponseSuccess<Campaign> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -91,7 +128,7 @@ export class CampaignServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponse<Campaign[]> = await response.json();
+      const data: ServerResponseSuccess<Campaign[]> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -105,7 +142,7 @@ export class CampaignServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponse<Campaign> = await response.json();
+      const data: ServerResponseSuccess<Campaign> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -120,7 +157,7 @@ export class CampaignServiceDB {
         },
         body: JSON.stringify(layout),
       });
-      const data: ServerResponse<Layout> = await response.json();
+      const data: ServerResponseSuccess<Layout> = await response.json();
       return data;
     } catch (error) {
       throw error;

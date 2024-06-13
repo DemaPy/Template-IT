@@ -59,7 +59,7 @@ const CampaignBuilder = ({ layout, slug, sections, campaign }: Props) => {
 
     if (!slug) {
         return (
-            <div className='w-full flex items-center justify-center flex-col text-md font-semibold text-center md:text-3xl'>Please, select slug to render campaign</div>
+            <div className='w-full flex items-center justify-center flex-col text-md font-semibold text-center md:text-3xl text-slate-300'>Select slug to render campaign</div>
         )
     }
 

@@ -9,7 +9,7 @@ class _ComponentService {
 
   delete = async (component: Component["id"]) => {
     try {
-      const result: ServerResponse<Component> = await this.service.delete(
+      const result: ServerResponseSuccess<Component> = await this.service.delete(
         component
       );
       return result;
@@ -21,7 +21,7 @@ class _ComponentService {
 
   create = async (component: Omit<Component, "id" | "placeholders">) => {
     try {
-      const result: ServerResponse<Component> = await this.service.create(
+      const result: ServerResponseSuccess<Component> = await this.service.create(
         component
       );
       return result;
@@ -31,9 +31,9 @@ class _ComponentService {
     }
   };
 
-  update = async (component: Component) => {
+  update = async (component: Component) : Promise<ServerResponseSuccess<Component> | ServerResponseError> => {
     try {
-      const result: ServerResponse<Component> = await this.service.update(
+      const result: ServerResponseSuccess<Component> = await this.service.update(
         component
       );
       return result;
@@ -45,7 +45,7 @@ class _ComponentService {
 
   deletePlaceholder = async (placeholder_id: Placeholder["id"]) => {
     try {
-      const result: ServerResponse<Placeholder> =
+      const result: ServerResponseSuccess<Placeholder> =
         await this.service.deletePlaceholder(placeholder_id);
       return result;
     } catch (err: unknown) {
@@ -56,7 +56,7 @@ class _ComponentService {
 
   createComponentPlaceholder = async (placeholder: Omit<Placeholder, "id">) => {
     try {
-      const result: ServerResponse<Placeholder> =
+      const result: ServerResponseSuccess<Placeholder> =
         await this.service.createComponentPlaceholder(placeholder);
       return result;
     } catch (err: unknown) {
@@ -67,7 +67,7 @@ class _ComponentService {
 
   getAll = async () => {
     try {
-      const result: ServerResponse<Component[]> = await this.service.getAll();
+      const result: ServerResponseSuccess<Component[]> = await this.service.getAll();
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);
@@ -77,7 +77,7 @@ class _ComponentService {
 
   getOne = async (id: string) => {
     try {
-      const result: ServerResponse<Component> = await this.service.getOne(id);
+      const result: ServerResponseSuccess<Component> = await this.service.getOne(id);
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);
@@ -87,7 +87,7 @@ class _ComponentService {
 
   deleteSection = async (section_id: Section["id"]) => {
     try {
-      const result: ServerResponse<Section> = await this.service.deleteSection(
+      const result: ServerResponseSuccess<Section> = await this.service.deleteSection(
         section_id
       );
       return result;
@@ -99,7 +99,7 @@ class _ComponentService {
 
   duplicateSection = async (section_id: Section["id"]) => {
     try {
-      const result: ServerResponse<Section> =
+      const result: ServerResponseSuccess<Section> =
         await this.service.duplicateSection(section_id);
       return result;
     } catch (err) {

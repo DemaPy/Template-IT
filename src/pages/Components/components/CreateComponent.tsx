@@ -26,7 +26,7 @@ const CreateComponent = () => {
     const onSubmit = async () => {
         if (componentName.length > 3) {
             const response = await ComponentService.create({ title: componentName, content })
-            if (response.error instanceof Error) {
+            if (response.status === "error") {
                 alert(response.message)
                 setClose()
                 return

@@ -5,32 +5,26 @@ import { useCallback } from "react"
 type Props = {
     items: Section[] | null
     layouts: Layout[]
-    handleSwap: (dragIndex: number, hoverIndex: number, section_id: string) => void
 }
 
 const CampaignLayout = ({
     items,
     layouts,
-    handleSwap
 }: Props) => {
-    const moveCard = useCallback((dragIndex: number, hoverIndex: number, section_id: string) => {
-        handleSwap(dragIndex, hoverIndex, section_id)
-    }, [])
-
+    
     const renderSection = useCallback(
         (section: Section, index: number) => {
             return (
                 <SectionLayout
-                    layout={layouts.find(item => item.sectionId === section.id)!}
+                    layouts={layouts}
                     item={section}
                     key={section.id}
                     index={index}
                     id={section.id}
-                    moveCard={moveCard}
                 />
             )
         },
-        [],
+        [layouts],
     )
     if (!items) return null
 

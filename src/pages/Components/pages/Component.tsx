@@ -8,6 +8,7 @@ import { useComponentUpdateModal } from "@/store/componentUpdateModal"
 import ComponentHandler from "./components/ComponentHandler"
 import { useNavigate } from "react-router-dom";
 import { ComponentService } from "@/services/DI/Component"
+import UpdateComponent from "../components/UpdateComponent"
 
 const Component = () => {
     const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Component = () => {
     useEffect(() => {
         (async () => {
             const response = await ComponentService.getOne(params.id!)
-            if (response.error instanceof Error) {
+            if (response.status === "error") {
                 alert(response.message)
                 return
             }
@@ -70,6 +71,7 @@ const Component = () => {
                     }
                 ]}
             />
+            <UpdateComponent />
             <ComponentHandler component={component} />
         </PageContainer>
     )

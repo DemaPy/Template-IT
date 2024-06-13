@@ -26,7 +26,7 @@ function Login() {
     const handleLogin = async () => {
         if (email.trim().length > 6 && password.trim().length >= 4 || password.trim().length <= 10) {
             const response = await Auth.login({ email, password })
-            if (response.error instanceof Error) {
+            if (response.status === "error") {
                 alert(response.message)
                 return
             }

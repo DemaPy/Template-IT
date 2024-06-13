@@ -9,7 +9,7 @@ class _TemplateService {
 
   duplicateSection = async (section_id: Section["id"]) => {
     try {
-      const result: ServerResponse<Section> =
+      const result: ServerResponseSuccess<Section> =
         await this.service.duplicateSection(section_id);
       return result;
     } catch (err) {
@@ -20,7 +20,7 @@ class _TemplateService {
 
   delete = async (template_id: Template["id"]) => {
     try {
-      const result: ServerResponse<Template> = await this.service.delete(
+      const result: ServerResponseSuccess<Template> = await this.service.delete(
         template_id
       );
       return result;
@@ -32,7 +32,7 @@ class _TemplateService {
 
   create = async (template: Omit<Template, "id" | "sections" | "userId">) => {
     try {
-      const result: ServerResponse<Template> = await this.service.create(
+      const result: ServerResponseSuccess<Template> = await this.service.create(
         template
       );
       return result;
@@ -44,7 +44,7 @@ class _TemplateService {
 
   update = async (template: Template) => {
     try {
-      const result: ServerResponse<Template> = await this.service.update(
+      const result: ServerResponseSuccess<Template> = await this.service.update(
         template
       );
       return result;
@@ -56,7 +56,7 @@ class _TemplateService {
 
   createSection = async (section: Omit<Section, "id" | "placeholders">) => {
     try {
-      const result: ServerResponse<Section> = await this.service.createSection(
+      const result: ServerResponseSuccess<Section> = await this.service.createSection(
         section
       );
       return result;
@@ -68,7 +68,7 @@ class _TemplateService {
 
   createSectionFromComponent = async (section: Omit<Section, "id">) => {
     try {
-      const result: ServerResponse<Section> = await this.service.createSection(
+      const result: ServerResponseSuccess<Section> = await this.service.createSection(
         section
       );
       return result;
@@ -80,7 +80,7 @@ class _TemplateService {
 
   createSectionPlaceholder = async (placeholder: Omit<Placeholder, "id">) => {
     try {
-      const result: ServerResponse<Placeholder> =
+      const result: ServerResponseSuccess<Placeholder> =
         await this.service.createSectionPlaceholder(placeholder);
       return result;
     } catch (err: unknown) {
@@ -91,7 +91,7 @@ class _TemplateService {
 
   deletePlaceholder = async (placeholder_id: Placeholder["id"]) => {
     try {
-      const result: ServerResponse<Placeholder> =
+      const result: ServerResponseSuccess<Placeholder> =
         await this.service.deletePlaceholder(placeholder_id);
       return result;
     } catch (err: unknown) {
@@ -102,7 +102,7 @@ class _TemplateService {
 
   deleteSection = async (section_id: Section["id"]) => {
     try {
-      const result: ServerResponse<Section> = await this.service.deleteSection(
+      const result: ServerResponseSuccess<Section> = await this.service.deleteSection(
         section_id
       );
       return result;
@@ -114,7 +114,7 @@ class _TemplateService {
 
   getAll = async () => {
     try {
-      const result: ServerResponse<Template[]> = await this.service.getAll();
+      const result: ServerResponseSuccess<Template[]> = await this.service.getAll();
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);
@@ -124,7 +124,7 @@ class _TemplateService {
 
   getOne = async (id: string) => {
     try {
-      const result: ServerResponse<Template> = await this.service.getOne(id);
+      const result: ServerResponseSuccess<Template> = await this.service.getOne(id);
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);
@@ -134,7 +134,7 @@ class _TemplateService {
 
   updateSection = async (section: Section) => {
     try {
-      const result: ServerResponse<Section> = await this.service.updateSection(
+      const result: ServerResponseSuccess<Section> = await this.service.updateSection(
         section
       );
       return result;

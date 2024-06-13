@@ -3,13 +3,15 @@ import Title from '@/components/Title'
 import React from 'react'
 
 type Props = {
+    isLoading: boolean
     slugs: {[key: string]: boolean}
     onChange: (isSlugActive: {[key: string]: boolean}) => void
 }
 
 const SectionSlugs = ({
     onChange,
-    slugs
+    slugs,
+    isLoading
 }: Props) => {
 
     const generateSlugs = (data: {[key: string]: boolean}) => {
@@ -17,8 +19,8 @@ const SectionSlugs = ({
         for (const key in data) {
             const isSlugActive = data[key];
             elements.push(<div key={key} className='flex justify-between rounded-sm p-2 gap-4 items-center bg-slate-50'>
-                <Title size='xs' title={key} />
-                <Switchh text={isSlugActive ? "On" : "Off"} isActive={isSlugActive} onChange={(isActive) => onChange({[key]: isActive})} />
+                <Title size='xxs' title={key} />
+                <Switchh isDisabled={isLoading} text={isSlugActive ? "On" : "Off"} isActive={isSlugActive} onChange={(isActive) => onChange({[key]: isActive})} />
             </div>)
         }
         return elements

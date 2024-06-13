@@ -7,13 +7,12 @@ import CampaignTemplateHandler from "./components/CampaignTemplateHandler"
 import { useCampaignUpdateModal } from "@/store/campaignUpdateModal"
 import UpdateCampaign from "../components/UpdateCampaign"
 import { CampaignService } from "@/services/DI/Campaign"
-import { useLayoutUpdate } from "@/store/layoutUpdate"
 
 const Campaign = () => {
   const location = useLocation()
   const setOpen = useCampaignUpdateModal(state => state.setOpen)
   const setCampaignStore = useCampaignUpdateModal(state => state.setCampaign)
-  const layout = useLayoutUpdate(state => state.layout)
+  const _campaign = useCampaignUpdateModal(state => state.campaign)
   const params = useParams<{ id: string; }>()
   const [campaign, setCampaign] = useState<Campaign | null>()
   const navigate = useNavigate();
@@ -22,7 +21,7 @@ const Campaign = () => {
   useEffect(() => {
     (async () => {
       const response = await CampaignService.getOne(params.id!)
-      if (response.error instanceof Error) {
+      if (response.status === "error") {
         alert(response.message)
         return
       }
@@ -38,7 +37,7 @@ const Campaign = () => {
       }
       setCampaign(response.data)
     })()
-  }, [layout])
+  }, [_campaign])
 
   if (!campaign) return null
 

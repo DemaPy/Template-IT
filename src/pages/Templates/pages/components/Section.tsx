@@ -54,7 +54,7 @@ const Section = ({ item }: Props) => {
   const handleDeleteSection = async () => {
     setLoading(true)
     const response = await TemplateService.deleteSection(item.id)
-    if (response.error instanceof Error) {
+    if (response.status === "error") {
       alert(response.message)
       setLoading(false)
       return
@@ -66,7 +66,7 @@ const Section = ({ item }: Props) => {
   const handleDeletePlaceholder = async (placeholder_id: Placeholder["id"]) => {
     setLoading(true)
     const response = await TemplateService.deletePlaceholder(placeholder_id)
-    if (response.error instanceof Error) {
+    if (response.status === "error") {
       alert(response.message)
       setLoading(false)
       return
@@ -80,7 +80,7 @@ const Section = ({ item }: Props) => {
   const handleDuplicate = async () => {
     setLoading(true)
     const response = await TemplateService.duplicateSection(item.id)
-    if (response.error instanceof Error) {
+    if (response.status === "error") {
       alert(response.message)
       setLoading(false)
       return

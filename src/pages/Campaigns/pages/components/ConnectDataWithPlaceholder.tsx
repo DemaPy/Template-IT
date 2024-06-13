@@ -36,15 +36,12 @@ const ConnectDataWithPlaceholder = () => {
         [placeholder.id]: data
       }
       const response = await CampaignService.savePlaceholderData({ campaignId: campaign.id, data: newConnection })
-      if (response.error instanceof Error) {
+      if (response.status === "error") {
         alert(response.message)
-        setClose()
-        return
       }
       if (response.status === "success") {
-        alert(response.message)
+        setCampaign(response.data)
       }
-      setCampaign(response.data!)
       setClose()
     }
 

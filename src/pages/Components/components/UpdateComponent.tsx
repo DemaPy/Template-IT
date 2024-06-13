@@ -10,43 +10,47 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { useSectionUpdateModal } from '@/store/sectionUpdateModal'
-import { TemplateService } from '@/services/DI/Template'
-import { useSectionCreateModal } from '@/store/sectionCreateModal'
+import { ComponentService } from "@/services/DI/Component"
+import { useComponentUpdateModal } from "@/store/componentUpdateModal"
 
-const UpdateSection = () => {
-    const setSection = useSectionCreateModal(state => state.setSection)
-    const isOpen = useSectionUpdateModal(state => state.isOpen)
-    const setClose = useSectionUpdateModal(state => state.setClose)
-    const section = useSectionUpdateModal(state => state.section)
+const UpdateComponent = () => {
+    const [isLoading, setIsLoading] = useState(false)
+    const isOpen = useComponentUpdateModal(state => state.isOpen)
+    const setClose = useComponentUpdateModal(state => state.setClose)
+    const component = useComponentUpdateModal(state => state.component)
+    const setComponent = useComponentUpdateModal(state => state.setComponent)
 
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
 
     useEffect(() => {
-        if (section) {
-            setTitle(section?.title)
-            setContent(section?.content)
+        if (component) {
+            setTitle(component?.title)
+            setContent(component?.content)
         }
-    }, [section])
+    }, [component])
 
     const onSubmit = async () => {
-        if (section && title && content) {
-            const response = await TemplateService.updateSection({ ...section, content: content, title: title })
+        if (component && title && content.length > 3) {
+            setIsLoading(true)
+            const response = await ComponentService.update({ ...component, content: content, title: title })
             if (response.status === "error") {
                 alert(response.message)
-                setClose()
-                return
             }
-            setSection(response.data!)
+            if (response.status === "success") {
+                setComponent(response.data)
+            }
+            setIsLoading(false)
             setClose()
+        } else {
+            alert("Minimum length 3 symbols")
         }
     }
     return (
         <Dialog open={isOpen} onOpenChange={setClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Edit section</DialogTitle>
+                    <DialogTitle>Edit component</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
@@ -71,7 +75,7 @@ const UpdateSection = () => {
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onSubmit}>Save changes</Button>
+                    <Button onClick={onSubmit} disabled={isLoading}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
@@ -79,4 +83,4 @@ const UpdateSection = () => {
     )
 }
 
-export default UpdateSection
+export default UpdateComponent

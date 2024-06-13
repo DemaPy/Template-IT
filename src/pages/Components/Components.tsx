@@ -20,15 +20,14 @@ const Components = () => {
     useEffect(() => {
         (async () => {
             const response = await ComponentService.getAll()
-            if (response.error instanceof Error) {
+            if (response.status === "error") {
+                if (response.code === 401) {
+                    navigate(`/login?redirect=${location.pathname}`)
+                }
+                if (response.code === 403) {
+                    navigate(`/access-denied`)
+                }
                 alert(response.message)
-                return
-            }
-            if (response.code === 401) {
-                navigate(`/login?redirect=${location.pathname}`)
-            }
-            if (response.code === 403) {
-                navigate(`/access-denied`)
             }
             setComponents(response.data)
         })()

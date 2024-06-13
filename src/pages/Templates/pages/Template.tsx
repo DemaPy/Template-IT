@@ -28,7 +28,7 @@ const Template = () => {
   useEffect(() => {
     (async () => {
       const response = await TemplateService.getOne(params.id!)
-      if (response.error instanceof Error) {
+      if (response.status === "error") {
         alert(response.message)
         return
       }

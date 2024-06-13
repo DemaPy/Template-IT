@@ -29,7 +29,7 @@ const CreateSection = ({ template_id }: Props) => {
     const onSubmit = async () => {
         if (title.length > 3 && content.length > 10) {
             const response = await TemplateService.createSection({ templateId: template_id, content: content, title: title })
-            if (response.error instanceof Error) {
+            if (response.status === "error") {
                 alert(response.message)
                 setClose()
                 return

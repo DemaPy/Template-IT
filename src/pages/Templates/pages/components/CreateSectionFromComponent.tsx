@@ -42,7 +42,7 @@ const CreateSectionFromComponent = ({ template_id, components }: Props) => {
         if (title.length >= 3 && component_id) {
             if (!component) return
             const response = await TemplateService.createSectionFromComponent({ templateId: template_id, content: component.content, placeholders: component.placeholders, title: title })
-            if (response.error instanceof Error) {
+            if (response.status === "error") {
                 alert(response.message)
                 setClose()
                 return

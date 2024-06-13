@@ -24,7 +24,7 @@ const CreateTemplate = () => {
     const onSubmit = async () => {
         if (templateName.length >= 3) {
             const response = await TemplateService.create({ title: templateName })
-            if (response.error instanceof Error) {
+            if (response.status === "error") {
                 alert(response.message)
                 setClose()
                 return

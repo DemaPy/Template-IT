@@ -17,10 +17,9 @@ type Props = {
   sections: Section[] | null
   inActiveSections: Section[] | null
   campaign: Campaign
-  handleSwap: (dragIndex: number, hoverIndex: number, section_id: string) => void
 }
 
-const Sidebar = ({ setSelectedSlug, slug, campaign, sections, handleSwap, inActiveSections }: Props) => {
+const Sidebar = ({ setSelectedSlug, slug, campaign, sections, inActiveSections }: Props) => {
 
   const generateSlugs = () => {
     const _slugs = [""]
@@ -37,11 +36,11 @@ const Sidebar = ({ setSelectedSlug, slug, campaign, sections, handleSwap, inActi
     }
     return _slugs.filter(Boolean)
   }
-
+  
   return (
     <div className='w-3/4 overflow-auto max-h-[80vh]'>
       <Tabs defaultValue="sections">
-        <TabsList className='sticky top-0 flex items-center justify-between bg-transparent bg-slate-50 z-50'>
+        <TabsList className='sticky top-0 flex items-center justify-between bg-transparent z-50'>
           <div>
             <TabsTrigger value="sections">Sections</TabsTrigger>
             <TabsTrigger value="layout">Layout</TabsTrigger>
@@ -70,7 +69,7 @@ const Sidebar = ({ setSelectedSlug, slug, campaign, sections, handleSwap, inActi
         <TabsContent value="layout">
           <div className="flex flex-col gap-4">
             <Title size='sm' title={"Swap layout sections"} />
-            <CampaignLayout layouts={campaign.layout} handleSwap={handleSwap} items={inActiveSections} />
+            <CampaignLayout layouts={campaign.layout} items={inActiveSections} />
           </div>
         </TabsContent>
       </Tabs>
