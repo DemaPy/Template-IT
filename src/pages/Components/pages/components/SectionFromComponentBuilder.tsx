@@ -3,7 +3,7 @@ type Props = {
     components: Component[]
 }
 
-const TemplateBuilder = ({ components }: Props) => {
+const SectionFromComponentBuilder = ({ components }: Props) => {
 
     let html = ''
 
@@ -32,14 +32,14 @@ const TemplateBuilder = ({ components }: Props) => {
             {/* <iframe srcDoc={`<style>${campaign.css || ""}</style> ${html}`} className="h-full w-full"> */}
 
             <div style={{
-                height: '80vh',
+                height: '30vh',
                 overflowY: "scroll"
             }}>
-                <iframe srcDoc={`${html}`} className="h-full w-full">
+                <iframe style={{height: '100vh'}} srcDoc={`${html}`} className="h-full w-full pointer-events-none">
                 </iframe>
             </div>
         </div>
     )
 }
 
-export default TemplateBuilder
+export default SectionFromComponentBuilder

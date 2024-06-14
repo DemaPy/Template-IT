@@ -27,8 +27,16 @@ const CreateComponent = () => {
         if (componentName.length > 3) {
             const response = await ComponentService.create({ title: componentName, content })
             if (response.status === "error") {
+                if ("errors" in response) {
+                    let error_message = ""
+                    for (const error of response.errors) {
+                        error_message += response.message + ": " + error.msg
+                    }
+                    alert(error_message)
+                    return
+                }
+    
                 alert(response.message)
-                setClose()
                 return
             }
             setComponent(response.data!)

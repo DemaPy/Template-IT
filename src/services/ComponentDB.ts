@@ -1,7 +1,9 @@
 const BASE_URL = "http://localhost:7777";
 
 export class ComponentServiceDB {
-  static async create(component: Omit<Component, "id">) {
+  static async create(
+    component: Omit<Component, "id">
+  ): Promise<ServerResponseSuccess<Component> | ServerResponseError> {
     try {
       const response = await fetch(BASE_URL + "/components", {
         method: "POST",
@@ -11,59 +13,47 @@ export class ComponentServiceDB {
         },
         body: JSON.stringify(component),
       });
-      const data: ServerResponse<Component> = await response.json();
-      return data.data;
+      const json = await response.json();
+      if (!response.ok) {
+        const error: ServerResponseValidationError = {
+          message: json.message,
+          status: "error",
+          errors: json.errors,
+        };
+        throw error;
+      }
+      return json;
     } catch (error) {
       throw error;
     }
   }
 
-  static async duplicateSection(section_id: Section["id"]) {
+  static async deletePlaceholder(
+    placeholder_id: Placeholder["id"],
+    component_id: Component["id"]
+  ) {
     try {
-      const response = await fetch(BASE_URL + `/sections/${section_id}`, {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      const data: ServerResponse<Section> = await response.json();
+      const response = await fetch(
+        BASE_URL + `/component-palceholders/${placeholder_id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+          body: JSON.stringify({ component_id }),
+        }
+      );
+      const data: ServerResponseSuccess<Placeholder> = await response.json();
       return data;
     } catch (error) {
       throw error;
     }
   }
 
-  static async deleteSection(section_id: Section["id"]) {
-    try {
-      const response = await fetch(BASE_URL + `/sections/${section_id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      const data: ServerResponse<Section> = await response.json();
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async deletePlaceholder(placeholder_id: Placeholder["id"]) {
-    try {
-      const response = await fetch(BASE_URL + `/component-palceholders/${placeholder_id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      const data: ServerResponse<Placeholder> = await response.json();
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async createComponentPlaceholder(placeholder: Omit<Placeholder, "id">) {
+  static async createComponentPlaceholder(
+    placeholder: Omit<Placeholder, "id">
+  ) {
     try {
       const response = await fetch(BASE_URL + `/component-palceholders/`, {
         method: "POST",
@@ -73,7 +63,24 @@ export class ComponentServiceDB {
         },
         body: JSON.stringify(placeholder),
       });
-      const data: ServerResponse<Placeholder> = await response.json();
+      const data: ServerResponseSuccess<Placeholder> = await response.json();
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteComponentPlaceholder(placeholder: Placeholder) {
+    try {
+      const response = await fetch(BASE_URL + `/component-palceholders/`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify(placeholder),
+      });
+      const data: ServerResponseSuccess<Placeholder> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -88,16 +95,16 @@ export class ComponentServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponse<Component> = await response.json();
+      const data: ServerResponseSuccess<Component> = await response.json();
       return data.data;
     } catch (error) {
       throw error;
     }
   }
 
-  static async update(component: Component) {
+  static async update(component: Component, position: number): Promise<ServerResponseSuccess<Component> | ServerResponseError> {
     try {
-      const response = await fetch(BASE_URL + "/components", {
+      const response = await fetch(BASE_URL + `/components/${position}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -105,8 +112,16 @@ export class ComponentServiceDB {
         },
         body: JSON.stringify(component),
       });
-      const data: ServerResponse<Component> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        const error: ServerResponseValidationError = {
+          message: json.message,
+          status: "error",
+          errors: json.errors,
+        };
+        throw error;
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -119,7 +134,7 @@ export class ComponentServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponse<Component[]> = await response.json();
+      const data: ServerResponseSuccess<Component[]> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -133,7 +148,7 @@ export class ComponentServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponse<Component> = await response.json();
+      const data: ServerResponseSuccess<Component> = await response.json();
       return data;
     } catch (error) {
       throw error;

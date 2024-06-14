@@ -23,6 +23,7 @@ const Component = ({ item }: Props) => {
   const handleClick = () => {
     setIsOpen()
     setComponent(item)
+    setIsOpenTextArea(false)
   }
 
   useEffect(() => {
@@ -43,11 +44,13 @@ const Component = ({ item }: Props) => {
     }
   }, [isOpen])
 
-  const handleDeleteClick = async (placeholderId: Placeholder['id']) => {
-    const response = await ComponentService.deletePlaceholder(placeholderId)
+  const handleDeleteClick = async (placeholderId: Placeholder['id'], componentId: Component['id']) => {
+    const response = await ComponentService.deletePlaceholder(placeholderId, componentId)
     if (response.status === "error") {
       alert(response.message)
       return
+    } else {
+      setComponent(response.data)
     }
   }
 
@@ -55,26 +58,18 @@ const Component = ({ item }: Props) => {
     icon: isOpen ? <ChevronUpIcon className='w-4 h-4 mr-2' /> : <ChevronDown className='w-4 h-4 mr-2' />,
     title: "Show content",
     onClick: () => setIsOpenTextArea(!isOpen)
-  }, {
-    title: "Delete",
-    icon: <TrashIcon className='w-4 h-4 mr-2 text-red-400' />,
-    onClick: () => ComponentService.deleteSection(item.id)
   }]
-
-  const addPlaceholdersToContent = () => {
-    return item.content
-  }
 
   return (
     <li className='w-full flex flex-col gap-4 border rounded-md p-4'>
       <Heading title={item.title} actions={actions} size='xs' action={{ icon: <Edit2Icon className='w-4 h-4 mr-2 text-yellow-400' />, title: "Edit", onClick: handleClick }} />
-      {isOpen && <Textarea disabled ref={ref} defaultValue={addPlaceholdersToContent()} className='resize-none w-full min-h-60 max-h-72' />}
+      {isOpen && <Textarea ref={ref} defaultValue={item.content} className='resize-none w-full min-h-60 max-h-72' />}
       {item.placeholders && <Title title={"Placeholders"} size='xs' />}
       {item.placeholders && (
         item.placeholders.map(item => (
           <div className='flex justify-between gap-2 items-center' key={item.id}>
             <p className="p-2 border rounded-md grow text-sm" >Name: {item.title} | Position: {item.position}</p>
-            <Button variant={"ghost"} onClick={() => handleDeleteClick(item.id)} size={"icon"}> <TrashIcon className='w-4 h-4' /> </Button>
+            <Button variant={"ghost"} onClick={() => handleDeleteClick(item.id, item.componentId!)} size={"icon"}> <TrashIcon className='w-4 h-4' /> </Button>
           </div>
         ))
       )}

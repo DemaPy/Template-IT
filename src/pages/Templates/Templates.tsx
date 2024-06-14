@@ -8,11 +8,13 @@ import { TemplateService } from "../../services/DI/Template";
 import Heading from "../../components/Heading";
 import { useTemplateCreateModal } from "../../store/templateCreateModal"
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTemplateUpdateModal } from "@/store/templateUpdateModal";
 
 const Templates = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const [templates, setTemplates] = useState<Array<Template> | null>(null)
+  const template = useTemplateUpdateModal(state => state.template)
   const setIsOpen = useTemplateCreateModal(state => state.setOpen)
   const IsOpen = useTemplateCreateModal(state => state.isOpen)
 
@@ -21,18 +23,17 @@ const Templates = () => {
     (async () => {
       const response = await TemplateService.getAll()
       if (response.status === "error") {
-        alert(response.message)
-        return
-      }
-      if (response.code === 401) {
-        navigate(`/login?redirect=${location.pathname}`)
-      }
-      if (response.code === 403) {
-        navigate(`/access-denied`)
+        console.warn(response.message)
+        if (response.code === 401) {
+          navigate(`/login?redirect=${location.pathname}`)
+        }
+        if (response.code === 403) {
+          navigate(`/access-denied`)
+        }
       }
       setTemplates(response.data)
     })()
-  }, [])
+  }, [template])
 
   return (
     <PageContainer>

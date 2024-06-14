@@ -5,7 +5,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -15,6 +15,9 @@ import { TemplateService } from '@/services/DI/Template'
 import { useSectionCreateModal } from '@/store/sectionCreateModal'
 
 const UpdateSection = () => {
+    const ref = useRef<HTMLTextAreaElement | null>(null)
+    const [position, setPosition] = useState<number | null>(null)
+
     const setSection = useSectionCreateModal(state => state.setSection)
     const isOpen = useSectionUpdateModal(state => state.isOpen)
     const setClose = useSectionUpdateModal(state => state.setClose)
@@ -30,9 +33,23 @@ const UpdateSection = () => {
         }
     }, [section])
 
+    useEffect(() => {
+        if (!ref || !ref.current) return
+
+        const handleClick = (ev: FocusEvent) => {
+            setPosition((ev.target as HTMLTextAreaElement).selectionStart)
+        }
+
+        ref.current.addEventListener("blur", handleClick)
+        return () => {
+            if (!ref || !ref.current) return
+            ref.current.removeEventListener("blur", handleClick)
+        }
+    }, [content])
+
     const onSubmit = async () => {
-        if (section && title && content) {
-            const response = await TemplateService.updateSection({ ...section, content: content, title: title })
+        if (section && title && content && position) {
+            const response = await TemplateService.updateSection({ ...section, content: content, title: title }, position)
             if (response.status === "error") {
                 alert(response.message)
                 setClose()
@@ -63,6 +80,7 @@ const UpdateSection = () => {
                             Content
                         </Label>
                         <Textarea
+                            ref={ref}
                             id="content"
                             value={content}
                             onChange={ev => setContent(ev.target.value)}

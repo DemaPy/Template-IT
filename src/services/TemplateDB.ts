@@ -1,7 +1,7 @@
 const BASE_URL = "http://localhost:7777";
 
 export class TemplateServiceDB {
-  static async create(template: Omit<Template, "id">) {
+  static async create(template: Omit<Template, "id">): Promise<ServerResponseSuccess<Template> | ServerResponseError> {
     try {
       const response = await fetch(BASE_URL + "/templates", {
         method: "POST",
@@ -11,8 +11,16 @@ export class TemplateServiceDB {
         },
         body: JSON.stringify(template),
       });
-      const data: ServerResponse<Template> = await response.json();
-      return data.data;
+      const json = await response.json();
+      if (!response.ok) {
+        const error: ServerResponseValidationError = {
+          message: json.message,
+          status: "error",
+          errors: json.errors
+        };
+        throw error;
+      }
+      return json
     } catch (error) {
       throw error;
     }
@@ -26,7 +34,7 @@ export class TemplateServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponse<Template> = await response.json();
+      const data: ServerResponseSuccess<Template> = await response.json();
       return data.data;
     } catch (error) {
       throw error;
@@ -43,7 +51,7 @@ export class TemplateServiceDB {
         },
         body: JSON.stringify(template),
       });
-      const data: ServerResponse<Template> = await response.json();
+      const data: ServerResponseSuccess<Template> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -57,7 +65,7 @@ export class TemplateServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponse<Template[]> = await response.json();
+      const data: ServerResponseSuccess<Template[]> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -71,7 +79,7 @@ export class TemplateServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponse<Template> = await response.json();
+      const data: ServerResponseSuccess<Template> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -86,7 +94,7 @@ export class TemplateServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponse<Section> = await response.json();
+      const data: ServerResponseSuccess<Section> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -101,7 +109,7 @@ export class TemplateServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponse<Section> = await response.json();
+      const data: ServerResponseSuccess<Section> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -116,7 +124,7 @@ export class TemplateServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponse<Placeholder> = await response.json();
+      const data: ServerResponseSuccess<Placeholder> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -133,7 +141,7 @@ export class TemplateServiceDB {
         },
         body: JSON.stringify(placeholder),
       });
-      const data: ServerResponse<Placeholder> = await response.json();
+      const data: ServerResponseSuccess<Placeholder> = await response.json();
       return data;
     } catch (error) {
       throw error;
@@ -150,16 +158,16 @@ export class TemplateServiceDB {
         },
         body: JSON.stringify(section),
       });
-      const data: ServerResponse<Section> = await response.json();
+      const data: ServerResponseSuccess<Section> = await response.json();
       return data;
     } catch (error) {
       throw error;
     }
   }
 
-  static async updateSection(section: Section) {
+  static async updateSection(section: Section, position: number) {
     try {
-      const response = await fetch(BASE_URL + `/sections/`, {
+      const response = await fetch(BASE_URL + `/sections/${position}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -167,7 +175,7 @@ export class TemplateServiceDB {
         },
         body: JSON.stringify(section),
       });
-      const data: ServerResponse<Section> = await response.json();
+      const data: ServerResponseSuccess<Section> = await response.json();
       return data;
     } catch (error) {
       throw error;

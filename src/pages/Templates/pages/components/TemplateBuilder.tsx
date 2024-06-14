@@ -33,6 +33,7 @@ const TemplateBuilder = ({ sections }: Props) => {
     return (
         <div className="w-full flex flex-col gap-2 relative bg-slate-50 p-2">
             {/* <iframe srcDoc={`<style>${campaign.css || ""}</style> ${html}`} className="h-full w-full"> */}
+
             <iframe srcDoc={`${html}`} className="h-full w-full">
             </iframe>
         </div>

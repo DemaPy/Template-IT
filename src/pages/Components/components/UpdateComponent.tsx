@@ -5,7 +5,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -14,14 +14,17 @@ import { ComponentService } from "@/services/DI/Component"
 import { useComponentUpdateModal } from "@/store/componentUpdateModal"
 
 const UpdateComponent = () => {
+    const ref = useRef<HTMLTextAreaElement | null>(null)
+    const [position, setPosition] = useState<number | null>(null)
+
     const [isLoading, setIsLoading] = useState(false)
     const isOpen = useComponentUpdateModal(state => state.isOpen)
     const setClose = useComponentUpdateModal(state => state.setClose)
     const component = useComponentUpdateModal(state => state.component)
     const setComponent = useComponentUpdateModal(state => state.setComponent)
 
-    const [title, setTitle] = useState("")
-    const [content, setContent] = useState("")
+    const [title, setTitle] = useState<string | null>(null)
+    const [content, setContent] = useState<string | null>(null)
 
     useEffect(() => {
         if (component) {
@@ -30,22 +33,56 @@ const UpdateComponent = () => {
         }
     }, [component])
 
-    const onSubmit = async () => {
-        if (component && title && content.length > 3) {
-            setIsLoading(true)
-            const response = await ComponentService.update({ ...component, content: content, title: title })
-            if (response.status === "error") {
-                alert(response.message)
-            }
-            if (response.status === "success") {
-                setComponent(response.data)
-            }
-            setIsLoading(false)
-            setClose()
-        } else {
-            alert("Minimum length 3 symbols")
+    useEffect(() => {
+        if (!ref || !ref.current) return
+
+        const handleClick = (ev: FocusEvent) => {
+            setPosition((ev.target as HTMLTextAreaElement).selectionStart)
         }
+
+        ref.current.addEventListener("blur", handleClick)
+        return () => {
+            if (!ref || !ref.current) return
+            ref.current.removeEventListener("blur", handleClick)
+        }
+    }, [content])
+
+    const onSubmit = async () => {
+        console.log({
+            content,
+            title,
+            component,
+            position
+        });
+
+        if (!content || !title || !component || !position) return
+        setIsLoading(true)
+        const response = await ComponentService.update({ ...component, content: content, title: title }, position)
+        if (response.status === "error") {
+            if ("errors" in response) {
+                let error_message = ""
+                for (const error of response.errors) {
+                    error_message += response.message + ": " + error.msg
+                }
+                alert(error_message)
+                return
+            }
+
+            alert(response.message)
+            return
+        }
+        setComponent(response.data)
+        setIsLoading(false)
+        setClose()
     }
+
+    useEffect(() => {
+        return () => {
+            setTitle(null)
+            setContent(null)
+        }
+    }, [])
+
     return (
         <Dialog open={isOpen} onOpenChange={setClose}>
             <DialogContent>
@@ -59,7 +96,7 @@ const UpdateComponent = () => {
                         </Label>
                         <Input
                             id="name"
-                            value={title}
+                            value={title || ""}
                             onChange={ev => setTitle(ev.target.value)}
                             className="col-span-4"
                         />
@@ -67,8 +104,9 @@ const UpdateComponent = () => {
                             Content
                         </Label>
                         <Textarea
+                            ref={ref}
                             id="content"
-                            value={content}
+                            value={content || ""}
                             onChange={ev => setContent(ev.target.value)}
                             className="col-span-4 resize-y min-h-48 max-h-80"
                         />

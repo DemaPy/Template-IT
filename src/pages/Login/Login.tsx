@@ -24,25 +24,44 @@ function Login() {
     const [email, setEmail] = useState<string>("")
 
     const handleLogin = async () => {
-        if (email.trim().length > 6 && password.trim().length >= 4 || password.trim().length <= 10) {
-            const response = await Auth.login({ email, password })
-            if (response.status === "error") {
-                alert(response.message)
-                return
-            }
-            if (response.status === "error") {
-                alert(response.message)
+        const response = await Auth.login({ email, password })
+        
+        if (response.status === "error") {
+
+            if ("errors" in response) {
+                let error_message = ""
+                for (const error of response.errors) {
+                    error_message += response.message + ": " + error.msg
+                }
+                alert(error_message)
                 return
             }
 
-            if (response.status === "success") {
-                localStorage.setItem("token", response.data?.token!)
-                login()
-                const redirect = location.search.split("=")[1]
-                navigate(redirect ? redirect : '/templates')
-            }
-        } else {
-            alert("Minimum length 4, maximum length 10 symbols")
+            alert(response.message)
+            return
+        }
+
+        
+        if (response.status === "success") {
+            localStorage.setItem("token", response.data.token)
+            login()
+            const redirect = location.search.split("=")[1]
+            navigate(redirect ? redirect : '/templates')
+        }
+    }
+
+    const handleLoginGuest = async () => {
+        const response = await Auth.login({ email: "guest@gmail.com", password: "guest" })
+        if (response.status === "error") {
+            alert(response.message)
+            return
+        }
+
+        if (response.status === "success") {
+            localStorage.setItem("token", response.data?.token!)
+            login()
+            const redirect = location.search.split("=")[1]
+            navigate(redirect ? redirect : '/templates')
         }
     }
 
@@ -86,7 +105,7 @@ function Login() {
                     </div>
                 </CardContent>
                 <CardFooter className="gap-2">
-                    <Button className="w-full" variant={"outline"}>Continue as Guest</Button>
+                    <Button className="w-full" variant={"outline"} onClick={handleLoginGuest}>Continue as Guest</Button>
                     <Button className="w-full" onClick={handleLogin}>Login</Button>
                 </CardFooter>
             </Card>

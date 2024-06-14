@@ -30,12 +30,18 @@ const CreateCampaign = () => {
         if (campaignName.length >= 3 && template_id && css.length > 10) {
             const response = await CampaignService.create({ title: campaignName, templateId: template_id, css })
             if (response.status === "error") {
+
+                if ("errors" in response) {
+                    let error_message = ""
+                    for (const error of response.errors) {
+                        error_message += response.message + ": " + error.msg
+                    }
+                    alert(error_message)
+                    return
+                }
+    
                 alert(response.message)
-                setClose()
                 return
-            }
-            if (response.status === "success") {
-                alert("Campaign created")
             }
             setCampaign(response.data!)
             setClose()

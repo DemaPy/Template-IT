@@ -20,8 +20,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useSectionFromComponentCreateModal } from '@/store/sectionFromComponentCreateModal'
 import { Textarea } from '@/components/ui/textarea'
 import { TemplateService } from '@/services/DI/Template'
-import TemplateBuilder from '@/pages/Components/pages/components/TemplateBuilder'
 import { useSectionCreateModal } from '@/store/sectionCreateModal'
+import SectionFromComponentBuilder from '@/pages/Components/pages/components/SectionFromComponentBuilder'
 
 type Props = {
     template_id: string
@@ -108,7 +108,7 @@ const CreateSectionFromComponent = ({ template_id, components }: Props) => {
                                             />
                                         </TabsContent>
                                         <TabsContent value="preview">
-                                            <TemplateBuilder components={[component]} />
+                                            <SectionFromComponentBuilder components={[component]} />
                                         </TabsContent>
                                     </Tabs>
 

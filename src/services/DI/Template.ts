@@ -30,15 +30,20 @@ class _TemplateService {
     }
   };
 
-  create = async (template: Omit<Template, "id" | "sections" | "userId">) => {
+  create = async (template: Omit<Template, "id" | "sections" | "userId">): Promise<ServerResponseSuccess<Template> | ServerResponseValidationError | ServerResponseError> => {
     try {
       const result: ServerResponseSuccess<Template> = await this.service.create(
         template
       );
       return result;
-    } catch (err) {
-      const error = ensureError(err);
-      return error;
+    } catch (err: unknown) {
+      if ("errors" in (err as ServerResponseValidationError)) {
+        return err as ServerResponseValidationError
+      }
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
     }
   };
 
@@ -56,9 +61,8 @@ class _TemplateService {
 
   createSection = async (section: Omit<Section, "id" | "placeholders">) => {
     try {
-      const result: ServerResponseSuccess<Section> = await this.service.createSection(
-        section
-      );
+      const result: ServerResponseSuccess<Section> =
+        await this.service.createSection(section);
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);
@@ -68,9 +72,8 @@ class _TemplateService {
 
   createSectionFromComponent = async (section: Omit<Section, "id">) => {
     try {
-      const result: ServerResponseSuccess<Section> = await this.service.createSection(
-        section
-      );
+      const result: ServerResponseSuccess<Section> =
+        await this.service.createSection(section);
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);
@@ -98,13 +101,12 @@ class _TemplateService {
       const error = ensureError(err);
       return error;
     }
-  }
+  };
 
   deleteSection = async (section_id: Section["id"]) => {
     try {
-      const result: ServerResponseSuccess<Section> = await this.service.deleteSection(
-        section_id
-      );
+      const result: ServerResponseSuccess<Section> =
+        await this.service.deleteSection(section_id);
       return result;
     } catch (err) {
       const error = ensureError(err);
@@ -114,7 +116,8 @@ class _TemplateService {
 
   getAll = async () => {
     try {
-      const result: ServerResponseSuccess<Template[]> = await this.service.getAll();
+      const result: ServerResponseSuccess<Template[]> =
+        await this.service.getAll();
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);
@@ -124,7 +127,9 @@ class _TemplateService {
 
   getOne = async (id: string) => {
     try {
-      const result: ServerResponseSuccess<Template> = await this.service.getOne(id);
+      const result: ServerResponseSuccess<Template> = await this.service.getOne(
+        id
+      );
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);
@@ -132,11 +137,10 @@ class _TemplateService {
     }
   };
 
-  updateSection = async (section: Section) => {
+  updateSection = async (section: Section, position: number) => {
     try {
-      const result: ServerResponseSuccess<Section> = await this.service.updateSection(
-        section
-      );
+      const result: ServerResponseSuccess<Section> =
+        await this.service.updateSection(section, position);
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);

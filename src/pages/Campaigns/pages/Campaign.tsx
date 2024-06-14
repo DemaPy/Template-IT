@@ -17,23 +17,22 @@ const Campaign = () => {
   const [campaign, setCampaign] = useState<Campaign | null>()
   const navigate = useNavigate();
   if (!("id" in params)) return null
-  
+
   useEffect(() => {
     (async () => {
       const response = await CampaignService.getOne(params.id!)
       if (response.status === "error") {
-        alert(response.message)
-        return
+        console.warn(response.message)
+        if (response.code === 401) {
+          navigate(`/login?redirect=${location.pathname}`)
+        }
+        if (response.code === 403) {
+          navigate(`/access-denied`)
+        }
       }
       if (response.data === null) {
         navigate("/campaigns")
         return
-      }
-      if (response.code === 401) {
-        navigate(`/login?redirect=${location.pathname}`)
-      }
-      if (response.code === 403) {
-        navigate(`/access-denied`)
       }
       setCampaign(response.data)
     })()

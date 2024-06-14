@@ -16,7 +16,7 @@ const CampaignBuilder = ({ layout, slug, sections, campaign }: Props) => {
         for (const section of sections) {
 
             const sectionLayout = layout.find(item => item.sectionId === section.id)
-            
+
             // Check if current section can be rendered
             if (!sectionLayout?.renderOn![slug]) {
                 continue
@@ -66,8 +66,9 @@ const CampaignBuilder = ({ layout, slug, sections, campaign }: Props) => {
     return (
         <div className="w-full flex flex-col gap-2 relative bg-slate-50 p-2">
             <NavbarBuilder html={html} campaign={campaign} />
-            <iframe srcDoc={`<style>${campaign.css || ""}</style> ${html}`} className="h-full w-full">
-            </iframe>
+
+                <iframe srcDoc={`<style>${campaign.css || ""}</style> ${html}`} className="h-full w-full">
+                </iframe>
             {/* <div className='flex items-center justify-start flex-col' dangerouslySetInnerHTML={{ __html: campaign.css || "" }}></div>
                 <div className='flex items-center justify-start flex-col' dangerouslySetInnerHTML={{ __html: html }}></div> */}
         </div>

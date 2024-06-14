@@ -22,14 +22,13 @@ const Campaigns = () => {
     (async () => {
       const response = await CampaignService.getAll()
       if (response.status === "error") {
-        alert(response.message)
-        return
-      }
-      if (response.code === 401) {
-        navigate(`/login?redirect=${location.pathname}`)
-      }
-      if (response.code === 403) {
-        navigate(`/access-denied`)
+        console.warn(response.message)
+        if (response.code === 401) {
+          navigate(`/login?redirect=${location.pathname}`)
+        }
+        if (response.code === 403) {
+          navigate(`/access-denied`)
+        }
       }
       setCampaigns(response.data)
     })()

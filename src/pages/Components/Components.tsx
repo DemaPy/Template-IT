@@ -21,6 +21,7 @@ const Components = () => {
         (async () => {
             const response = await ComponentService.getAll()
             if (response.status === "error") {
+                console.warn(response.message)
                 if (response.code === 401) {
                     navigate(`/login?redirect=${location.pathname}`)
                 }

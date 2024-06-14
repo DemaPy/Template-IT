@@ -33,15 +33,20 @@ class _CampaignService {
 
   create = async (
     campaign: Omit<Campaign, "id" | "userId" | "layout" | "data">
-  ) => {
+  ): Promise<ServerResponseSuccess<Campaign> | ServerResponseValidationError | ServerResponseError> => {
     try {
       const result: ServerResponseSuccess<Campaign> = await this.service.create(
         campaign
       );
       return result;
     } catch (err) {
-      const error = ensureError(err);
-      return error;
+      if ("errors" in (err as ServerResponseValidationError)) {
+        return err as ServerResponseValidationError
+      }
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
     }
   };
 

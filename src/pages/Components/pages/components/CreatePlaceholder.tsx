@@ -22,7 +22,7 @@ const CreatePlaceholder = () => {
     const setComponentStore = useComponentUpdateModal(state => state.setComponent)
 
 
-    const [_placeholder, setPlaceholder] = useState<number>()
+    const [_placeholder, setPlaceholder] = useState<number | null>(null)
     const [title, setPlaceholderTitle] = useState<string>('')
     const [fallback, setFallback] = useState<string>('')
 
@@ -34,14 +34,11 @@ const CreatePlaceholder = () => {
                 setClose()
                 return
             }
-            if (response.data) {
+            if (response.status === "success" || response.data) {
                 setComponentStore({
                     ...component,
                     placeholders: [...component.placeholders, response.data]
                 })
-            }
-            if (response.status === "success") {
-                alert("Placeholder created")
             }
             setClose()
         } else {
@@ -52,6 +49,10 @@ const CreatePlaceholder = () => {
     useEffect(() => {
         if (placeholder) {
             setPlaceholder(placeholder)
+        }
+
+        () => {
+            setPlaceholder(null)
         }
     }, [placeholder])
 
@@ -90,7 +91,7 @@ const CreatePlaceholder = () => {
                             disabled={true}
                             id="placeholder"
                             placeholder="placeholder position"
-                            defaultValue={_placeholder}
+                            defaultValue={_placeholder || ""}
                             className="col-span-4"
                         />
                     </div>

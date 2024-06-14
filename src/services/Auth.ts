@@ -1,9 +1,14 @@
-import { ensureError } from "@/lib/utils";
-
 const BASE_URL = "http://localhost:7777";
 
 export class Auth {
-  static registration = async (data: { email: string; password: string }) => {
+  static registration = async (data: {
+    email: string;
+    password: string;
+  }): Promise<
+    | ServerResponseSuccess<User>
+    | ServerResponseValidationError
+    | ServerResponseError
+  > => {
     try {
       const response = await fetch(BASE_URL + "/auth/registration", {
         method: "POST",
@@ -12,15 +17,33 @@ export class Auth {
         },
         body: JSON.stringify(data),
       });
-      const loggedUser: ServerResponse<User> = await response.json();
-      return loggedUser;
+      const json = await response.json();
+      if (!response.ok) {
+        const error: ServerResponseValidationError = {
+          message: json.message,
+          status: "error",
+          errors: json.errors
+
+        };
+        throw error;
+      }
+      return json;
     } catch (err) {
-      const error = ensureError(err);
-      return error;
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
     }
   };
 
-  static login = async (data: { email: string; password: string }) => {
+  static login = async (data: {
+    email: string;
+    password: string;
+  }): Promise<
+    | ServerResponseSuccess<{ token: string }>
+    | ServerResponseValidationError
+    | ServerResponseError
+  > => {
     try {
       const response = await fetch(BASE_URL + "/auth/login", {
         method: "POST",
@@ -30,11 +53,22 @@ export class Auth {
         credentials: "include",
         body: JSON.stringify(data),
       });
-      const loggedUser: ServerResponse<{token: string}> = await response.json();
-      return loggedUser;
-    } catch (err) {
-      const error = ensureError(err);
-      return error;
+      const json = await response.json();
+      if (!response.ok) {
+        const error: ServerResponseValidationError = {
+          message: json.message,
+          status: "error",
+          errors: json.errors
+
+        };
+        return error;
+      }
+      return json as ServerResponseSuccess<{ token: string }>;
+    } catch (error) {
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
     }
   };
 }

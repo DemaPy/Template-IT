@@ -11,8 +11,16 @@ export class CampaignServiceDB {
         },
         body: JSON.stringify(campaign),
       });
-      const data: ServerResponseSuccess<Campaign> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        const error: ServerResponseValidationError = {
+          message: json.message,
+          status: "error",
+          errors: json.errors
+        };
+        throw error;
+      }
+      return json;
     } catch (error) {
       throw error;
     }

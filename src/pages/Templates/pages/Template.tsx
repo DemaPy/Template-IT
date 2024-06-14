@@ -29,18 +29,17 @@ const Template = () => {
     (async () => {
       const response = await TemplateService.getOne(params.id!)
       if (response.status === "error") {
-        alert(response.message)
-        return
+        console.warn(response.message)
+        if (response.code === 401) {
+          navigate(`/login?redirect=${location.pathname}`)
+        }
+        if (response.code === 403) {
+          navigate(`/access-denied`)
+        }
       }
       if (response.data === null) {
         navigate("/templates")
         return
-      }
-      if (response.code === 401) {
-        navigate(`/login?redirect=${location.pathname}`)
-      }
-      if (response.code === 403) {
-        navigate(`/access-denied`)
       }
       setTemplate(response.data)
     })()

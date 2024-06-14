@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button'
+import { useEffect } from 'react'
 
 type Props = {
-    onSelect: (slug: string) => void
+    onSelect: (slug: string | null) => void
     csv: any[] | null
 }
 
@@ -10,6 +11,13 @@ const SelectCSV = ({ csv, onSelect }: Props) => {
     const handleClick = (column: string) => {
         onSelect(column)
     }
+
+    useEffect(() => {
+
+        return () => {
+            onSelect(null)
+        }
+    }, [])
 
     if (!csv) return
 

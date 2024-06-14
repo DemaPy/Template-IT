@@ -25,10 +25,19 @@ const CreateTemplate = () => {
         if (templateName.length >= 3) {
             const response = await TemplateService.create({ title: templateName })
             if (response.status === "error") {
+                if ("errors" in response) {
+                    let error_message = ""
+                    for (const error of response.errors) {
+                        error_message += response.message + ": " + error.msg
+                    }
+                    alert(error_message)
+                    return
+                }
+    
                 alert(response.message)
-                setClose()
                 return
             }
+            
             setTemplate(response.data!)
             setClose()
         } else {
