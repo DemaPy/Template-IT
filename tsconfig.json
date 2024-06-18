@@ -26,6 +26,6 @@
     }
   },
   "types": ["chrome"],
-  "include": ["src"],
+  "include": ["src", "src/pages/Components/pages/components/.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
