@@ -23,26 +23,14 @@ const CampaignTemplateHandler = ({ campaign, setCampaign }: Props) => {
       const items = update(prev, {
         $splice: [
           [dragIndex, 1],
-          [hoverIndex, 0, {
-            ...prev[dragIndex],
-            order: dragIndex
-          }],
+          [hoverIndex, 0, prev[dragIndex]],
         ],
       })
-      return items.map(item => {
-        if (item.order === dragIndex) {
-          return {
-            ...item,
-            order: hoverIndex
-          }
+      return items.map((item, idx) => {
+        return {
+          ...item,
+          order: idx
         }
-        if (item.order === hoverIndex) {
-          return {
-            ...item,
-            order: dragIndex
-          }
-        }
-        return item
       })
     })
     setIsLayoutChanged(true)
