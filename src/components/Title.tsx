@@ -20,7 +20,7 @@ const Title = ({ title, size }: { title: string | ReactNode, size?: AvailableSiz
     lg: "text-6xl",
   };
   return (
-    <h1 className={`${size ? sizes[size] : sizes["md"]} font-semibold truncate`}>
+    <h1 className={`${size ? sizes[size] : sizes["md"]} font-semibold`}>
       {title}
     </h1>
   );
