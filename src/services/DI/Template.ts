@@ -137,10 +137,10 @@ class _TemplateService {
     }
   };
 
-  updateSection = async (section: Section, position: number) => {
+  updateSection = async (section: Section) => {
     try {
       const result: ServerResponseSuccess<Section> =
-        await this.service.updateSection(section, position);
+        await this.service.updateSection(section);
       return result;
     } catch (err: unknown) {
       const error = ensureError(err);

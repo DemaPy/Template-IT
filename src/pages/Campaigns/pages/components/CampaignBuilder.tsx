@@ -1,19 +1,30 @@
 import NavbarBuilder from "./NavbarBuilder"
 
 type Props = {
-    sections: Section[] | null
+    sortedSections: Section[] | null
     campaign: Campaign
     slug: string | null
     layout: Layout[]
 }
 
-const CampaignBuilder = ({ layout, slug, sections, campaign }: Props) => {
+const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
 
     let html = ''
 
-    if (campaign.data && sections && slug) {
+    if (!campaign.data) {
+        return (
+            <div className='w-full flex items-center justify-center flex-col text-md font-semibold text-center md:text-3xl'>Looks like you don't have data <br /> to render.</div>
+        )
+    }
 
-        for (const section of sections) {
+    if (!slug) {
+        return (
+            <div className='w-full flex items-center justify-center flex-col text-md font-semibold text-center md:text-3xl text-slate-300'>Select slug to render campaign</div>
+        )
+    }
+
+    if (campaign.data && sortedSections && slug) {
+        for (const section of sortedSections) {
 
             const sectionLayout = layout.find(item => item.sectionId === section.id)
 
@@ -27,7 +38,7 @@ const CampaignBuilder = ({ layout, slug, sections, campaign }: Props) => {
                 html += section.content
                 continue
             }
-
+            
             let shift = 0
             const sectionPlaceholdersSort = section.placeholders?.toSorted((a, b) => a.position - b.position)
 
@@ -49,18 +60,6 @@ const CampaignBuilder = ({ layout, slug, sections, campaign }: Props) => {
 
             html += document.join("")
         }
-    }
-
-    if (!campaign.data) {
-        return (
-            <div className='w-full flex items-center justify-center flex-col text-md font-semibold text-center md:text-3xl'>Looks like you don't have data <br /> to render.</div>
-        )
-    }
-
-    if (!slug) {
-        return (
-            <div className='w-full flex items-center justify-center flex-col text-md font-semibold text-center md:text-3xl text-slate-300'>Select slug to render campaign</div>
-        )
     }
 
     return (

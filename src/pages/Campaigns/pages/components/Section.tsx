@@ -29,13 +29,14 @@ const Section = ({ campaign, item }: Props) => {
   }
 
   const connectData = (data: Campaign['data']) => {
+    if (!campaign.data[item.id]) return null
     const result = CampaignService.convertPlaceholders(data, item.placeholders, item.id)
     return result
   }
 
   return (
     <li className='w-full flex flex-col gap-4 border rounded-md p-2'>
-      <Heading title={item.title} size='xs' actions={[{ isLoading: Object.keys(campaign.data).length === 0, icon: isDataOpen ? <ChevronUpIcon className='w-4 h-4 mr-2' /> : <ChevronDown className='w-4 h-4 mr-2' />, title: "Show data", onClick: () => setIsDataOpen(!isDataOpen) }]} action={{ icon: isOpen ? <ChevronUpIcon className='w-4 h-4' /> : <ChevronDown className='w-4 h-4' />, onClick: () => setIsOpen(!isOpen) }} />
+      <Heading title={item.title} size='xs' actions={[{ icon: isDataOpen ? <ChevronUpIcon className='w-4 h-4 mr-2' /> : <ChevronDown className='w-4 h-4 mr-2' />, title: "Show data", onClick: () => setIsDataOpen(!isDataOpen) }]} action={{ icon: isOpen ? <ChevronUpIcon className='w-4 h-4' /> : <ChevronDown className='w-4 h-4' />, onClick: () => setIsOpen(!isOpen) }} />
       {isOpen && <Textarea disabled={true} defaultValue={item.content} className='resize-none w-full min-h-60 max-h-72' />}
       {isDataOpen && <SectionData data={connectData(campaign.data)} />}
       <Placeholders handleClick={handleClick} placeholders={item.placeholders} />

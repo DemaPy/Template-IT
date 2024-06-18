@@ -36,11 +36,10 @@ class _ComponentService {
     }
   };
 
-  update = async (component: Component, position: number) : Promise<ServerResponseSuccess<Component> | ServerResponseValidationError | ServerResponseError> => {
+  update = async (component: Component) : Promise<ServerResponseSuccess<Component> | ServerResponseValidationError | ServerResponseError> => {
     try {
       const result: ServerResponseSuccess<Component> = await this.service.update(
         component,
-        position
       );
       return result;
     } catch (err: unknown) {

@@ -165,9 +165,9 @@ export class TemplateServiceDB {
     }
   }
 
-  static async updateSection(section: Section, position: number) {
+  static async updateSection(section: Section) {
     try {
-      const response = await fetch(BASE_URL + `/sections/${position}`, {
+      const response = await fetch(BASE_URL + `/sections/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

@@ -70,7 +70,7 @@ const Campaign = () => {
         ]}
       />
       <UpdateCampaign />
-      <CampaignTemplateHandler campaign={campaign} />
+      <CampaignTemplateHandler setCampaign={setCampaign} campaign={campaign} />
     </PageContainer>
   )
 }

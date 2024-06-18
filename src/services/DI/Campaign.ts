@@ -8,17 +8,6 @@ class _CampaignService {
     this.service = service;
   }
 
-  saveLayout = async (layout: Layout[]) => {
-    try {
-      const result: ServerResponseSuccess<Layout[]> =
-        await this.service.saveLayout(layout);
-      return result;
-    } catch (err) {
-      const error = ensureError(err);
-      return error;
-    }
-  };
-
   delete = async (campaign_id: Campaign["id"]) => {
     try {
       const result: ServerResponseSuccess<Campaign> = await this.service.delete(
@@ -33,7 +22,11 @@ class _CampaignService {
 
   create = async (
     campaign: Omit<Campaign, "id" | "userId" | "layout" | "data">
-  ): Promise<ServerResponseSuccess<Campaign> | ServerResponseValidationError | ServerResponseError> => {
+  ): Promise<
+    | ServerResponseSuccess<Campaign>
+    | ServerResponseValidationError
+    | ServerResponseError
+  > => {
     try {
       const result: ServerResponseSuccess<Campaign> = await this.service.create(
         campaign
@@ -41,7 +34,7 @@ class _CampaignService {
       return result;
     } catch (err) {
       if ("errors" in (err as ServerResponseValidationError)) {
-        return err as ServerResponseValidationError
+        return err as ServerResponseValidationError;
       }
       return {
         status: "error",
@@ -90,7 +83,7 @@ class _CampaignService {
     placeholders: Placeholder[] | null,
     section_id: string
   ) => {
-    if (Object.keys(data).length === 0 || !placeholders) return [];
+    if (!placeholders) return [];
     const dataToReturn: DataToReturn = [];
     for (const placeholder of placeholders || []) {
       const placeholderData = data[section_id];
@@ -104,23 +97,47 @@ class _CampaignService {
     return dataToReturn;
   };
 
-  updateLayout = async (layout: Layout) : Promise<ServerResponseSuccess<Campaign> | ServerResponseError> => {
+  updateLayout = async (
+    layout: Partial<Layout>
+  ): Promise<
+    | ServerResponseSuccess<Campaign>
+    | ServerResponseValidationError
+    | ServerResponseError
+  > => {
     try {
       const result: ServerResponseSuccess<Campaign> =
         await this.service.updateLayout(layout);
       return result;
     } catch (err: unknown) {
-      return err as ServerResponseError
+      if ("errors" in (err as ServerResponseValidationError)) {
+        return err as ServerResponseValidationError;
+      }
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
     }
   };
 
-  updateLayoutsOrder = async (layout: Layout[]) : Promise<ServerResponseSuccess<Campaign> | ServerResponseError> => {
+  updateLayoutsOrder = async (
+    layout: Layout[]
+  ): Promise<
+    | ServerResponseSuccess<Campaign>
+    | ServerResponseValidationError
+    | ServerResponseError
+  > => {
     try {
       const result: ServerResponseSuccess<Campaign> =
         await this.service.updateLayoutsOrder(layout);
       return result;
     } catch (err: unknown) {
-      return err as ServerResponseError
+      if ("errors" in (err as ServerResponseValidationError)) {
+        return err as ServerResponseValidationError;
+      }
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
     }
   };
 

@@ -28,9 +28,14 @@ const UpdateCampaign = () => {
         }
     }, [campaign])
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         if (campaign && title.length > 4 && css.length > 10) {
-            CampaignService.update({ ...campaign, title: title, css: css })
+            const response = await CampaignService.update({ ...campaign, title: title, css: css })
+            if (response.status === "error") {
+                alert(response.message)
+                setClose()
+                return
+            }
             setClose()
         }
     }

@@ -26,7 +26,7 @@ export class CampaignServiceDB {
     }
   }
 
-  static async updateLayout(layout: Layout) {
+  static async updateLayout(layout: Pick<Layout, "id" | "is_active">) {
     try {
       const response = await fetch(BASE_URL + "/layouts", {
         method: "PATCH",
@@ -61,7 +61,7 @@ export class CampaignServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({layouts: layouts}),
+        body: JSON.stringify({layout: layouts}),
       });
       if (!response.ok) {
         const err: ServerResponseError = await response.json()
@@ -151,21 +151,6 @@ export class CampaignServiceDB {
         },
       });
       const data: ServerResponseSuccess<Campaign> = await response.json();
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async saveLayout(layout: Layout[]) {
-    try {
-      const response = await fetch(BASE_URL + `/layouts/`, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        body: JSON.stringify(layout),
-      });
-      const data: ServerResponseSuccess<Layout> = await response.json();
       return data;
     } catch (error) {
       throw error;

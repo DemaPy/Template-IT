@@ -10,16 +10,21 @@ import {
 import CampaignLayout from './CampaignLayout'
 import Title from '@/components/Title'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
 
 type Props = {
+  isLayoutChanged: boolean
   slug: string | null
   setSelectedSlug: (slug: string) => void
-  sections: Section[] | null
-  inActiveSections: Section[] | null
+  inActiveSections: Section[]
+  sortedSections: Section[]
   campaign: Campaign
+  layout: Layout[]
+  moveCard: (dragIndex: number, hoverIndex: number) => void
+  handleLayoutChange: () => void
 }
 
-const Sidebar = ({ setSelectedSlug, slug, campaign, sections, inActiveSections }: Props) => {
+const Sidebar = ({ isLayoutChanged, handleLayoutChange, setSelectedSlug, layout, slug, campaign, sortedSections, inActiveSections, moveCard }: Props) => {
   const generateSlugs = () => {
     const _slugs = [""]
     const allSlugs = Object.values(Object.values(campaign.data)[0])
@@ -66,13 +71,18 @@ const Sidebar = ({ setSelectedSlug, slug, campaign, sections, inActiveSections }
           <div className='flex flex-col gap-4'>
             <Title size='sm' title={"Connect data with placeholders"} />
             <ConnectDataWithPlaceholder />
-            <ListView campaign={campaign} component={Section} items={sections} />
+            <ListView campaign={campaign} component={Section} items={sortedSections} />
           </div>
         </TabsContent>
         <TabsContent value="layout">
           <div className="flex flex-col gap-4">
-            <Title size='sm' title={"Swap layout sections"} />
-            <CampaignLayout layouts={campaign.layout} items={inActiveSections} />
+            <div className='flex justify-between items-center'>
+              <Title size='sm' title={"Swap layout sections"} />
+              {isLayoutChanged && (
+                <Button onClick={handleLayoutChange} variant={"secondary"} size={"sm"}>Save layout</Button>
+              )}
+            </div>
+            <CampaignLayout isLayoutChanged={isLayoutChanged} moveCard={moveCard} layout={layout} sections={inActiveSections} />
           </div>
         </TabsContent>
       </Tabs>

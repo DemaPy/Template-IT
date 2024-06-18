@@ -102,9 +102,9 @@ export class ComponentServiceDB {
     }
   }
 
-  static async update(component: Component, position: number): Promise<ServerResponseSuccess<Component> | ServerResponseError> {
+  static async update(component: Component): Promise<ServerResponseSuccess<Component> | ServerResponseError> {
     try {
-      const response = await fetch(BASE_URL + `/components/${position}`, {
+      const response = await fetch(BASE_URL + `/components/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

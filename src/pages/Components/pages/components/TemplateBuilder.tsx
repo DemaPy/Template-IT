@@ -21,9 +21,9 @@ const TemplateBuilder = ({ components }: Props) => {
     }
 
 
-    if (!components) {
+    if (components[0].placeholders.length === 0) {
         return (
-            <div className='w-full flex items-center justify-center flex-col text-md font-semibold text-center md:text-3xl'>Start adding sections</div>
+            <div className='w-full flex items-center justify-center flex-col text-md font-semibold text-center md:text-3xl'>Start adding placeholders</div>
         )
     }
 

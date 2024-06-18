@@ -62,7 +62,7 @@ const Component = ({ item }: Props) => {
 
   return (
     <li className='w-full flex flex-col gap-4 border rounded-md p-4'>
-      <Heading title={item.title} actions={actions} size='xs' action={{ icon: <Edit2Icon className='w-4 h-4 mr-2 text-yellow-400' />, title: "Edit", onClick: handleClick }} />
+      <Heading title={item.title} actions={actions} size='xs' action={{ icon: <Edit2Icon className='w-4 h-4 text-yellow-400' />, onClick: handleClick }} />
       {isOpen && <Textarea ref={ref} defaultValue={item.content} className='resize-none w-full min-h-60 max-h-72' />}
       {item.placeholders && <Title title={"Placeholders"} size='xs' />}
       {item.placeholders && (

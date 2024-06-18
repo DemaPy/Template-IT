@@ -5,7 +5,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -14,9 +14,6 @@ import { ComponentService } from "@/services/DI/Component"
 import { useComponentUpdateModal } from "@/store/componentUpdateModal"
 
 const UpdateComponent = () => {
-    const ref = useRef<HTMLTextAreaElement | null>(null)
-    const [position, setPosition] = useState<number | null>(null)
-
     const [isLoading, setIsLoading] = useState(false)
     const isOpen = useComponentUpdateModal(state => state.isOpen)
     const setClose = useComponentUpdateModal(state => state.setClose)
@@ -33,33 +30,14 @@ const UpdateComponent = () => {
         }
     }, [component])
 
-    useEffect(() => {
-        if (!ref || !ref.current) return
-
-        const handleClick = (ev: FocusEvent) => {
-            setPosition((ev.target as HTMLTextAreaElement).selectionStart)
-        }
-
-        ref.current.addEventListener("blur", handleClick)
-        return () => {
-            if (!ref || !ref.current) return
-            ref.current.removeEventListener("blur", handleClick)
-        }
-    }, [content])
-
     const onSubmit = async () => {
-        console.log({
-            content,
-            title,
-            component,
-            position
-        });
-
-        if (!content || !title || !component || !position) return
+        if (!content || !title || !component) return
         setIsLoading(true)
-        const response = await ComponentService.update({ ...component, content: content, title: title }, position)
+
+        const response = await ComponentService.update({ ...component, content: content, title: title })
         if (response.status === "error") {
             if ("errors" in response) {
+                setIsLoading(false)
                 let error_message = ""
                 for (const error of response.errors) {
                     error_message += response.message + ": " + error.msg
@@ -74,14 +52,9 @@ const UpdateComponent = () => {
         setComponent(response.data)
         setIsLoading(false)
         setClose()
+        setTitle(null)
+        setContent(null)
     }
-
-    useEffect(() => {
-        return () => {
-            setTitle(null)
-            setContent(null)
-        }
-    }, [])
 
     return (
         <Dialog open={isOpen} onOpenChange={setClose}>
@@ -104,7 +77,6 @@ const UpdateComponent = () => {
                             Content
                         </Label>
                         <Textarea
-                            ref={ref}
                             id="content"
                             value={content || ""}
                             onChange={ev => setContent(ev.target.value)}
