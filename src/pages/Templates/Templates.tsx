@@ -6,34 +6,28 @@ import TemplateCard from "./components/TemplateCard";
 import { useEffect, useState } from "react";
 import { TemplateService } from "../../services/DI/Template";
 import Heading from "../../components/Heading";
-import { useTemplateCreateModal } from "../../store/templateCreateModal"
+import { useTemplateCreateModal } from "../../store/templateCreateModal";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTemplateUpdateModal } from "@/store/templateUpdateModal";
+import { handleResponse } from "@/utils/handleResponse";
 
 const Templates = () => {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const [templates, setTemplates] = useState<Array<Template> | null>(null)
-  const template = useTemplateUpdateModal(state => state.template)
-  const setIsOpen = useTemplateCreateModal(state => state.setOpen)
-  const IsOpen = useTemplateCreateModal(state => state.isOpen)
-
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [templates, setTemplates] = useState<Array<Template> | null>(null);
+  const template = useTemplateUpdateModal((state) => state.template);
+  const setIsOpen = useTemplateCreateModal((state) => state.setOpen);
+  const IsOpen = useTemplateCreateModal((state) => state.isOpen);
 
   useEffect(() => {
     (async () => {
-      const response = await TemplateService.getAll()
-      if (response.status === "error") {
-        console.warn(response.message)
-        if (response.code === 401) {
-          navigate(`/login?redirect=${location.pathname}`)
-        }
-        if (response.code === 403) {
-          navigate(`/access-denied`)
-        }
+      const response = await TemplateService.getAll();
+      const parsed = handleResponse<Template[]>(response, location, navigate);
+      if (parsed) {
+        setTemplates(parsed.data);
       }
-      setTemplates(response.data)
-    })()
-  }, [template])
+    })();
+  }, [template]);
 
   return (
     <PageContainer>
@@ -48,7 +42,7 @@ const Templates = () => {
       <GridView items={templates} component={TemplateCard} />
       {IsOpen && <CreateTemplate />}
     </PageContainer>
-  )
-}
+  );
+};
 
-export default Templates
+export default Templates;
