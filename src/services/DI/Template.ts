@@ -33,12 +33,12 @@ class _TemplateService {
   create = async (
     template: Omit<Template, "id" | "sections" | "userId">
   ): Promise<
-    | ServerResponseSuccess<Template>
-    | ServerResponseValidationError
-    | ServerResponseAuthorizationError
-    | ServerResponseAuthenticationError
-    | ServerResponseError
-  > => {
+  | ServerResponseSuccess<Template>
+  | ServerResponseValidationError
+  | ServerResponseAuthorizationError
+  | ServerResponseAuthenticationError
+  | ServerResponseError
+> => {
     try {
       const result: ServerResponseSuccess<Template> = await this.service.create(
         template

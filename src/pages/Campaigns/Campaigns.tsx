@@ -9,30 +9,25 @@ import { useEffect, useState } from "react";
 import { CampaignService } from "@/services/DI/Campaign";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCampaignUpdateModal } from "@/store/campaignUpdateModal";
+import { handleResponse } from "@/utils/handleResponse";
 
 const Campaigns = () => {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const [campaigns, setCampaigns] = useState<Array<Campaign> | null>(null)
-  const setIsOpen = useCampaignCreateModal(state => state.setOpen)
-  const IsOpen = useCampaignCreateModal(state => state.isOpen)
-  const campaign = useCampaignUpdateModal(state => state.campaign)
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [campaigns, setCampaigns] = useState<Array<Campaign> | null>(null);
+  const setIsOpen = useCampaignCreateModal((state) => state.setOpen);
+  const IsOpen = useCampaignCreateModal((state) => state.isOpen);
+  const campaign = useCampaignUpdateModal((state) => state.campaign);
 
   useEffect(() => {
     (async () => {
-      const response = await CampaignService.getAll()
-      if (response.status === "error") {
-        console.warn(response.message)
-        if (response.code === 401) {
-          navigate(`/login?redirect=${location.pathname}`)
-        }
-        if (response.code === 403) {
-          navigate(`/access-denied`)
-        }
+      const response = await CampaignService.getAll();
+      const parsed = handleResponse<Campaign[]>(response, location, navigate);
+      if (parsed) {
+        setCampaigns(parsed.data);
       }
-      setCampaigns(response.data)
-    })()
-  }, [campaign])
+    })();
+  }, [campaign]);
 
   return (
     <PageContainer>
@@ -47,7 +42,7 @@ const Campaigns = () => {
       <GridView items={campaigns} component={CampaignCard} />
       {IsOpen && <CreateCampaign />}
     </PageContainer>
-  )
-}
+  );
+};
 
-export default Campaigns
+export default Campaigns;
