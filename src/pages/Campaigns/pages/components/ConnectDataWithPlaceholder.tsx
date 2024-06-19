@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { useAddDataToPlaceholderModal } from "@/store/addDataToPlaceholderModal"
-import CSVReader, { IFileInfo } from "react-csv-reader"
+import CSVReader from "react-csv-reader"
 import { useCampaignUpdateModal } from "@/store/campaignUpdateModal"
 import { Label } from "@/components/ui/label"
 import { useSectionUpdateModal } from "@/store/sectionUpdateModal"
@@ -47,7 +47,7 @@ const ConnectDataWithPlaceholder = ({ campaignId }: { campaignId: Campaign['id']
     setClose()
   }
 
-  const handle_CSV = (data: any[], fileInfo: IFileInfo, originalFile: File | undefined) => {
+  const handle_CSV = (data: any[]) => {
     const [keys, ...content] = data
     const CSV = []
     let isSlugExist = false
