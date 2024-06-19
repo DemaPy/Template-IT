@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function ensureError(value: unknown): ServerResponse<null> {
+export function ensureError(value: unknown) {
   if (value instanceof Error) {
     return {
       data: null,
