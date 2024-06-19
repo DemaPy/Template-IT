@@ -12,11 +12,17 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { useCampaignUpdateModal } from '@/store/campaignUpdateModal'
 import { CampaignService } from "@/services/DI/Campaign"
+import { handleResponse } from "@/utils/handleResponse"
+import { useLocation, useNavigate } from "react-router-dom"
 
 const UpdateCampaign = () => {
+    const location = useLocation()
+    const navigate = useNavigate()
+    const [loading, setLoading] = useState<boolean>(false)
     const isOpen = useCampaignUpdateModal(state => state.isOpen)
     const setClose = useCampaignUpdateModal(state => state.setClose)
     const campaign = useCampaignUpdateModal(state => state.campaign)
+    const setCampaign = useCampaignUpdateModal(state => state.setCampaign)
 
     const [title, setTitle] = useState("")
     const [css, setCss] = useState("")
@@ -30,11 +36,12 @@ const UpdateCampaign = () => {
 
     const onSubmit = async () => {
         if (campaign && title.length > 4 && css.length > 10) {
+            setLoading(true)
             const response = await CampaignService.update({ ...campaign, title: title, css: css })
-            if (response.status === "error") {
-                alert(response.message)
-                setClose()
-                return
+            const parsed = handleResponse<Campaign>(response, location, navigate)
+            setLoading(false)
+            if (parsed) {
+                setCampaign(parsed.data!)
             }
             setClose()
         }
@@ -64,12 +71,12 @@ const UpdateCampaign = () => {
                             id="css"
                             value={css}
                             onChange={ev => setCss(ev.target.value)}
-                            className="col-span-4 resize-none w-full min-h-60"
+                            className="col-span-4 resize-none w-full min-h-96"
                         />
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onSubmit}>Save changes</Button>
+                    <Button disabled={loading} onClick={onSubmit}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

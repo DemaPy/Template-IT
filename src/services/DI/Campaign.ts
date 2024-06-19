@@ -43,15 +43,38 @@ class _CampaignService {
     }
   };
 
-  update = async (campaign: Campaign) => {
+  update = async (
+    campaign: Campaign
+  ): Promise<
+    | ServerResponseSuccess<Campaign>
+    | ServerResponseValidationError
+    | ServerResponseAuthorizationError
+    | ServerResponseAuthenticationError
+    | ServerResponseError
+  > => {
     try {
       const result: ServerResponseSuccess<Campaign> = await this.service.update(
         campaign
       );
       return result;
     } catch (err: unknown) {
-      const error = ensureError(err);
-      return error;
+      if (
+        "code" in
+        (err as
+          | ServerResponseAuthenticationError
+          | ServerResponseAuthorizationError)
+      ) {
+        return err as
+          | ServerResponseAuthenticationError
+          | ServerResponseAuthorizationError;
+      }
+      if ("errors" in (err as ServerResponseValidationError)) {
+        return err as ServerResponseValidationError;
+      }
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
     }
   };
 

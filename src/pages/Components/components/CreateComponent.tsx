@@ -13,9 +13,15 @@ import { Textarea } from '@/components/ui/textarea'
 import { useComponentCreateModal } from '@/store/componentCreateModal'
 import { ComponentService } from "@/services/DI/Component"
 import { useComponentUpdateModal } from "@/store/componentUpdateModal"
+import { handleResponse } from "@/utils/handleResponse"
+import { useLocation, useNavigate } from "react-router-dom"
 
 
 const CreateComponent = () => {
+    const location = useLocation()
+    const navigate = useNavigate()
+    const [loading, setLoading] = useState<boolean>(false)
+
     const isOpen = useComponentCreateModal(state => state.isOpen)
     const setClose = useComponentCreateModal(state => state.setClose)
     const setComponent = useComponentUpdateModal(state => state.setComponent)
@@ -25,21 +31,13 @@ const CreateComponent = () => {
 
     const onSubmit = async () => {
         if (componentName.length > 3) {
+            setLoading(true)
             const response = await ComponentService.create({ title: componentName, content })
-            if (response.status === "error") {
-                if ("errors" in response) {
-                    let error_message = ""
-                    for (const error of response.errors) {
-                        error_message += response.message + ": " + error.msg
-                    }
-                    alert(error_message)
-                    return
-                }
-    
-                alert(response.message)
-                return
+            const parsed = handleResponse<Component>(response, location, navigate)
+            setLoading(false)
+            if (parsed) {
+                setComponent(parsed.data!)
             }
-            setComponent(response.data!)
             setClose()
         }
     }
@@ -67,12 +65,12 @@ const CreateComponent = () => {
                             id="content"
                             value={content}
                             onChange={ev => setContent(ev.target.value)}
-                            className="col-span-4"
+                            className="col-span-4 resize-y min-h-48 max-h-80"
                         />
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onSubmit}>Save changes</Button>
+                    <Button disabled={loading} onClick={onSubmit}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

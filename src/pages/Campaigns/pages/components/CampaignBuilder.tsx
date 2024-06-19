@@ -38,7 +38,7 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
                 html += section.content
                 continue
             }
-            
+
             let shift = 0
             const sectionPlaceholdersSort = section.placeholders?.toSorted((a, b) => a.position - b.position)
 
@@ -64,12 +64,9 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
 
     return (
         <div className="w-full flex flex-col gap-2 relative bg-slate-50 p-2">
-            <NavbarBuilder html={html} campaign={campaign} />
-
-                <iframe srcDoc={`<style>${campaign.css || ""}</style> ${html}`} className="h-full w-full">
-                </iframe>
-            {/* <div className='flex items-center justify-start flex-col' dangerouslySetInnerHTML={{ __html: campaign.css || "" }}></div>
-                <div className='flex items-center justify-start flex-col' dangerouslySetInnerHTML={{ __html: html }}></div> */}
+            <NavbarBuilder html={`<style>${campaign.css || ""}</style>` + html} campaign={campaign} />
+            <iframe srcDoc={`<style>${campaign.css || ""}</style> ${html}`} className="h-full w-full">
+            </iframe>
         </div>
     )
 }

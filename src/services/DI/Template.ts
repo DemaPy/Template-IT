@@ -30,15 +30,33 @@ class _TemplateService {
     }
   };
 
-  create = async (template: Omit<Template, "id" | "sections" | "userId">): Promise<ServerResponseSuccess<Template> | ServerResponseValidationError | ServerResponseError> => {
+  create = async (
+    template: Omit<Template, "id" | "sections" | "userId">
+  ): Promise<
+    | ServerResponseSuccess<Template>
+    | ServerResponseValidationError
+    | ServerResponseAuthorizationError
+    | ServerResponseAuthenticationError
+    | ServerResponseError
+  > => {
     try {
       const result: ServerResponseSuccess<Template> = await this.service.create(
         template
       );
       return result;
     } catch (err: unknown) {
+      if (
+        "code" in
+        (err as
+          | ServerResponseAuthenticationError
+          | ServerResponseAuthorizationError)
+      ) {
+        return err as
+          | ServerResponseAuthenticationError
+          | ServerResponseAuthorizationError;
+      }
       if ("errors" in (err as ServerResponseValidationError)) {
-        return err as ServerResponseValidationError
+        return err as ServerResponseValidationError;
       }
       return {
         status: "error",
@@ -47,15 +65,38 @@ class _TemplateService {
     }
   };
 
-  update = async (template: Template) => {
+  update = async (
+    template: Template
+  ): Promise<
+    | ServerResponseSuccess<Template>
+    | ServerResponseValidationError
+    | ServerResponseAuthorizationError
+    | ServerResponseAuthenticationError
+    | ServerResponseError
+  > => {
     try {
       const result: ServerResponseSuccess<Template> = await this.service.update(
         template
       );
       return result;
     } catch (err: unknown) {
-      const error = ensureError(err);
-      return error;
+      if (
+        "code" in
+        (err as
+          | ServerResponseAuthenticationError
+          | ServerResponseAuthorizationError)
+      ) {
+        return err as
+          | ServerResponseAuthenticationError
+          | ServerResponseAuthorizationError;
+      }
+      if ("errors" in (err as ServerResponseValidationError)) {
+        return err as ServerResponseValidationError;
+      }
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
     }
   };
 

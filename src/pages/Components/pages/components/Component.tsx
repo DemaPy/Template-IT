@@ -63,12 +63,12 @@ const Component = ({ item }: Props) => {
   return (
     <li className='w-full flex flex-col gap-4 border rounded-md p-4'>
       <Heading title={item.title} actions={actions} size='xs' action={{ icon: <Edit2Icon className='w-4 h-4 text-yellow-400' />, onClick: handleClick }} />
-      {isOpen && <Textarea ref={ref} defaultValue={item.content} className='resize-none w-full min-h-60 max-h-72' />}
+      {isOpen && <Textarea ref={ref} defaultValue={item.content} className='resize-y w-full min-h-60 max-h-80' />}
       {item.placeholders && <Title title={"Placeholders"} size='xs' />}
       {item.placeholders && (
         item.placeholders.map(item => (
           <div className='flex justify-between gap-2 items-center' key={item.id}>
-            <p className="p-2 border rounded-md grow text-sm" >Name: {item.title} | Position: {item.position}</p>
+            <p className="p-2 border rounded-md grow text-sm" >Name: {item.title} | Position: {item.position} | Fallback: {item.fallback}</p>
             <Button variant={"ghost"} onClick={() => handleDeleteClick(item.id, item.componentId!)} size={"icon"}> <TrashIcon className='w-4 h-4' /> </Button>
           </div>
         ))

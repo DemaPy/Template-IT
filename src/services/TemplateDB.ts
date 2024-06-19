@@ -12,6 +12,14 @@ export class TemplateServiceDB {
         body: JSON.stringify(template),
       });
       const json = await response.json();
+      if (!response.ok && json.code === 401) {
+        const error: ServerResponseAuthenticationError = {
+          message: json.message,
+          status: "error",
+          code: json.code
+        };
+        throw error;
+      }
       if (!response.ok) {
         const error: ServerResponseValidationError = {
           message: json.message,

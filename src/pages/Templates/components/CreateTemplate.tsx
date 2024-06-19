@@ -12,14 +12,16 @@ import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { TemplateService } from '@/services/DI/Template'
 import { useTemplateUpdateModal } from '@/store/templateUpdateModal'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 
 const CreateTemplate = () => {
+    const location = useLocation()
+    const navigate = useNavigate()
     const isOpen = useTemplateCreateModal(state => state.isOpen)
     const setClose = useTemplateCreateModal(state => state.setClose)
     const [templateName, setTemplateName] = useState("")
     const setTemplate = useTemplateUpdateModal(state => state.setTemplate)
-    const [wrapper, setTemplateWrapper] = useState("")
 
     const onSubmit = async () => {
         if (templateName.length >= 3) {
@@ -32,6 +34,14 @@ const CreateTemplate = () => {
                     }
                     alert(error_message)
                     return
+                }
+
+                if ("code" in response && response.code === 401) {
+                    navigate(`/login?redirect=${location.pathname}`)
+                }
+
+                if ("code" in response && response.code === 403) {
+                    navigate(`/access-denied`)
                 }
     
                 alert(response.message)

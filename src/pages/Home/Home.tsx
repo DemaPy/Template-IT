@@ -1,11 +1,12 @@
-import PageContainer from '../../components/PageContainer'
 import Hero from './components/Hero'
+import Instruction from './components/Instruction'
 
 const Home = () => {
   return (
-    <PageContainer>
+    <>
       <Hero />
-    </PageContainer>
+      <Instruction />
+    </>
   )
 }
 

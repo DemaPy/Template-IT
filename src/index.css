@@ -15,3 +15,7 @@ body,
   align-items: center;
   justify-content: center;
 }
+
+.csv-input {
+  display: none;
+}

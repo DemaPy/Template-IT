@@ -7,7 +7,7 @@ type Store = {
 }
 
 export const useAuth = create<Store>()((set) => ({
-    isLogged: true,
+    isLogged: false,
     setIsLoggedIn: () => set(() => ({ isLogged: true })),
     setIsLoggedOut: () => set(() => ({ isLogged: false })),
 }))

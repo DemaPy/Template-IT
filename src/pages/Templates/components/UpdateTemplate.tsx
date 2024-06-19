@@ -11,8 +11,12 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useTemplateUpdateModal } from '@/store/templateUpdateModal'
 import { TemplateService } from '@/services/DI/Template'
+import { useLocation, useNavigate } from "react-router-dom"
+import { handleResponse } from "@/utils/handleResponse"
 
 const UpdateTemplate = () => {
+    const location = useLocation()
+    const navigate = useNavigate()
     const [loading, setLoading] = useState<boolean>(false)
     const isOpen = useTemplateUpdateModal(state => state.isOpen)
     const setClose = useTemplateUpdateModal(state => state.setClose)
@@ -31,13 +35,11 @@ const UpdateTemplate = () => {
         if (template && title.length > 4) {
             setLoading(true)
             const response = await TemplateService.update({ ...template, title: title })
-            if (response.status === "error") {
-                alert(response.message)
-                setClose()
-                return
-            }
+            const parsed = handleResponse<Template>(response, location, navigate)
             setLoading(false)
-            setTemplate(response.data!)
+            if (parsed) {
+                setTemplate(parsed.data!)
+            }
             setClose()
         }
     }

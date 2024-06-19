@@ -11,6 +11,7 @@ import CampaignLayout from './CampaignLayout'
 import Title from '@/components/Title'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
+import { useAddDataToPlaceholderModal } from '@/store/addDataToPlaceholderModal'
 
 type Props = {
   isLayoutChanged: boolean
@@ -25,22 +26,27 @@ type Props = {
 }
 
 const Sidebar = ({ isLayoutChanged, handleLayoutChange, setSelectedSlug, layout, slug, campaign, sortedSections, inActiveSections, moveCard }: Props) => {
+  const isOpen = useAddDataToPlaceholderModal(state => state.isOpen)
+
   const generateSlugs = () => {
     const _slugs = [""]
-    const allSlugs = Object.values(Object.values(campaign.data)[0])
-    for (const iterator of allSlugs) {
-      const slugs = Object.keys(iterator)
-      for (const slug of slugs) {
-        if (_slugs.includes(slug)) {
-          continue
-        } else {
-          _slugs.push(slug)
+    for (const iterator of Object.values(campaign.data)) {
+      const data = Object.values(iterator)
+      data.forEach(item => {
+        const keys = Object.keys(item)
+        for (const slug of keys) {
+          if (_slugs.includes(slug)) {
+            continue
+          } else {
+            _slugs.push(slug)
+          }
         }
-      }
+      })
+      
     }
     return _slugs.filter(Boolean)
   }
-
+  
   return (
     <div className='w-3/4 overflow-auto max-h-[80vh]'>
       <Tabs defaultValue="sections">
@@ -70,7 +76,11 @@ const Sidebar = ({ isLayoutChanged, handleLayoutChange, setSelectedSlug, layout,
         <TabsContent value="sections">
           <div className='flex flex-col gap-4'>
             <Title size='sm' title={"Connect data with placeholders"} />
-            <ConnectDataWithPlaceholder />
+            {
+              isOpen && (
+                <ConnectDataWithPlaceholder campaignId={campaign.id} />
+              )
+            }
             <ListView campaign={campaign} component={Section} items={sortedSections} />
           </div>
         </TabsContent>

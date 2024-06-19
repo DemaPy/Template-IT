@@ -12,8 +12,12 @@ import { useEffect, useState } from 'react'
 import { usePlaceholderCreateModal } from "@/store/placeholderCreateModal"
 import { useComponentUpdateModal } from "@/store/componentUpdateModal"
 import { ComponentService } from "@/services/DI/Component"
+import { handleResponse } from "@/utils/handleResponse"
+import { useLocation, useNavigate } from "react-router-dom"
 
 const CreatePlaceholder = () => {
+    const location = useLocation()
+    const navigate = useNavigate()
     const isOpen = usePlaceholderCreateModal(state => state.isOpen)
     const setClose = usePlaceholderCreateModal(state => state.setClose)
     const placeholder = usePlaceholderCreateModal(state => state.placeholder)
@@ -29,15 +33,11 @@ const CreatePlaceholder = () => {
     const onSubmit = async () => {
         if (_placeholder && component && title.length >= 3 && fallback.length >= 3) {
             const response = await ComponentService.createComponentPlaceholder({ title, position: _placeholder, componentId: component.id, fallback })
-            if (response.status === "error") {
-                alert(response.message)
-                setClose()
-                return
-            }
-            if (response.status === "success" || response.data) {
+            const parsed = handleResponse<Placeholder>(response, location, navigate)
+            if (parsed) {
                 setComponentStore({
                     ...component,
-                    placeholders: [...component.placeholders, response.data]
+                    placeholders: [...component.placeholders, parsed.data!]
                 })
             }
             setClose()
@@ -51,7 +51,7 @@ const CreatePlaceholder = () => {
             setPlaceholder(placeholder)
         }
 
-        () => {
+        return () => {
             setPlaceholder(null)
         }
     }, [placeholder])

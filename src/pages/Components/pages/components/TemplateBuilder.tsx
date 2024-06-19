@@ -20,7 +20,6 @@ const TemplateBuilder = ({ components }: Props) => {
         html += document.join("")
     }
 
-
     if (components[0].placeholders.length === 0) {
         return (
             <div className='w-full flex items-center justify-center flex-col text-md font-semibold text-center md:text-3xl'>Start adding placeholders</div>

@@ -12,9 +12,14 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { ComponentService } from "@/services/DI/Component"
 import { useComponentUpdateModal } from "@/store/componentUpdateModal"
+import { handleResponse } from "@/utils/handleResponse"
+import { useLocation, useNavigate } from "react-router-dom"
 
 const UpdateComponent = () => {
-    const [isLoading, setIsLoading] = useState(false)
+    const location = useLocation()
+    const navigate = useNavigate()
+    const [loading, setLoading] = useState<boolean>(false)
+
     const isOpen = useComponentUpdateModal(state => state.isOpen)
     const setClose = useComponentUpdateModal(state => state.setClose)
     const component = useComponentUpdateModal(state => state.component)
@@ -32,25 +37,14 @@ const UpdateComponent = () => {
 
     const onSubmit = async () => {
         if (!content || !title || !component) return
-        setIsLoading(true)
-
+        setLoading(true)
         const response = await ComponentService.update({ ...component, content: content, title: title })
-        if (response.status === "error") {
-            if ("errors" in response) {
-                setIsLoading(false)
-                let error_message = ""
-                for (const error of response.errors) {
-                    error_message += response.message + ": " + error.msg
-                }
-                alert(error_message)
-                return
-            }
-
-            alert(response.message)
-            return
+        const parsed = handleResponse<Component>(response, location, navigate)
+        setLoading(false)
+        if (parsed) {
+            setComponent(parsed.data!)
         }
-        setComponent(response.data)
-        setIsLoading(false)
+        setLoading(false)
         setClose()
         setTitle(null)
         setContent(null)
@@ -85,7 +79,7 @@ const UpdateComponent = () => {
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onSubmit} disabled={isLoading}>Save changes</Button>
+                    <Button disabled={loading} onClick={onSubmit}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
