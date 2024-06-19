@@ -1,18 +1,15 @@
 import { useAuth } from '@/store/login'
 import { PropsWithChildren, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 const LoginGuard = ({ children }: PropsWithChildren) => {
-    const navigate = useNavigate()
-    const { isLogged } = useAuth()
-
+    const login = useAuth(store => store.setIsLoggedIn)
 
     useEffect(() => {
-        if (!isLogged) {
-            navigate("/login")
-            return
+        const token = localStorage.getItem("token")
+        if (token) {
+            login()
         }
-    }, [isLogged])
+    }, [])
 
 
     return (
