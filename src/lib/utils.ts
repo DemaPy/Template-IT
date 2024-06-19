@@ -5,11 +5,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function ensureError(value: unknown) {
+export function ensureError(value: unknown): ServerResponseError {
   if (value instanceof Error) {
     return {
-      data: null,
-      error: value,
       message: value.message,
       status: "error",
     };
@@ -24,8 +22,6 @@ export function ensureError(value: unknown) {
     `This value was thrown as is, not through an Error: ${stringified}`
   );
   return {
-    data: null,
-    error: error,
     message: error.message,
     status: "error",
   };
