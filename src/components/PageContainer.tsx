@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 
 const PageContainer = ({ children }: PropsWithChildren) => {
-  return <section className="mt-6 space-y-6 flex-grow flex flex-col">{children}</section>;
+  return <section className="mt-6 grow flex items-stretch flex-col space-y-6">{children}</section>;
 };
 
 export default PageContainer;
