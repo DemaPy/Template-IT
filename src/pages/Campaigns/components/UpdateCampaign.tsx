@@ -8,7 +8,6 @@ import {
 import { useEffect, useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { useCampaignUpdateModal } from '@/store/campaignUpdateModal'
 import { CampaignService } from "@/services/DI/Campaign"
@@ -25,19 +24,17 @@ const UpdateCampaign = () => {
     const setCampaign = useCampaignUpdateModal(state => state.setCampaign)
 
     const [title, setTitle] = useState("")
-    const [css, setCss] = useState("")
 
     useEffect(() => {
         if (campaign) {
             setTitle(campaign?.title)
-            setCss(campaign?.css)
         }
     }, [campaign])
 
     const onSubmit = async () => {
-        if (campaign && title.length > 4 && css.length > 10) {
+        if (campaign && title.length > 4) {
             setLoading(true)
-            const response = await CampaignService.update({ ...campaign, title: title, css: css })
+            const response = await CampaignService.update({ ...campaign, title: title })
             const parsed = handleResponse<Campaign>(response, location, navigate)
             setLoading(false)
             if (parsed) {
@@ -63,15 +60,6 @@ const UpdateCampaign = () => {
                             value={title}
                             onChange={ev => setTitle(ev.target.value)}
                             className="col-span-4"
-                        />
-                        <Label htmlFor="css" className="text-left">
-                            Css
-                        </Label>
-                        <Textarea
-                            id="css"
-                            value={css}
-                            onChange={ev => setCss(ev.target.value)}
-                            className="col-span-4 resize-none w-full min-h-96"
                         />
                     </div>
                 </div>

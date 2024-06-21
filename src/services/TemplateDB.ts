@@ -1,7 +1,12 @@
+import { AccessError } from "./Errors/AccessError";
+import { AuthError } from "./Errors/AuthError";
+
 const BASE_URL = "http://localhost:7777";
 
 export class TemplateServiceDB {
-  static async create(template: Omit<Template, "id">): Promise<ServerResponseSuccess<Template> | ServerResponseError> {
+  static async create(
+    template: Omit<Template, "id">
+  ): Promise<ServerResponseSuccess<Template> | ServerResponseError> {
     try {
       const response = await fetch(BASE_URL + "/templates", {
         method: "POST",
@@ -12,23 +17,17 @@ export class TemplateServiceDB {
         body: JSON.stringify(template),
       });
       const json = await response.json();
-      if (!response.ok && json.code === 401) {
-        const error: ServerResponseAuthenticationError = {
-          message: json.message,
-          status: "error",
-          code: json.code
-        };
-        throw error;
-      }
       if (!response.ok) {
-        const error: ServerResponseValidationError = {
-          message: json.message,
-          status: "error",
-          errors: json.errors
-        };
-        throw error;
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
       }
-      return json
+      return json;
     } catch (error) {
       throw error;
     }
@@ -42,8 +41,18 @@ export class TemplateServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponseSuccess<Template> = await response.json();
-      return data.data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -59,8 +68,18 @@ export class TemplateServiceDB {
         },
         body: JSON.stringify(template),
       });
-      const data: ServerResponseSuccess<Template> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -73,8 +92,18 @@ export class TemplateServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponseSuccess<Template[]> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -87,8 +116,18 @@ export class TemplateServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponseSuccess<Template> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -102,8 +141,18 @@ export class TemplateServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponseSuccess<Section> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -117,8 +166,18 @@ export class TemplateServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponseSuccess<Section> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -126,14 +185,27 @@ export class TemplateServiceDB {
 
   static async deletePlaceholder(placeholder_id: Placeholder["id"]) {
     try {
-      const response = await fetch(BASE_URL + `/section-palceholders/${placeholder_id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      const data: ServerResponseSuccess<Placeholder> = await response.json();
-      return data;
+      const response = await fetch(
+        BASE_URL + `/section-palceholders/${placeholder_id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -149,8 +221,18 @@ export class TemplateServiceDB {
         },
         body: JSON.stringify(placeholder),
       });
-      const data: ServerResponseSuccess<Placeholder> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -166,8 +248,18 @@ export class TemplateServiceDB {
         },
         body: JSON.stringify(section),
       });
-      const data: ServerResponseSuccess<Section> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -183,8 +275,18 @@ export class TemplateServiceDB {
         },
         body: JSON.stringify(section),
       });
-      const data: ServerResponseSuccess<Section> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }

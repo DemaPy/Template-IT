@@ -1,4 +1,6 @@
 import { ComponentServiceDB } from "../ComponentDB";
+import { AccessError } from "../Errors/AccessError";
+import { AuthError } from "../Errors/AuthError";
 
 class _ComponentService {
   service: any;
@@ -10,8 +12,8 @@ class _ComponentService {
     component: Component["id"]
   ): Promise<
     | ServerResponseSuccess<Component>
-    | ServerResponseAuthenticationError
-    | ServerResponseAuthorizationError
+    | AccessError
+    | AuthError
     | ServerResponseError
   > => {
     try {
@@ -19,19 +21,21 @@ class _ComponentService {
         await this.service.delete(component);
       return result;
     } catch (err) {
-      if (
-        "code" in
-        (err as
-          | ServerResponseAuthenticationError
-          | ServerResponseAuthorizationError)
-      ) {
-        return err as
-          | ServerResponseAuthenticationError
-          | ServerResponseAuthorizationError;
+      if (err instanceof AccessError) {
+        return err;
       }
-      if ("errors" in (err as ServerResponseValidationError)) {
-        return err as ServerResponseValidationError;
+
+      if (err instanceof AuthError) {
+        return err;
       }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
       return {
         status: "error",
         message: "Unknown error happend",
@@ -43,8 +47,8 @@ class _ComponentService {
     component: Omit<Component, "id" | "placeholders">
   ): Promise<
     | ServerResponseSuccess<Component>
-    | ServerResponseAuthenticationError
-    | ServerResponseAuthorizationError
+    | AccessError
+    | AuthError
     | ServerResponseError
   > => {
     try {
@@ -52,9 +56,21 @@ class _ComponentService {
         await this.service.create(component);
       return result;
     } catch (err) {
-      if ("errors" in (err as ServerResponseValidationError)) {
-        return err as ServerResponseValidationError;
+      if (err instanceof AccessError) {
+        return err;
       }
+
+      if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
       return {
         status: "error",
         message: "Unknown error happend",
@@ -66,8 +82,8 @@ class _ComponentService {
     component: Component
   ): Promise<
     | ServerResponseSuccess<Component>
-    | ServerResponseAuthenticationError
-    | ServerResponseAuthorizationError
+    | AccessError
+    | AuthError
     | ServerResponseError
   > => {
     try {
@@ -75,9 +91,21 @@ class _ComponentService {
         await this.service.update(component);
       return result;
     } catch (err: unknown) {
-      if ("errors" in (err as ServerResponseValidationError)) {
-        return err as ServerResponseValidationError;
+      if (err instanceof AccessError) {
+        return err;
       }
+
+      if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
       return {
         status: "error",
         message: "Unknown error happend",
@@ -90,8 +118,8 @@ class _ComponentService {
     componentId: Component["id"]
   ): Promise<
     | ServerResponseSuccess<Component>
-    | ServerResponseAuthenticationError
-    | ServerResponseAuthorizationError
+    | AccessError
+    | AuthError
     | ServerResponseError
   > => {
     try {
@@ -99,19 +127,21 @@ class _ComponentService {
         await this.service.deletePlaceholder(placeholder_id, componentId);
       return result;
     } catch (err: unknown) {
-      if (
-        "code" in
-        (err as
-          | ServerResponseAuthenticationError
-          | ServerResponseAuthorizationError)
-      ) {
-        return err as
-          | ServerResponseAuthenticationError
-          | ServerResponseAuthorizationError;
+      if (err instanceof AccessError) {
+        return err;
       }
-      if ("errors" in (err as ServerResponseValidationError)) {
-        return err as ServerResponseValidationError;
+
+      if (err instanceof AuthError) {
+        return err;
       }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
       return {
         status: "error",
         message: "Unknown error happend",
@@ -123,8 +153,8 @@ class _ComponentService {
     placeholder: Omit<Placeholder, "id">
   ): Promise<
     | ServerResponseSuccess<Placeholder>
-    | ServerResponseAuthenticationError
-    | ServerResponseAuthorizationError
+    | AccessError
+    | AuthError
     | ServerResponseError
   > => {
     try {
@@ -132,19 +162,21 @@ class _ComponentService {
         await this.service.createComponentPlaceholder(placeholder);
       return result;
     } catch (err: unknown) {
-      if (
-        "code" in
-        (err as
-          | ServerResponseAuthenticationError
-          | ServerResponseAuthorizationError)
-      ) {
-        return err as
-          | ServerResponseAuthenticationError
-          | ServerResponseAuthorizationError;
+      if (err instanceof AccessError) {
+        return err;
       }
-      if ("errors" in (err as ServerResponseValidationError)) {
-        return err as ServerResponseValidationError;
+
+      if (err instanceof AuthError) {
+        return err;
       }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
       return {
         status: "error",
         message: "Unknown error happend",
@@ -154,8 +186,8 @@ class _ComponentService {
 
   getAll = async (): Promise<
     | ServerResponseSuccess<Component[]>
-    | ServerResponseAuthenticationError
-    | ServerResponseAuthorizationError
+    | AccessError
+    | AuthError
     | ServerResponseError
   > => {
     try {
@@ -163,19 +195,21 @@ class _ComponentService {
         await this.service.getAll();
       return result;
     } catch (err: unknown) {
-      if (
-        "code" in
-        (err as
-          | ServerResponseAuthenticationError
-          | ServerResponseAuthorizationError)
-      ) {
-        return err as
-          | ServerResponseAuthenticationError
-          | ServerResponseAuthorizationError;
+      if (err instanceof AccessError) {
+        return err;
       }
-      if ("errors" in (err as ServerResponseValidationError)) {
-        return err as ServerResponseValidationError;
+
+      if (err instanceof AuthError) {
+        return err;
       }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
       return {
         status: "error",
         message: "Unknown error happend",
@@ -187,8 +221,8 @@ class _ComponentService {
     id: string
   ): Promise<
     | ServerResponseSuccess<Component>
-    | ServerResponseAuthenticationError
-    | ServerResponseAuthorizationError
+    | AccessError
+    | AuthError
     | ServerResponseError
   > => {
     try {
@@ -196,19 +230,21 @@ class _ComponentService {
         await this.service.getOne(id);
       return result;
     } catch (err: unknown) {
-      if (
-        "code" in
-        (err as
-          | ServerResponseAuthenticationError
-          | ServerResponseAuthorizationError)
-      ) {
-        return err as
-          | ServerResponseAuthenticationError
-          | ServerResponseAuthorizationError;
+      if (err instanceof AccessError) {
+        return err;
       }
-      if ("errors" in (err as ServerResponseValidationError)) {
-        return err as ServerResponseValidationError;
+
+      if (err instanceof AuthError) {
+        return err;
       }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
       return {
         status: "error",
         message: "Unknown error happend",

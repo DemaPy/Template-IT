@@ -30,7 +30,7 @@ const CreateComponent = () => {
     const [content, setContent] = useState("")
 
     const onSubmit = async () => {
-        if (componentName.length > 3) {
+        if (componentName.length >= 3) {
             setLoading(true)
             const response = await ComponentService.create({ title: componentName, content })
             const parsed = handleResponse<Component>(response, location, navigate)
@@ -39,6 +39,8 @@ const CreateComponent = () => {
                 setComponent(parsed.data!)
             }
             setClose()
+        } else {
+            alert("Minimum length 3 symbols")
         }
     }
     return (

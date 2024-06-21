@@ -1,3 +1,6 @@
+import { AccessError } from "./Errors/AccessError";
+import { AuthError } from "./Errors/AuthError";
+
 const BASE_URL = "http://localhost:7777";
 
 export class ComponentServiceDB {
@@ -15,15 +18,17 @@ export class ComponentServiceDB {
       });
       const json = await response.json();
       if (!response.ok) {
-        const error: ServerResponseValidationError = {
-          message: json.message,
-          status: "error",
-          errors: json.errors,
-        };
-        throw error;
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
       }
       return json;
-    } catch (error) {
+    } catch (error: any) {
       throw error;
     }
   }
@@ -44,8 +49,18 @@ export class ComponentServiceDB {
           body: JSON.stringify({ component_id }),
         }
       );
-      const data: ServerResponseSuccess<Placeholder> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -63,8 +78,18 @@ export class ComponentServiceDB {
         },
         body: JSON.stringify(placeholder),
       });
-      const data: ServerResponseSuccess<Placeholder> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -80,8 +105,18 @@ export class ComponentServiceDB {
         },
         body: JSON.stringify(placeholder),
       });
-      const data: ServerResponseSuccess<Placeholder> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -95,14 +130,26 @@ export class ComponentServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponseSuccess<Component> = await response.json();
-      return data.data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
   }
 
-  static async update(component: Component): Promise<ServerResponseSuccess<Component> | ServerResponseError> {
+  static async update(
+    component: Component
+  ): Promise<ServerResponseSuccess<Component> | ServerResponseError> {
     try {
       const response = await fetch(BASE_URL + `/components/`, {
         method: "PATCH",
@@ -114,12 +161,14 @@ export class ComponentServiceDB {
       });
       const json = await response.json();
       if (!response.ok) {
-        const error: ServerResponseValidationError = {
-          message: json.message,
-          status: "error",
-          errors: json.errors,
-        };
-        throw error;
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
       }
       return json;
     } catch (error) {
@@ -134,8 +183,18 @@ export class ComponentServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponseSuccess<Component[]> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -148,8 +207,18 @@ export class ComponentServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponseSuccess<Component> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }

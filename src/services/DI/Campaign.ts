@@ -1,6 +1,7 @@
-import { ensureError } from "@/lib/utils";
 import { CampaignServiceDB } from "../CampaignDB";
 import { DataToReturn } from "@/pages/Campaigns/pages/components/Section";
+import { AccessError } from "../Errors/AccessError";
+import { AuthError } from "../Errors/AuthError";
 
 class _CampaignService {
   service: any;
@@ -8,15 +9,40 @@ class _CampaignService {
     this.service = service;
   }
 
-  delete = async (campaign_id: Campaign["id"]) => {
+  delete = async (
+    campaign_id: Campaign["id"]
+  ): Promise<
+    | ServerResponseSuccess<Campaign>
+    | ServerResponseValidationError
+    | AccessError
+    | AuthError
+    | ServerResponseError
+  > => {
     try {
       const result: ServerResponseSuccess<Campaign> = await this.service.delete(
         campaign_id
       );
       return result;
     } catch (err) {
-      const error = ensureError(err);
-      return error;
+      if (err instanceof AccessError) {
+        return err;
+      }
+
+      if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
     }
   };
 
@@ -25,6 +51,8 @@ class _CampaignService {
   ): Promise<
     | ServerResponseSuccess<Campaign>
     | ServerResponseValidationError
+    | AccessError
+    | AuthError
     | ServerResponseError
   > => {
     try {
@@ -33,9 +61,21 @@ class _CampaignService {
       );
       return result;
     } catch (err) {
-      if ("errors" in (err as ServerResponseValidationError)) {
-        return err as ServerResponseValidationError;
+      if (err instanceof AccessError) {
+        return err;
       }
+
+      if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
       return {
         status: "error",
         message: "Unknown error happend",
@@ -48,8 +88,8 @@ class _CampaignService {
   ): Promise<
     | ServerResponseSuccess<Campaign>
     | ServerResponseValidationError
-    | ServerResponseAuthorizationError
-    | ServerResponseAuthenticationError
+    | AccessError
+    | AuthError
     | ServerResponseError
   > => {
     try {
@@ -58,19 +98,21 @@ class _CampaignService {
       );
       return result;
     } catch (err: unknown) {
-      if (
-        "code" in
-        (err as
-          | ServerResponseAuthenticationError
-          | ServerResponseAuthorizationError)
-      ) {
-        return err as
-          | ServerResponseAuthenticationError
-          | ServerResponseAuthorizationError;
+      if (err instanceof AccessError) {
+        return err;
       }
-      if ("errors" in (err as ServerResponseValidationError)) {
-        return err as ServerResponseValidationError;
+
+      if (err instanceof AuthError) {
+        return err;
       }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
       return {
         status: "error",
         message: "Unknown error happend",
@@ -78,26 +120,74 @@ class _CampaignService {
     }
   };
 
-  getAll = async () => {
+  getAll = async (): Promise<
+    | ServerResponseSuccess<Campaign[]>
+    | ServerResponseValidationError
+    | AccessError
+    | AuthError
+    | ServerResponseError
+  > => {
     try {
       const result: ServerResponseSuccess<Campaign[]> =
         await this.service.getAll();
       return result;
     } catch (err: unknown) {
-      const error = ensureError(err);
-      return error;
+      if (err instanceof AccessError) {
+        return err;
+      }
+
+      if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
     }
   };
 
-  getOne = async (id: Campaign["id"]) => {
+  getOne = async (
+    id: Campaign["id"]
+  ): Promise<
+    | ServerResponseSuccess<Campaign>
+    | ServerResponseValidationError
+    | AccessError
+    | AuthError
+    | ServerResponseError
+  > => {
     try {
       const result: ServerResponseSuccess<Campaign> = await this.service.getOne(
         id
       );
       return result;
     } catch (err: unknown) {
-      const error = ensureError(err);
-      return error;
+      if (err instanceof AccessError) {
+        return err;
+      }
+
+      if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
     }
   };
 
@@ -125,6 +215,8 @@ class _CampaignService {
   ): Promise<
     | ServerResponseSuccess<Campaign>
     | ServerResponseValidationError
+    | AccessError
+    | AuthError
     | ServerResponseError
   > => {
     try {
@@ -132,9 +224,21 @@ class _CampaignService {
         await this.service.updateLayout(layout);
       return result;
     } catch (err: unknown) {
-      if ("errors" in (err as ServerResponseValidationError)) {
-        return err as ServerResponseValidationError;
+      if (err instanceof AccessError) {
+        return err;
       }
+
+      if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
       return {
         status: "error",
         message: "Unknown error happend",
@@ -147,6 +251,8 @@ class _CampaignService {
   ): Promise<
     | ServerResponseSuccess<Campaign>
     | ServerResponseValidationError
+    | AccessError
+    | AuthError
     | ServerResponseError
   > => {
     try {
@@ -154,9 +260,21 @@ class _CampaignService {
         await this.service.updateLayoutsOrder(layout);
       return result;
     } catch (err: unknown) {
-      if ("errors" in (err as ServerResponseValidationError)) {
-        return err as ServerResponseValidationError;
+      if (err instanceof AccessError) {
+        return err;
       }
+
+      if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
       return {
         status: "error",
         message: "Unknown error happend",
@@ -173,8 +291,25 @@ class _CampaignService {
         await this.service.savePlaceholderData(data);
       return result;
     } catch (err: unknown) {
-      const error = ensureError(err);
-      return error;
+      if (err instanceof AccessError) {
+        return err;
+      }
+
+      if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
     }
   };
 }

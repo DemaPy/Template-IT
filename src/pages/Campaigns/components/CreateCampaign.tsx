@@ -28,7 +28,7 @@ const CreateCampaign = () => {
 
     const onSubmit = async () => {
         if (campaignName.length >= 3 && template_id && css.length > 10) {
-            const response = await CampaignService.create({ title: campaignName, templateId: template_id, css })
+            const response = await CampaignService.create({ title: campaignName, templateId: template_id })
             if (response.status === "error") {
 
                 if ("errors" in response) {

@@ -1,3 +1,6 @@
+import { AccessError } from "./Errors/AccessError";
+import { AuthError } from "./Errors/AuthError";
+
 const BASE_URL = "http://localhost:7777";
 
 export class CampaignServiceDB {
@@ -13,12 +16,14 @@ export class CampaignServiceDB {
       });
       const json = await response.json();
       if (!response.ok) {
-        const error: ServerResponseValidationError = {
-          message: json.message,
-          status: "error",
-          errors: json.errors
-        };
-        throw error;
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
       }
       return json;
     } catch (error) {
@@ -36,20 +41,26 @@ export class CampaignServiceDB {
         },
         body: JSON.stringify(layout),
       });
+      const json = await response.json();
       if (!response.ok) {
-        const err: ServerResponseError = await response.json()
-        throw err
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
       }
-      const data: ServerResponseSuccess<Layout> = await response.json();
-      return data;
+      return json;
     } catch (error) {
       if (error instanceof Error) {
         throw {
-          status: 'error',
-          message: error.message
+          status: "error",
+          message: error.message,
         };
       }
-      throw error
+      throw error;
     }
   }
 
@@ -61,37 +72,59 @@ export class CampaignServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({layout: layouts}),
+        body: JSON.stringify({ layout: layouts }),
       });
+      const json = await response.json();
       if (!response.ok) {
-        const err: ServerResponseError = await response.json()
-        throw err
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
       }
-      const data: ServerResponseSuccess<Layout> = await response.json();
-      return data;
+      return json;
     } catch (error) {
       if (error instanceof Error) {
         throw {
-          status: 'error',
-          message: error.message
+          status: "error",
+          message: error.message,
         };
       }
-      throw error
+      throw error;
     }
   }
 
-  static async savePlaceholderData(_data: {campaignId: Campaign['id'], data: Record<string, Record<string, Record<string, string>>>}) {
+  static async savePlaceholderData(_data: {
+    campaignId: Campaign["id"];
+    data: Record<string, Record<string, Record<string, string>>>;
+  }) {
     try {
-      const response = await fetch(BASE_URL + `/campaigns/${_data.campaignId}/data`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        body: JSON.stringify(_data.data),
-      });
-      const data: ServerResponseSuccess<Campaign> = await response.json();
-      return data;
+      const response = await fetch(
+        BASE_URL + `/campaigns/${_data.campaignId}/data`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+          body: JSON.stringify(_data.data),
+        }
+      );
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -105,8 +138,18 @@ export class CampaignServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponseSuccess<Campaign> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -122,8 +165,18 @@ export class CampaignServiceDB {
         },
         body: JSON.stringify(campaign),
       });
-      const data: ServerResponseSuccess<Campaign> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -136,8 +189,18 @@ export class CampaignServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponseSuccess<Campaign[]> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
@@ -150,8 +213,18 @@ export class CampaignServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const data: ServerResponseSuccess<Campaign> = await response.json();
-      return data;
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        throw new Error(response.statusText);
+      }
+      return json;
     } catch (error) {
       throw error;
     }
