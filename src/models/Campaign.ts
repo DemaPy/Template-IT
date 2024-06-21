@@ -5,6 +5,5 @@ type Campaign = {
     templateId: string
     template?: Template
     data: CampaignData
-    css: string
     layout: Layout[]
 }
