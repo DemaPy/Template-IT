@@ -285,7 +285,13 @@ class _CampaignService {
   savePlaceholderData = async (data: {
     campaignId: Campaign["id"];
     data: Record<string, Record<string, Record<string, string>>>;
-  }) => {
+  }): Promise<
+  | ServerResponseSuccess<Campaign>
+  | ServerResponseValidationError
+  | AccessError
+  | AuthError
+  | ServerResponseError
+> => {
     try {
       const result: ServerResponseSuccess<Campaign> =
         await this.service.savePlaceholderData(data);

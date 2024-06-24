@@ -67,7 +67,7 @@ const CreateComponent = () => {
                             id="content"
                             value={content}
                             onChange={ev => setContent(ev.target.value)}
-                            className="col-span-4 resize-y min-h-48 max-h-80"
+                            className="col-span-4 resize-y min-h-64 max-h-96"
                         />
                     </div>
                 </div>

@@ -60,7 +60,7 @@ const Sidebar = ({ isLayoutChanged, handleLayoutChange, setSelectedSlug, layout,
               <div>
                 <Select
                   value={slug || ""}
-                  onValueChange={value => setSelectedSlug(value)}
+                  onValueChange={value => setSelectedSlug(value.toUpperCase())}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select slug" />

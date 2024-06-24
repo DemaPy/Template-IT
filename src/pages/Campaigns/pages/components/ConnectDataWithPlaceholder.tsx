@@ -14,9 +14,13 @@ import { Label } from "@/components/ui/label"
 import { useSectionUpdateModal } from "@/store/sectionUpdateModal"
 import MatchColumns from "./MatchColumns"
 import { CampaignService } from "@/services/DI/Campaign"
+import { handleResponse } from "@/utils/handleResponse"
+import { useLocation, useNavigate } from "react-router-dom"
 
 
 const ConnectDataWithPlaceholder = ({ campaignId }: { campaignId: Campaign['id'] }) => {
+  const location = useLocation()
+  const navigate = useNavigate()
   const [selectedColumns, setSelectedColumns] = useState<Record<string, string>>({})
   const [parsedCSV, setParsedCSV] = useState<any[] | null>(null)
   const [columns, setColumns] = useState<string[] | null>(null)
@@ -32,17 +36,15 @@ const ConnectDataWithPlaceholder = ({ campaignId }: { campaignId: Campaign['id']
     for (const placeholder_id in selectedColumns) {
       const column = selectedColumns[placeholder_id]
       for (const obj_data of parsedCSV!) {
-        data[obj_data.slug] = obj_data[column.toLowerCase()]
+        data[obj_data.slug.toUpperCase()] = obj_data[column.toLowerCase()]
       }
       result[placeholder_id] = data
       data = {}
     }
     const response = await CampaignService.savePlaceholderData({ campaignId: campaignId, data: { [section!.id]: result } })
-    if (response.status === "error") {
-      alert(response.message)
-    }
-    if (response.status === "success") {
-      setCampaign(response.data)
+    const parsed = handleResponse<Campaign>(response, location, navigate)
+    if (parsed) {
+      setCampaign(parsed.data!)
     }
     setClose()
   }
@@ -79,6 +81,9 @@ const ConnectDataWithPlaceholder = ({ campaignId }: { campaignId: Campaign['id']
   }
 
   const handleSelectColumn = ({ placeholder_id, value }: { placeholder_id: string, value: string }) => {
+    if (value === "") {
+      return
+    }
     if (value === "default") {
       setSelectedColumns(prev => {
         delete prev[placeholder_id]

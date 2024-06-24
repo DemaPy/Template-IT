@@ -32,7 +32,7 @@ const Campaign = () => {
   if (!campaign) return null;
 
   const handleDelete = async () => {
-    const response = await CampaignService.delete(campaign.id!);
+    const response = await CampaignService.delete(campaign.id);
     if (response.status === "success") {
       navigate("/campaigns");
       return;

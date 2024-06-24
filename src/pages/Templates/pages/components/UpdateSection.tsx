@@ -13,8 +13,13 @@ import { Button } from '@/components/ui/button'
 import { useSectionUpdateModal } from '@/store/sectionUpdateModal'
 import { TemplateService } from '@/services/DI/Template'
 import { useSectionCreateModal } from '@/store/sectionCreateModal'
+import { useLocation, useNavigate } from "react-router-dom"
+import { handleResponse } from "@/utils/handleResponse"
 
 const UpdateSection = () => {
+    const navigate = useNavigate()
+    const location = useLocation()
+    const [loading, setLoading] = useState<boolean>(false)
     const setSection = useSectionCreateModal(state => state.setSection)
     const isOpen = useSectionUpdateModal(state => state.isOpen)
     const setClose = useSectionUpdateModal(state => state.setClose)
@@ -32,13 +37,13 @@ const UpdateSection = () => {
 
     const onSubmit = async () => {
         if (section && title && content) {
+            setLoading(true)
             const response = await TemplateService.updateSection({ ...section, content: content, title: title })
-            if (response.status === "error") {
-                alert(response.message)
-                setClose()
-                return
+            const parsed = handleResponse<Section>(response, location, navigate)
+            setLoading(false)
+            if (parsed) {
+                setSection(parsed.data)
             }
-            setSection(response.data!)
             setClose()
         }
     }
@@ -71,7 +76,7 @@ const UpdateSection = () => {
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onSubmit}>Save changes</Button>
+                    <Button onClick={onSubmit} disabled={loading}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
