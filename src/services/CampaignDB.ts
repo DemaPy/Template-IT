@@ -1,5 +1,6 @@
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
+import { ValidationError } from "./Errors/ValidationError";
 
 const BASE_URL = "http://localhost:7777";
 
@@ -21,6 +22,13 @@ export class CampaignServiceDB {
         }
         if (response.status === 401) {
           throw new AuthError({ message: json.message });
+        }
+
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
         }
 
         throw new Error(response.statusText);
@@ -48,6 +56,13 @@ export class CampaignServiceDB {
         }
         if (response.status === 401) {
           throw new AuthError({ message: json.message });
+        }
+
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
         }
 
         throw new Error(response.statusText);
@@ -81,6 +96,13 @@ export class CampaignServiceDB {
         }
         if (response.status === 401) {
           throw new AuthError({ message: json.message });
+        }
+
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
         }
 
         throw new Error(response.statusText);
@@ -122,6 +144,13 @@ export class CampaignServiceDB {
           throw new AuthError({ message: json.message });
         }
 
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
+        }
+
         throw new Error(response.statusText);
       }
       return json;
@@ -145,6 +174,13 @@ export class CampaignServiceDB {
         }
         if (response.status === 401) {
           throw new AuthError({ message: json.message });
+        }
+
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
         }
 
         throw new Error(response.statusText);
@@ -174,6 +210,13 @@ export class CampaignServiceDB {
           throw new AuthError({ message: json.message });
         }
 
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
+        }
+
         throw new Error(response.statusText);
       }
       return json;
@@ -198,6 +241,13 @@ export class CampaignServiceDB {
           throw new AuthError({ message: json.message });
         }
 
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
+        }
+
         throw new Error(response.statusText);
       }
       return json;
@@ -220,6 +270,13 @@ export class CampaignServiceDB {
         }
         if (response.status === 401) {
           throw new AuthError({ message: json.message });
+        }
+
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
         }
 
         throw new Error(response.statusText);

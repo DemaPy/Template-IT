@@ -119,7 +119,7 @@ const ConnectDataWithPlaceholder = ({ campaignId }: { campaignId: Campaign['id']
         }
         {
           parsedCSV && columns && (
-            <div className="flex flex-col gap-2 w-full">
+            <div className="flex flex-col gap-2 w-full max-h-[600px] overflow-auto">
               {section?.placeholders.map((item, idx) => {
                 return (
                   <div className="grid grid-cols-6 gap-2" key={idx}>

@@ -14,7 +14,8 @@ import { handleResponse } from "@/utils/handleResponse";
 const Components = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [components, setComponents] = useState<Array<Component> | null>(null);
+  const isOpen = useComponentCreateModal(state => state.isOpen)
+  const [components, setComponents] = useState<Array<Component>>([]);
   const setIsOpen = useComponentCreateModal((state) => state.setOpen);
   const component = useComponentUpdateModal((state) => state.component);
 
@@ -38,7 +39,11 @@ const Components = () => {
           title: "create",
         }}
       />
-      <CreateComponent />
+      {
+        isOpen && (
+          <CreateComponent components={components} />
+        )
+      }
       <GridView items={components} component={ComponentCard} />
     </PageContainer>
   );

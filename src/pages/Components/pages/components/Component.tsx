@@ -5,14 +5,20 @@ import { Textarea } from '@/components/ui/textarea'
 import { ComponentService } from '@/services/DI/Component'
 import { useComponentUpdateModal } from '@/store/componentUpdateModal'
 import { usePlaceholderCreateModal } from '@/store/placeholderCreateModal'
+import { handleResponse } from '@/utils/handleResponse'
 import { ChevronDown, ChevronUpIcon, Edit2Icon, TrashIcon } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 type Props = {
   item: Component
 }
 
 const Component = ({ item }: Props) => {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState<boolean>(false)
+
   const [isOpen, setIsOpenTextArea] = useState(false)
   const setIsOpen = useComponentUpdateModal(state => state.setOpen)
   const setComponent = useComponentUpdateModal(state => state.setComponent)
@@ -44,13 +50,13 @@ const Component = ({ item }: Props) => {
     }
   }, [isOpen])
 
-  const handleDeleteClick = async (placeholderId: Placeholder['id'], componentId: Component['id']) => {
-    const response = await ComponentService.deletePlaceholder(placeholderId, componentId)
-    if (response.status === "error") {
-      alert(response.message)
-      return
-    } else {
-      setComponent(response.data)
+  const handleDeleteClick = async (placeholderId: Placeholder['id']) => {
+    setLoading(true)
+    const response = await ComponentService.deletePlaceholder(placeholderId)
+    const parsed = handleResponse<Component>(response, location, navigate)
+    setLoading(false)
+    if (parsed) {
+      setComponent(parsed.data!)
     }
   }
 
@@ -69,7 +75,7 @@ const Component = ({ item }: Props) => {
         item.placeholders.map(item => (
           <div className='flex justify-between gap-2 items-center' key={item.id}>
             <p className="p-2 border rounded-md grow text-sm" >Name: {item.title} | Position: {item.position} | Fallback: {item.fallback}</p>
-            <Button variant={"ghost"} onClick={() => handleDeleteClick(item.id, item.componentId!)} size={"icon"}> <TrashIcon className='w-4 h-4' /> </Button>
+            <Button disabled={loading} variant={"ghost"} onClick={() => handleDeleteClick(item.id)} size={"icon"}> <TrashIcon className='w-4 h-4' /> </Button>
           </div>
         ))
       )}

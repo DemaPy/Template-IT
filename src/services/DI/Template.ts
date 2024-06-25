@@ -2,6 +2,7 @@ import { ensureError } from "@/lib/utils";
 import { TemplateServiceDB } from "../TemplateDB";
 import { AccessError } from "../Errors/AccessError";
 import { AuthError } from "../Errors/AuthError";
+import { ValidationError } from "../Errors/ValidationError";
 
 class _TemplateService {
   service: any;
@@ -13,7 +14,7 @@ class _TemplateService {
     section_id: Section["id"]
   ): Promise<
     | ServerResponseSuccess<Section>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -28,6 +29,10 @@ class _TemplateService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -49,7 +54,7 @@ class _TemplateService {
     template_id: Template["id"]
   ): Promise<
     | ServerResponseSuccess<Template>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -65,6 +70,10 @@ class _TemplateService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -86,7 +95,7 @@ class _TemplateService {
     template: Omit<Template, "id" | "sections" | "userId">
   ): Promise<
     | ServerResponseSuccess<Template>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -102,6 +111,10 @@ class _TemplateService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -123,7 +136,7 @@ class _TemplateService {
     template: Template
   ): Promise<
     | ServerResponseSuccess<Template>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -139,6 +152,10 @@ class _TemplateService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -160,26 +177,7 @@ class _TemplateService {
     section: Omit<Section, "id" | "placeholders">
   ): Promise<
     | ServerResponseSuccess<Section>
-    | ServerResponseValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
-    try {
-      const result: ServerResponseSuccess<Section> =
-        await this.service.createSection(section);
-      return result;
-    } catch (err: unknown) {
-      const error = ensureError(err);
-      return error;
-    }
-  };
-
-  createSectionFromComponent = async (
-    section: Omit<Section, "id">
-  ): Promise<
-    | ServerResponseSuccess<Section>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -194,6 +192,50 @@ class _TemplateService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
+        return err;
+      }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
+    }
+  };
+
+  createSectionFromComponent = async (
+    section: Omit<Section, "id">
+  ): Promise<
+    | ServerResponseSuccess<Section>
+    | ValidationError
+    | AccessError
+    | AuthError
+    | ServerResponseError
+  > => {
+    try {
+      const result: ServerResponseSuccess<Section> =
+        await this.service.createSection(section);
+      return result;
+    } catch (err: unknown) {
+      if (err instanceof AccessError) {
+        return err;
+      }
+
+      if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -215,7 +257,7 @@ class _TemplateService {
     placeholder: Omit<Placeholder, "id">
   ): Promise<
     | ServerResponseSuccess<Placeholder>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -230,6 +272,10 @@ class _TemplateService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -251,7 +297,7 @@ class _TemplateService {
     placeholder_id: Placeholder["id"]
   ): Promise<
     | ServerResponseSuccess<Placeholder>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -266,6 +312,10 @@ class _TemplateService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -287,7 +337,7 @@ class _TemplateService {
     section_id: Section["id"]
   ): Promise<
     | ServerResponseSuccess<Section>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -302,6 +352,10 @@ class _TemplateService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -321,7 +375,7 @@ class _TemplateService {
 
   getAll = async (): Promise<
     | ServerResponseSuccess<Template[]>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -336,6 +390,10 @@ class _TemplateService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -357,7 +415,7 @@ class _TemplateService {
     id: string
   ): Promise<
     | ServerResponseSuccess<Template>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -373,6 +431,10 @@ class _TemplateService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -394,7 +456,7 @@ class _TemplateService {
     section: Section
   ): Promise<
     | ServerResponseSuccess<Section>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -409,6 +471,10 @@ class _TemplateService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 

@@ -15,24 +15,32 @@ import { ComponentService } from "@/services/DI/Component"
 import { useComponentUpdateModal } from "@/store/componentUpdateModal"
 import { handleResponse } from "@/utils/handleResponse"
 import { useLocation, useNavigate } from "react-router-dom"
+import { usePosition } from "@/hooks/usePosition"
+import ComponentSelect from "@/pages/Templates/pages/components/ComponentSelect"
 
 
-const CreateComponent = () => {
+const CreateComponent = ({ components }: { components: Component[] }) => {
+    const isOpen = useComponentCreateModal(state => state.isOpen)
+    const [component_id, _setComponent] = useState<string | null>(null)
+    const { ref, position, setPosition } = usePosition(isOpen)
+    
     const location = useLocation()
     const navigate = useNavigate()
     const [loading, setLoading] = useState<boolean>(false)
 
-    const isOpen = useComponentCreateModal(state => state.isOpen)
     const setClose = useComponentCreateModal(state => state.setClose)
     const setComponent = useComponentUpdateModal(state => state.setComponent)
 
-    const [componentName, setComponentName] = useState("")
+    const [componentTitle, setComponentTitle] = useState("")
     const [content, setContent] = useState("")
+    const [placeholders, setPlaceholders] = useState<Pick<Placeholder, "title" | 'position' | 'fallback'>[]>([])
+
 
     const onSubmit = async () => {
-        if (componentName.length >= 3) {
+        if (componentTitle.length >= 3) {
+            const component: ComponentCreateDTO = { title: componentTitle, content, placeholders }
             setLoading(true)
-            const response = await ComponentService.create({ title: componentName, content })
+            const response = await ComponentService.create(component)
             const parsed = handleResponse<Component>(response, location, navigate)
             setLoading(false)
             if (parsed) {
@@ -43,6 +51,19 @@ const CreateComponent = () => {
             alert("Minimum length 3 symbols")
         }
     }
+
+    const handleSelectComponent = (id: Component['id']) =>{
+        if (!position) return
+        _setComponent(id)
+        const selectedComponent = components.find(item=>item.id===id)!
+        const newContent = content.split("")
+        newContent.splice(position, 0, selectedComponent.content)
+        setPlaceholders(prev => ([...prev, ...selectedComponent.placeholders.map(item => ({ title: item.title, fallback: item.fallback, position: item.position + position}))]))
+        setContent(newContent.join(''))
+        setPosition(null)
+        _setComponent(null)
+    }
+
     return (
         <Dialog open={isOpen} onOpenChange={setClose}>
             <DialogContent>
@@ -56,14 +77,16 @@ const CreateComponent = () => {
                         </Label>
                         <Input
                             id="name"
-                            value={componentName}
-                            onChange={ev => setComponentName(ev.target.value)}
+                            value={componentTitle}
+                            onChange={ev => setComponentTitle(ev.target.value)}
                             className="col-span-4"
                         />
+                        <ComponentSelect isRender={position !== null && position > 0} components={components} setComponent={handleSelectComponent} component_id={component_id || ""} />
                         <Label htmlFor="content" className="text-left">
                             Content
                         </Label>
                         <Textarea
+                            ref={ref}
                             id="content"
                             value={content}
                             onChange={ev => setContent(ev.target.value)}

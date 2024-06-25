@@ -2,6 +2,7 @@ import { CampaignServiceDB } from "../CampaignDB";
 import { DataToReturn } from "@/pages/Campaigns/pages/components/Section";
 import { AccessError } from "../Errors/AccessError";
 import { AuthError } from "../Errors/AuthError";
+import { ValidationError } from "../Errors/ValidationError";
 
 class _CampaignService {
   service: any;
@@ -13,7 +14,7 @@ class _CampaignService {
     campaign_id: Campaign["id"]
   ): Promise<
     | ServerResponseSuccess<Campaign>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -29,6 +30,10 @@ class _CampaignService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -50,7 +55,7 @@ class _CampaignService {
     campaign: Omit<Campaign, "id" | "userId" | "layout" | "data">
   ): Promise<
     | ServerResponseSuccess<Campaign>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -66,6 +71,10 @@ class _CampaignService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -87,7 +96,7 @@ class _CampaignService {
     campaign: Campaign
   ): Promise<
     | ServerResponseSuccess<Campaign>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -103,6 +112,10 @@ class _CampaignService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -122,7 +135,7 @@ class _CampaignService {
 
   getAll = async (): Promise<
     | ServerResponseSuccess<Campaign[]>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -137,6 +150,10 @@ class _CampaignService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -158,7 +175,7 @@ class _CampaignService {
     id: Campaign["id"]
   ): Promise<
     | ServerResponseSuccess<Campaign>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -174,6 +191,10 @@ class _CampaignService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -214,7 +235,7 @@ class _CampaignService {
     layout: Partial<Layout>
   ): Promise<
     | ServerResponseSuccess<Campaign>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -229,6 +250,10 @@ class _CampaignService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -250,7 +275,7 @@ class _CampaignService {
     layout: Layout[]
   ): Promise<
     | ServerResponseSuccess<Campaign>
-    | ServerResponseValidationError
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -265,6 +290,10 @@ class _CampaignService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -286,12 +315,12 @@ class _CampaignService {
     campaignId: Campaign["id"];
     data: Record<string, Record<string, Record<string, string>>>;
   }): Promise<
-  | ServerResponseSuccess<Campaign>
-  | ServerResponseValidationError
-  | AccessError
-  | AuthError
-  | ServerResponseError
-> => {
+    | ServerResponseSuccess<Campaign>
+    | ValidationError
+    | AccessError
+    | AuthError
+    | ServerResponseError
+  > => {
     try {
       const result: ServerResponseSuccess<Campaign> =
         await this.service.savePlaceholderData(data);
@@ -302,6 +331,10 @@ class _CampaignService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 

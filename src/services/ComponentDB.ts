@@ -1,5 +1,6 @@
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
+import { ValidationError } from "./Errors/ValidationError";
 
 const BASE_URL = "http://localhost:7777";
 
@@ -25,6 +26,13 @@ export class ComponentServiceDB {
           throw new AuthError({ message: json.message });
         }
 
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
+        }
+
         throw new Error(response.statusText);
       }
       return json;
@@ -33,10 +41,7 @@ export class ComponentServiceDB {
     }
   }
 
-  static async deletePlaceholder(
-    placeholder_id: Placeholder["id"],
-    component_id: Component["id"]
-  ) {
+  static async deletePlaceholder(placeholder_id: Placeholder["id"]) {
     try {
       const response = await fetch(
         BASE_URL + `/component-palceholders/${placeholder_id}`,
@@ -46,7 +51,6 @@ export class ComponentServiceDB {
             "Content-Type": "application/json",
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
-          body: JSON.stringify({ component_id }),
         }
       );
       const json = await response.json();
@@ -56,6 +60,13 @@ export class ComponentServiceDB {
         }
         if (response.status === 401) {
           throw new AuthError({ message: json.message });
+        }
+
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
         }
 
         throw new Error(response.statusText);
@@ -87,6 +98,13 @@ export class ComponentServiceDB {
           throw new AuthError({ message: json.message });
         }
 
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
+        }
+
         throw new Error(response.statusText);
       }
       return json;
@@ -114,6 +132,13 @@ export class ComponentServiceDB {
           throw new AuthError({ message: json.message });
         }
 
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
+        }
+
         throw new Error(response.statusText);
       }
       return json;
@@ -137,6 +162,13 @@ export class ComponentServiceDB {
         }
         if (response.status === 401) {
           throw new AuthError({ message: json.message });
+        }
+
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
         }
 
         throw new Error(response.statusText);
@@ -168,6 +200,13 @@ export class ComponentServiceDB {
           throw new AuthError({ message: json.message });
         }
 
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
+        }
+
         throw new Error(response.statusText);
       }
       return json;
@@ -192,6 +231,13 @@ export class ComponentServiceDB {
           throw new AuthError({ message: json.message });
         }
 
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
+        }
+
         throw new Error(response.statusText);
       }
       return json;
@@ -214,6 +260,13 @@ export class ComponentServiceDB {
         }
         if (response.status === 401) {
           throw new AuthError({ message: json.message });
+        }
+
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
         }
 
         throw new Error(response.statusText);

@@ -16,12 +16,14 @@ import { useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useSectionFromComponentCreateModal } from '@/store/sectionFromComponentCreateModal'
 import { Textarea } from '@/components/ui/textarea'
 import { TemplateService } from '@/services/DI/Template'
 import { useSectionCreateModal } from '@/store/sectionCreateModal'
 import SectionFromComponentBuilder from '@/pages/Components/pages/components/SectionFromComponentBuilder'
+import ComponentSelect from './ComponentSelect'
+import { handleResponse } from '@/utils/handleResponse'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 type Props = {
     template_id: string
@@ -29,6 +31,9 @@ type Props = {
 }
 
 const CreateSectionFromComponent = ({ template_id, components }: Props) => {
+    const location = useLocation()
+    const navigate = useNavigate()
+    
     const isOpen = useSectionFromComponentCreateModal(state => state.isOpen)
     const setClose = useSectionFromComponentCreateModal(state => state.setClose)
     const setIsOpen = useSectionFromComponentCreateModal(state => state.setOpen)
@@ -42,12 +47,10 @@ const CreateSectionFromComponent = ({ template_id, components }: Props) => {
         if (title.length >= 3 && component_id) {
             if (!component) return
             const response = await TemplateService.createSectionFromComponent({ templateId: template_id, content: component.content, placeholders: component.placeholders, title: title })
-            if (response.status === "error") {
-                alert(response.message)
-                setClose()
-                return
+            const parsed = handleResponse<Section>(response, location, navigate)
+            if (parsed) {
+                setSection(parsed.data!)
             }
-            setSection(response.data!)
             setClose()
         } else {
             alert("Minimum length 3 symbols")
@@ -78,17 +81,7 @@ const CreateSectionFromComponent = ({ template_id, components }: Props) => {
                                 onChange={ev => setTitle(ev.target.value)}
                                 className="col-span-4"
                             />
-                            <Select
-                                value={component_id || ""}
-                                onValueChange={value => setComponent(value)}
-                            >
-                                <SelectTrigger className="col-span-4">
-                                    <SelectValue placeholder="Select component" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {components.map((item, idx) => <SelectItem key={idx} value={item.id}>{item.title}</SelectItem>)}
-                                </SelectContent>
-                            </Select>
+                            <ComponentSelect components={components} setComponent={setComponent} component_id={component_id || ""} />
                             {component && (
                                 <>
                                     <Tabs defaultValue="content" className='col-span-4'>

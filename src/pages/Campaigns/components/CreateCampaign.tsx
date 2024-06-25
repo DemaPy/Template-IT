@@ -11,39 +11,34 @@ import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
 import { useCampaignCreateModal } from '@/store/campaignCreateModal'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import { TemplateService } from "@/services/DI/Template"
 import { CampaignService } from "@/services/DI/Campaign"
 import { useCampaignUpdateModal } from "@/store/campaignUpdateModal"
+import { handleResponse } from "@/utils/handleResponse"
+import { useLocation, useNavigate } from "react-router-dom"
 
 
 const CreateCampaign = () => {
+    const location = useLocation()
+    const navigate = useNavigate()
+    const [loading, setLoading] = useState<boolean>(false)
+
     const [templates, setTemplates] = useState<Array<Template> | null>(null)
     const isOpen = useCampaignCreateModal(state => state.isOpen)
     const setClose = useCampaignCreateModal(state => state.setClose)
     const [campaignName, setCampaignName] = useState("")
-    const [css, setCss] = useState("")
     const setCampaign = useCampaignUpdateModal(state => state.setCampaign)
     const [template_id, setTemplateId] = useState<string | null>(null)
 
     const onSubmit = async () => {
-        if (campaignName.length >= 3 && template_id && css.length > 10) {
+        if (campaignName.length >= 3 && template_id) {
+            setLoading(true)
             const response = await CampaignService.create({ title: campaignName, templateId: template_id })
-            if (response.status === "error") {
-
-                if ("errors" in response) {
-                    let error_message = ""
-                    for (const error of response.errors) {
-                        error_message += response.message + ": " + error.msg
-                    }
-                    alert(error_message)
-                    return
-                }
-    
-                alert(response.message)
-                return
+            const parsed = handleResponse<Campaign>(response, location, navigate)
+            setLoading(false)
+            if (parsed) {
+                setCampaign(parsed.data!)
             }
-            setCampaign(response.data!)
             setClose()
         } else {
             alert("Minimum length 3")
@@ -53,11 +48,10 @@ const CreateCampaign = () => {
     useEffect(() => {
         (async () => {
             const response = await TemplateService.getAll()
-            if (response.status === "error") {
-                alert(response.message)
-                return
+            const parsed = handleResponse<Template[]>(response, location, navigate)
+            if (parsed) {
+                setTemplates(parsed.data)
             }
-            setTemplates(response.data)
         })()
     }, [])
 
@@ -95,19 +89,10 @@ const CreateCampaign = () => {
                                 {templates.map((item, idx) => <SelectItem key={idx} value={item.id.toString()}>{item.title}</SelectItem>)}
                             </SelectContent>
                         </Select>
-                        <Label htmlFor="css" className="text-left">
-                            Css
-                        </Label>
-                        <Textarea
-                            id="css"
-                            value={css}
-                            onChange={ev => setCss(ev.target.value)}
-                            className="col-span-4 resize-none w-full min-h-60"
-                        />
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onSubmit}>Save changes</Button>
+                    <Button disabled={loading} onClick={onSubmit}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

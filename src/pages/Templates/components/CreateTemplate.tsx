@@ -13,11 +13,13 @@ import { useState } from 'react'
 import { TemplateService } from '@/services/DI/Template'
 import { useTemplateUpdateModal } from '@/store/templateUpdateModal'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { handleResponse } from '@/utils/handleResponse'
 
 
 const CreateTemplate = () => {
     const location = useLocation()
     const navigate = useNavigate()
+    const [loading, setLoading] = useState<boolean>(false)
     const isOpen = useTemplateCreateModal(state => state.isOpen)
     const setClose = useTemplateCreateModal(state => state.setClose)
     const [templateName, setTemplateName] = useState("")
@@ -25,30 +27,13 @@ const CreateTemplate = () => {
 
     const onSubmit = async () => {
         if (templateName.length >= 3) {
+            setLoading(true)
             const response = await TemplateService.create({ title: templateName })
-            if (response.status === "error") {
-                if ("errors" in response) {
-                    let error_message = ""
-                    for (const error of response.errors) {
-                        error_message += response.message + ": " + error.msg
-                    }
-                    alert(error_message)
-                    return
-                }
-
-                if ("code" in response && response.code === 401) {
-                    navigate(`/login?redirect=${location.pathname}`)
-                }
-
-                if ("code" in response && response.code === 403) {
-                    navigate(`/access-denied`)
-                }
-    
-                alert(response.message)
-                return
+            const parsed = handleResponse<Template>(response, location, navigate)
+            setLoading(false)
+            if (parsed) {
+                setTemplate(parsed.data!)
             }
-            
-            setTemplate(response.data!)
             setClose()
         } else {
             alert("Minimum length: 3 symbols.")
@@ -83,7 +68,7 @@ const CreateTemplate = () => {
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onSubmit}>Save changes</Button>
+                    <Button disabled={loading} onClick={onSubmit}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

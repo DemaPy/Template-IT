@@ -1,6 +1,7 @@
 import { ComponentServiceDB } from "../ComponentDB";
 import { AccessError } from "../Errors/AccessError";
 import { AuthError } from "../Errors/AuthError";
+import { ValidationError } from "../Errors/ValidationError";
 
 class _ComponentService {
   service: any;
@@ -9,7 +10,7 @@ class _ComponentService {
   }
 
   delete = async (
-    component: Component["id"]
+    component: ComponentDeleteDTO
   ): Promise<
     | ServerResponseSuccess<Component>
     | AccessError
@@ -29,6 +30,10 @@ class _ComponentService {
         return err;
       }
 
+      if (err instanceof ValidationError) {
+        return err;
+      }
+
       if (err instanceof Error) {
         return {
           status: "error",
@@ -44,7 +49,7 @@ class _ComponentService {
   };
 
   create = async (
-    component: Omit<Component, "id" | "placeholders">
+    component: ComponentCreateDTO
   ): Promise<
     | ServerResponseSuccess<Component>
     | AccessError
@@ -61,6 +66,10 @@ class _ComponentService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -99,6 +108,10 @@ class _ComponentService {
         return err;
       }
 
+      if (err instanceof ValidationError) {
+        return err;
+      }
+
       if (err instanceof Error) {
         return {
           status: "error",
@@ -114,8 +127,7 @@ class _ComponentService {
   };
 
   deletePlaceholder = async (
-    placeholder_id: Placeholder["id"],
-    componentId: Component["id"]
+    placeholder_id: Placeholder["id"]
   ): Promise<
     | ServerResponseSuccess<Component>
     | AccessError
@@ -124,7 +136,7 @@ class _ComponentService {
   > => {
     try {
       const result: ServerResponseSuccess<Component> =
-        await this.service.deletePlaceholder(placeholder_id, componentId);
+        await this.service.deletePlaceholder(placeholder_id);
       return result;
     } catch (err: unknown) {
       if (err instanceof AccessError) {
@@ -132,6 +144,10 @@ class _ComponentService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -170,6 +186,10 @@ class _ComponentService {
         return err;
       }
 
+      if (err instanceof ValidationError) {
+        return err;
+      }
+
       if (err instanceof Error) {
         return {
           status: "error",
@@ -200,6 +220,10 @@ class _ComponentService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
@@ -235,6 +259,10 @@ class _ComponentService {
       }
 
       if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
         return err;
       }
 
