@@ -3,6 +3,5 @@ type Placeholder = {
     title: string
     sectionId?: string
     componentId?: string
-    position: number
     fallback: string
 }

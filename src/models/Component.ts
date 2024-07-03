@@ -11,6 +11,4 @@ type ComponentCreateDTO = {
     placeholders?: Pick<Placeholder, "title" | 'position' | 'fallback'>[]
 }
 
-type ComponentDeleteDTO = {
-    title: Component['title']
-}
+type ComponentDeleteDTO = Component['id']

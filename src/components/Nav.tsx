@@ -1,8 +1,9 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../store/login";
 import { Button } from "./ui/button";
 
 const Nav = () => {
+    const navigate = useNavigate()
     const { isLogged, setIsLoggedOut } = useAuth()
     const location = useLocation()
 
@@ -19,6 +20,7 @@ const Nav = () => {
     const handleLogout = () => {
         localStorage.removeItem('token')
         setIsLoggedOut()
+        navigate('/')
     }
 
     const handleLogin = () => {
