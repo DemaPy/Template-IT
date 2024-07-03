@@ -25,6 +25,8 @@ const Campaign = () => {
       const parsed = handleResponse<Campaign>(response, location, navigate);
       if (parsed) {
         setCampaign(parsed.data);
+      } else {
+        navigate("/campaigns");
       }
     })();
   }, [_campaign]);

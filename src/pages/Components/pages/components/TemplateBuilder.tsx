@@ -1,30 +1,37 @@
+import { decode } from 'html-entities';
 
 type Props = {
     components: Component[]
 }
 
 const TemplateBuilder = ({ components }: Props) => {
-
-    let html = ''
-
-    for (const component of components) {
-        let shift = 0
-        const sectionPlaceholdersSort = component.placeholders?.toSorted((a, b) => a.position - b.position)
-        const document = component.content.split("")
-        // If data appears, placeholders also.
-        for (const placeholder of sectionPlaceholdersSort!) {
-            document.splice(placeholder.position + shift, 0, placeholder.fallback)
-            shift++
+    const component = components[0]
+    let decoded = ""
+    try {
+        const dom = new DOMParser().parseFromString(decode(component.content), "text/html")
+        const allSpans = dom.querySelectorAll("[data-template-it_id]")
+        if (allSpans.length > 0) {
+            allSpans.forEach(item => {
+                const id = item.getAttribute("data-template-it_id")
+                if (id) {
+                    const content = component.placeholders.find(item => item.id === id)!
+                    item.textContent = content?.fallback
+                    return true
+                }
+                return false
+            })
         }
-
-        html += document.join("")
+        decoded = dom.body.innerHTML
+    } catch (error) {
+        console.log(error);
     }
 
-    if (components[0].placeholders.length === 0) {
+    if (component.placeholders.length === 0) {
         return (
             <div className='w-full flex items-center justify-center flex-col text-md font-semibold text-center md:text-3xl'>Start adding placeholders</div>
         )
     }
+
 
     return (
         <div className="w-full flex flex-col gap-2 relative bg-slate-50 p-2">
@@ -34,7 +41,7 @@ const TemplateBuilder = ({ components }: Props) => {
                 height: '80vh',
                 overflowY: "scroll"
             }}>
-                <iframe srcDoc={`${html}`} className="h-full w-full">
+                <iframe srcDoc={decoded} className="h-full w-full">
                 </iframe>
             </div>
         </div>

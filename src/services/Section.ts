@@ -1,173 +1,11 @@
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
+import { UpdateSectionDTO } from "./types/Section";
 
 const BASE_URL = "http://localhost:7777";
 
-export class TemplateServiceDB {
-  static async create(
-    template: Omit<Template, "id">
-  ): Promise<ServerResponseSuccess<Template> | ServerResponseError> {
-    try {
-      const response = await fetch(BASE_URL + "/templates", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        body: JSON.stringify(template),
-      });
-      const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(response.statusText);
-      }
-      return json;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async delete(template_id: Template["id"]) {
-    try {
-      const response = await fetch(BASE_URL + `/templates/${template_id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(response.statusText);
-      }
-      return json;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async update(template: Template) {
-    try {
-      const response = await fetch(BASE_URL + "/templates", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        body: JSON.stringify(template),
-      });
-      const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(response.statusText);
-      }
-      return json;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async getAll() {
-    try {
-      const response = await fetch(BASE_URL + "/templates", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(response.statusText);
-      }
-      return json;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async getOne(id: string) {
-    try {
-      const response = await fetch(BASE_URL + `/templates/${id}`, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(response.statusText);
-      }
-      return json;
-    } catch (error) {
-      throw error;
-    }
-  }
+export class SectionServiceDB {
 
   static async duplicateSection(section_id: Section["id"]) {
     try {
@@ -302,7 +140,7 @@ export class TemplateServiceDB {
     }
   }
 
-  static async createSection(section: Omit<Section, "id">) {
+  static async create(section: Omit<Section, "id">) {
     try {
       const response = await fetch(BASE_URL + `/sections/`, {
         method: "POST",
@@ -336,7 +174,7 @@ export class TemplateServiceDB {
     }
   }
 
-  static async updateSection(section: Section) {
+  static async update(section: UpdateSectionDTO) {
     try {
       const response = await fetch(BASE_URL + `/sections/`, {
         method: "PATCH",

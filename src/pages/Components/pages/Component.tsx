@@ -3,7 +3,6 @@ import PageContainer from "@/components/PageContainer";
 import { Edit, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { useComponentCreateModal } from "@/store/componentCreateModal";
 import { useComponentUpdateModal } from "@/store/componentUpdateModal";
 import ComponentHandler from "./components/ComponentHandler";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +14,7 @@ const Component = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const setOpen = useComponentCreateModal((state) => state.setOpen);
+  const setOpen = useComponentUpdateModal((state) => state.setOpen);
   const setComponentStore = useComponentUpdateModal(
     (state) => state.setComponent
   );
@@ -31,11 +30,13 @@ const Component = () => {
       const parsed = handleResponse<Component>(response, location, navigate);
       if (parsed) {
         setComponent(parsed.data);
+      } else {
+        navigate("/components");
       }
     })();
   }, [_component]);
 
-  if (!component) return null;
+  if (!component) return null
 
   const handleDelete = async () => {
     const response = await ComponentService.delete(component.id!);
@@ -54,7 +55,7 @@ const Component = () => {
       <Heading
         title={component.title}
         action={{
-          icon: <Trash className="w-4 h-4" />,
+          icon: <Trash className="w-4 h-4 text-red-400" />,
           onClick: handleDelete,
         }}
         actions={[

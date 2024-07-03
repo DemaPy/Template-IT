@@ -1,6 +1,7 @@
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
+import { UpdateSectionDTO } from "./types/Section";
 
 const BASE_URL = "http://localhost:7777";
 
@@ -77,8 +78,8 @@ export class ComponentServiceDB {
     }
   }
 
-  static async createComponentPlaceholder(
-    placeholder: Omit<Placeholder, "id">
+  static async createPlaceholders(
+    placeholders: Omit<Placeholder, "id">[]
   ) {
     try {
       const response = await fetch(BASE_URL + `/component-palceholders/`, {
@@ -87,7 +88,7 @@ export class ComponentServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(placeholder),
+        body: JSON.stringify({placeholders: placeholders}),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -180,7 +181,7 @@ export class ComponentServiceDB {
   }
 
   static async update(
-    component: Component
+    component: UpdateSectionDTO
   ): Promise<ServerResponseSuccess<Component> | ServerResponseError> {
     try {
       const response = await fetch(BASE_URL + `/components/`, {

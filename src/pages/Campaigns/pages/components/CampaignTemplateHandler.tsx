@@ -3,6 +3,8 @@ import Sidebar from './Sidebar'
 import CampaignBuilder from './CampaignBuilder'
 import update from 'immutability-helper'
 import { CampaignService } from '@/services/DI/Campaign'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { handleResponse } from '@/utils/handleResponse'
 
 type Props = {
   campaign: Campaign
@@ -10,6 +12,10 @@ type Props = {
 }
 
 const CampaignTemplateHandler = ({ campaign, setCampaign }: Props) => {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [_, setLoading] = useState<boolean>(false)
+
   const [isLayoutChanged, setIsLayoutChanged] = useState(false)
   const [layout, setLayout] = useState<Layout[]>(campaign.layout.toSorted((a, b) => a.order - b.order))
   const [slug, setSelectedSlug] = useState<string | null>(null)
@@ -40,11 +46,11 @@ const CampaignTemplateHandler = ({ campaign, setCampaign }: Props) => {
     setIsLayoutChanged(false)
     if (!layout) return
     const response = await CampaignService.updateLayoutsOrder(layout)
-    if (response.status === "error") {
-      alert(response.message)
-      return
+    const parsed = handleResponse<Campaign>(response, location, navigate)
+    setLoading(false)
+    if (parsed) {
+      setCampaign(parsed.data!)
     }
-    setCampaign(response.data)
   }
 
   const [sortedSections, sortedInactiveSections] = useMemo(() => {

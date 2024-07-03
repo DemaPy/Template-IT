@@ -18,6 +18,7 @@ const UpdateCampaign = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const [loading, setLoading] = useState<boolean>(false)
+    
     const isOpen = useCampaignUpdateModal(state => state.isOpen)
     const setClose = useCampaignUpdateModal(state => state.setClose)
     const campaign = useCampaignUpdateModal(state => state.campaign)

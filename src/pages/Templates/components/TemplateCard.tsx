@@ -9,7 +9,7 @@ const TemplateCard = ({ item }: Props) => {
   return (
     <div className="p-2 border rounded-md">
       <Link to={"/templates/" + item.id}>
-        <Title size="sm" title={item.title} />
+        <Title size="xs" title={item.title} />
       </Link>
     </div>
   )

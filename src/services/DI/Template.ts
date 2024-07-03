@@ -253,8 +253,8 @@ class _TemplateService {
     }
   };
 
-  createSectionPlaceholder = async (
-    placeholder: Omit<Placeholder, "id">
+  createPlaceholders = async (
+    placeholders: Omit<Placeholder, "id">[]
   ): Promise<
     | ServerResponseSuccess<Placeholder>
     | ValidationError
@@ -264,7 +264,7 @@ class _TemplateService {
   > => {
     try {
       const result: ServerResponseSuccess<Placeholder> =
-        await this.service.createSectionPlaceholder(placeholder);
+        await this.service.createPlaceholders(placeholders);
       return result;
     } catch (err: unknown) {
       if (err instanceof AccessError) {

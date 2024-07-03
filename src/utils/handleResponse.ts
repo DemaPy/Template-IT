@@ -16,29 +16,26 @@ export const handleResponse = <T>(
   navigate: NavigateFunction
 ) => {
   if (response instanceof AccessError) {
-    navigate(`/access-denied`);
-    return;
+    return navigate(`/access-denied`);
   }
 
   if (response instanceof AuthError) {
     localStorage.removeItem("token");
-    navigate(`/login?redirect=${location.pathname}`);
-    return;
+    return navigate(`/login?redirect=${location.pathname}`);
   }
 
   if (response instanceof ValidationError) {
-    console.log(response);
     let error_message = "";
     for (const error of response.errors) {
       error_message += response.message + ": " + error.msg;
     }
     alert(error_message);
-    return;
+    return null;
   }
 
   if (response.status === "error") {
     alert(response.message);
-    return;
+    return null;
   }
   return response;
 };

@@ -10,51 +10,48 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { ComponentService } from "@/services/DI/Component"
-import { useComponentUpdateModal } from "@/store/componentUpdateModal"
-import { handleResponse } from "@/utils/handleResponse"
+import { useSectionUpdateModal } from '@/store/sectionUpdateModal'
+import { TemplateService } from '@/services/DI/Template'
+import { useSectionCreateModal } from '@/store/sectionCreateModal'
 import { useLocation, useNavigate } from "react-router-dom"
+import { handleResponse } from "@/utils/handleResponse"
 
-const UpdateComponent = () => {
-    const location = useLocation()
+const UpdateSection = () => {
     const navigate = useNavigate()
+    const location = useLocation()
     const [loading, setLoading] = useState<boolean>(false)
+    const setSection = useSectionCreateModal(state => state.setSection)
+    const isOpen = useSectionUpdateModal(state => state.isOpen)
+    const setClose = useSectionUpdateModal(state => state.setClose)
+    const section = useSectionUpdateModal(state => state.section)
 
-    const isOpen = useComponentUpdateModal(state => state.isOpen)
-    const setClose = useComponentUpdateModal(state => state.setClose)
-    const component = useComponentUpdateModal(state => state.component)
-    const setComponent = useComponentUpdateModal(state => state.setComponent)
-    
-    const [title, setTitle] = useState<string | null>(null)
-    const [content, setContent] = useState<string | null>(null)
+    const [title, setTitle] = useState("")
+    const [content, setContent] = useState("")
 
     useEffect(() => {
-        if (component) {
-            setTitle(component?.title)
-            setContent(component?.content)
+        if (section) {
+            setTitle(section?.title)
+            setContent(section?.content)
         }
-    }, [component])
+    }, [section])
 
     const onSubmit = async () => {
-        if (!content || !title || !component) return
-        setLoading(true)
-        const response = await ComponentService.update({ ...component, content: content, title: title })
-        const parsed = handleResponse<Component>(response, location, navigate)
-        setLoading(false)
-        if (parsed) {
-            setComponent(parsed.data!)
+        if (section && title && content) {
+            setLoading(true)
+            const response = await TemplateService.updateSection({ ...section, content: content, title: title })
+            const parsed = handleResponse<Section>(response, location, navigate)
+            setLoading(false)
+            if (parsed) {
+                setSection(parsed.data)
+            }
+            setClose()
         }
-        setLoading(false)
-        setClose()
-        setTitle(null)
-        setContent(null)
     }
-
     return (
         <Dialog open={isOpen} onOpenChange={setClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Edit component</DialogTitle>
+                    <DialogTitle>Edit section</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
@@ -63,7 +60,7 @@ const UpdateComponent = () => {
                         </Label>
                         <Input
                             id="name"
-                            value={title || ""}
+                            value={title}
                             onChange={ev => setTitle(ev.target.value)}
                             className="col-span-4"
                         />
@@ -72,14 +69,14 @@ const UpdateComponent = () => {
                         </Label>
                         <Textarea
                             id="content"
-                            value={content || ""}
+                            value={content}
                             onChange={ev => setContent(ev.target.value)}
-                            className="col-span-4 resize-y min-h-96 max-h-96"
+                            className="col-span-4 resize-y min-h-48 max-h-80"
                         />
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button disabled={loading} onClick={onSubmit}>Save changes</Button>
+                    <Button onClick={onSubmit} disabled={loading}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
@@ -87,4 +84,4 @@ const UpdateComponent = () => {
     )
 }
 
-export default UpdateComponent
+export default UpdateSection

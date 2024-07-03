@@ -25,14 +25,14 @@ const Template = () => {
   );
   const updatedTemplate = useTemplateUpdateModal((store) => store.template);
 
-  if (!("id" in params)) return null;
-
   useEffect(() => {
     (async () => {
       const response = await TemplateService.getOne(params.id!);
       const parsed = handleResponse<Template>(response, location, navigate);
       if (parsed) {
         setTemplate(parsed.data);
+      } else {
+        navigate("/templates");
       }
     })();
   }, [updatedTemplate, section]);
@@ -56,7 +56,7 @@ const Template = () => {
       <Heading
         title={template.title}
         action={{
-          icon: <Trash className="w-4 h-4" />,
+          icon: <Trash className="w-4 h-4 text-red-400" />,
           onClick: handleDelete,
         }}
         actions={[

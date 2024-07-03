@@ -18,6 +18,7 @@ const UpdateTemplate = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const [loading, setLoading] = useState<boolean>(false)
+    
     const isOpen = useTemplateUpdateModal(state => state.isOpen)
     const setClose = useTemplateUpdateModal(state => state.setClose)
     const setTemplate = useTemplateUpdateModal(state => state.setTemplate)

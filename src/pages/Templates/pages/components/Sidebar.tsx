@@ -1,9 +1,8 @@
 import ListView from '@/components/List'
-import Section from './Section'
-import CreateSectionFromComponent from './CreateSectionFromComponent'
-import CreateSection from './CreateSection'
-import UpdateSection from './UpdateSection'
-import CreatePlaceholder from '@/pages/Templates/pages/components/CreatePlaceholder'
+import Section from './Section/Section'
+import CreateSectionFromComponent from './Section/CreateSectionFromComponent'
+import CreateSection from './Section/CreateSection'
+import UpdateSection from './Section/UpdateSection'
 import { useEffect, useState } from 'react'
 import { ComponentService } from '@/services/DI/Component'
 import { handleResponse } from '@/utils/handleResponse'
@@ -31,8 +30,6 @@ const Sidebar = ({ sections, template_id }: Props) => {
     })()
   }, [])
 
-  console.log(loading);
-  
   return (
     <div className='w-3/4 relative max-h-[80vh] overflow-y-auto'>
       <div className='flex gap-2 items-center sticky top-2'>
@@ -42,7 +39,6 @@ const Sidebar = ({ sections, template_id }: Props) => {
         )}
       </div>
       <UpdateSection />
-      <CreatePlaceholder />
       <ListView component={Section} items={sections} />
     </div>
   )

@@ -1,26 +1,27 @@
-import { ComponentServiceDB } from "../ComponentDB";
 import { AccessError } from "../Errors/AccessError";
 import { AuthError } from "../Errors/AuthError";
 import { ValidationError } from "../Errors/ValidationError";
-import { UpdateComponentDTO } from "../types/Component";
+import { SectionServiceDB } from "../Section";
+import { UpdateSectionDTO } from "../types/Section";
 
-class _ComponentService {
+class _SectionService {
   service: any;
   constructor(service: any) {
     this.service = service;
   }
 
-  delete = async (
-    component: ComponentDeleteDTO
+  duplicateSection = async (
+    section_id: Section["id"]
   ): Promise<
-    | ServerResponseSuccess<Component>
+    | ServerResponseSuccess<Section>
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
   > => {
     try {
-      const result: ServerResponseSuccess<Component> =
-        await this.service.delete(component);
+      const result: ServerResponseSuccess<Section> =
+        await this.service.duplicateSection(section_id);
       return result;
     } catch (err) {
       if (err instanceof AccessError) {
@@ -50,55 +51,17 @@ class _ComponentService {
   };
 
   create = async (
-    component: ComponentCreateDTO
+    section: Omit<Section, "id" | "placeholders">
   ): Promise<
-    | ServerResponseSuccess<Component>
+    | ServerResponseSuccess<Section>
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
   > => {
     try {
-      const result: ServerResponseSuccess<Component> =
-        await this.service.create(component);
-      return result;
-    } catch (err) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
-      if (err instanceof Error) {
-        return {
-          status: "error",
-          message: err.message,
-        };
-      }
-
-      return {
-        status: "error",
-        message: "Unknown error happend",
-      };
-    }
-  };
-
-  update = async (
-    component: UpdateComponentDTO
-  ): Promise<
-    | ServerResponseSuccess<Component>
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
-    try {
-      const result: ServerResponseSuccess<Component> =
-        await this.service.update(component);
+      const result: ServerResponseSuccess<Section> =
+        await this.service.createSection(section);
       return result;
     } catch (err: unknown) {
       if (err instanceof AccessError) {
@@ -127,17 +90,18 @@ class _ComponentService {
     }
   };
 
-  deletePlaceholder = async (
-    placeholder_id: Placeholder["id"]
+  createSectionFromComponent = async (
+    section: Omit<Section, "id">
   ): Promise<
-    | ServerResponseSuccess<Component>
+    | ServerResponseSuccess<Section>
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
   > => {
     try {
-      const result: ServerResponseSuccess<Component> =
-        await this.service.deletePlaceholder(placeholder_id);
+      const result: ServerResponseSuccess<Section> =
+        await this.service.createSection(section);
       return result;
     } catch (err: unknown) {
       if (err instanceof AccessError) {
@@ -170,6 +134,7 @@ class _ComponentService {
     placeholders: Omit<Placeholder, "id">[]
   ): Promise<
     | ServerResponseSuccess<Placeholder[]>
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
@@ -205,15 +170,18 @@ class _ComponentService {
     }
   };
 
-  getAll = async (): Promise<
-    | ServerResponseSuccess<Component[]>
+  deletePlaceholder = async (
+    placeholder_id: Placeholder["id"]
+  ): Promise<
+    | ServerResponseSuccess<Placeholder>
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
   > => {
     try {
-      const result: ServerResponseSuccess<Component[]> =
-        await this.service.getAll();
+      const result: ServerResponseSuccess<Placeholder> =
+        await this.service.deletePlaceholder(placeholder_id);
       return result;
     } catch (err: unknown) {
       if (err instanceof AccessError) {
@@ -242,17 +210,59 @@ class _ComponentService {
     }
   };
 
-  getOne = async (
-    id: string
+  deleteSection = async (
+    section_id: Section["id"]
   ): Promise<
-    | ServerResponseSuccess<Component>
+    | ServerResponseSuccess<Section>
+    | ValidationError
     | AccessError
     | AuthError
     | ServerResponseError
   > => {
     try {
-      const result: ServerResponseSuccess<Component> =
-        await this.service.getOne(id);
+      const result: ServerResponseSuccess<Section> =
+        await this.service.deleteSection(section_id);
+      return result;
+    } catch (err) {
+      if (err instanceof AccessError) {
+        return err;
+      }
+
+      if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
+        return err;
+      }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
+    }
+  };
+
+
+  update = async (
+    section: UpdateSectionDTO
+  ): Promise<
+    | ServerResponseSuccess<Section>
+    | ValidationError
+    | AccessError
+    | AuthError
+    | ServerResponseError
+  > => {
+    try {
+      const result: ServerResponseSuccess<Section> =
+        await this.service.updateSection(section);
       return result;
     } catch (err: unknown) {
       if (err instanceof AccessError) {
@@ -282,4 +292,4 @@ class _ComponentService {
   };
 }
 
-export const ComponentService = new _ComponentService(ComponentServiceDB);
+export const SectionService = new _SectionService(SectionServiceDB);

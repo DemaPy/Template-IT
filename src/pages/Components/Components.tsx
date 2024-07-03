@@ -14,18 +14,23 @@ import { handleResponse } from "@/utils/handleResponse";
 const Components = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false)
+
   const isOpen = useComponentCreateModal(state => state.isOpen)
-  const [components, setComponents] = useState<Array<Component>>([]);
   const setIsOpen = useComponentCreateModal((state) => state.setOpen);
+
+  const [components, setComponents] = useState<Array<Component>>([]);
   const component = useComponentUpdateModal((state) => state.component);
 
   useEffect(() => {
     (async () => {
+      setLoading(true)
       const response = await ComponentService.getAll();
       const parsed = handleResponse<Component[]>(response, location, navigate);
       if (parsed) {
         setComponents(parsed.data);
       }
+      setLoading(false)
     })();
   }, [component]);
 
@@ -41,10 +46,10 @@ const Components = () => {
       />
       {
         isOpen && (
-          <CreateComponent components={components} />
+          <CreateComponent />
         )
       }
-      <GridView items={components} component={ComponentCard} />
+      <GridView isLoading={loading} items={components} component={ComponentCard} />
     </PageContainer>
   );
 };
