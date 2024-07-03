@@ -1,29 +1,49 @@
 Add possibility to edit and edit content for data field in campaign
 HTML to image
-Nested components:
+Section ordering in template
+Components default data
 
-    Current:
-        Component with placeholders can be reused multiple times by sections.
-            -you don't have to create placeholders every time
-        
-    Problem:
-        But it is very boring and time consuming creating components with placeholders.
-        Because 1 component can have 18 placeholders. (and you have to set every placeholder manually)
 
-    Possible way to solve:
+Feature
+Create components from components
+    -copy placeholders to new component from selected component
+    -possibility insert selected component where user want (position)
 
-        Create component and placeholder with reference to another component.
+Currently I save position for content.
+(but there is big problem with shifting)
+Hello {name} position.
+Position for name if 5 symbol.
+But what if "l" letter will be deleted/added from/to "Hello" need to shift position for name placeholder.
 
-        Create component and before submitting, click on places where user want attach content from another components.
-        -How attach placeholders from referenced component?
+Problem lies in rely on text but I need some kind of system to manage this (like with slug position inserting)
+
+How to extend text without affecting position of placeholders?
+I can create placeholders inside text with data-placeholder-template-it="oi0437n12z0dqncu2"
+
+Questions:
+    How manage flexible ways of creating components?
+    -what if selected component has lover position than some placeholder
         (
-            Shifting problem?
-            position for new placeholders will be position for content + placeholder position
+            placeholders for older components shoud have shifting in amount content length of new component 
+        )
+    -what if component has been removed
+        (
+            placeholders should have shifting in amount content length of removed component 
         )
 
-{
-    id
-    title
-    position
-    fallback
-}
+When creating nested components there is problems:
+
+-too much clicking
+    (
+        components should be accessible by click and inserted after CTRL Position selected
+    )
+
+-undo action
+    (
+        remove selected component
+    )
+
+-insert component
+    (
+        placeholders stay with older position
+    )
