@@ -1,15 +1,13 @@
 import Heading from '@/components/Heading'
-import { Textarea } from '@/components/ui/textarea'
-import { TemplateService } from '@/services/DI/Template'
 import { useSectionCreateModal } from '@/store/sectionCreateModal'
 import { useSectionUpdateModal } from '@/store/sectionUpdateModal'
 import { handleResponse } from '@/utils/handleResponse'
 import { ChevronDown, ChevronUpIcon, CopyIcon, Edit2Icon, TrashIcon } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Placeholders from './Placeholders'
 import { Editor } from './Editor'
 import { SectionService } from '@/services/DI/Section'
+import { useState } from 'react'
 
 type Props = {
   item: Section
@@ -36,7 +34,7 @@ const Section = ({ item }: Props) => {
 
   const handleDeleteSection = async () => {
     setLoading(true)
-    const response = await TemplateService.deleteSection(item.id)
+    const response = await SectionService.delete({ id: item.id })
     const parsed = handleResponse<Section>(response, location, navigate)
     setLoading(false)
     if (parsed) {
@@ -47,7 +45,7 @@ const Section = ({ item }: Props) => {
 
   const handleDeletePlaceholder = async (placeholder_id: Placeholder["id"]) => {
     setLoading(true)
-    const response = await TemplateService.deletePlaceholder(placeholder_id)
+    const response = await SectionService.deletePlaceholder(placeholder_id)
     const parsed = handleResponse<Placeholder>(response, location, navigate)
     if (parsed) {
       setSectionCreate({ ...item, placeholders: [...item.placeholders, parsed.data] })
@@ -57,7 +55,7 @@ const Section = ({ item }: Props) => {
 
   const handleDuplicate = async () => {
     setLoading(true)
-    const response = await TemplateService.duplicateSection(item.id)
+    const response = await SectionService.duplicate({ id: item.id })
     const parsed = handleResponse<Section>(response, location, navigate)
     if (parsed) {
       setSectionCreate(parsed.data)

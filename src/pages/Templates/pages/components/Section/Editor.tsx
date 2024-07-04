@@ -3,10 +3,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ComponentService } from '@/services/DI/Component';
 import { SectionService } from '@/services/DI/Section';
+import { usePlaceholderUpdateModal } from '@/store/placeholderUpdateModal';
 import { handleResponse } from '@/utils/handleResponse';
 import { PlusCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
     content: string
@@ -15,6 +17,9 @@ type Props = {
 }
 
 export const Editor = ({ content, item, PlaceholderService }: Props) => {
+    const setOpen = usePlaceholderUpdateModal(state => state.setOpen)
+    const setPlaceholder = usePlaceholderUpdateModal(state => state.setPlaceholder)
+
     const [position, setPosition] = useState<number | null>(null)
     const location = useLocation()
     const navigate = useNavigate()
@@ -41,8 +46,12 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
         }
         const body = iframe.body;
         body.innerHTML = content;
-        for (const item of [...body.querySelectorAll("span")]) {
-            item.addEventListener("click", () => console.log("Test"));
+        for (const placeholder of item.placeholders) {
+            const elem = body.querySelector(`[data-template-it_id='${placeholder.id}']`)
+            elem?.addEventListener("click", () => {
+                setPlaceholder(placeholder)
+                setOpen()
+            })
         }
     }, []);
 
@@ -117,16 +126,18 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
         const range = new Range();
         range.setStart(selection.anchorNode!, selection.anchorOffset);
         selection.addRange(range);
+        // Create ID
+        const id = uuidv4()
         // Create Span
         const span = document.createElement("span");
         span.textContent = title
         span.style.cssText = "cursor: pointer; padding: 0.2rem 0.4rem; border-radius: 0.2rem; border: 1px solid black; background: #ececec; font-size: 14px; box-shadow: 0px 0px 5px #00000060";
-        span.setAttribute("data-template-it_id", Date.now() + "");
+        span.setAttribute("data-template-it_id", id);
         span.addEventListener("click", () => {
             console.log("Placeholder created");
         });
         range.insertNode(span);
-        setPlaceholders(prev => ([...prev, { id: Date.now() + "", title, fallback }]))
+        setPlaceholders(prev => ([...prev, { id: id, title, fallback }]))
         setTitle("");
         setFallback("");
         setPosition(null)

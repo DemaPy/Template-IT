@@ -12,9 +12,9 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { TemplateService } from '@/services/DI/Template'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { handleResponse } from '@/utils/handleResponse'
+import { SectionService } from '@/services/DI/Section'
 
 type Props = {
     template_id: string
@@ -35,7 +35,7 @@ const CreateSection = ({ template_id }: Props) => {
     const onSubmit = async () => {
         if (title.length > 3 && content.length > 10) {
             setLoading(true)
-            const response = await TemplateService.createSection({ templateId: template_id, content, title: title })
+            const response = await SectionService.create({ templateId: template_id, content, title: title })
             const parsed = handleResponse<Section>(response, location, navigate)
             if (parsed) {
                 setSection(parsed.data!)
@@ -47,7 +47,7 @@ const CreateSection = ({ template_id }: Props) => {
 
     return (
         <>
-            <Button variant={"ghost"} className='bg-slate-50 rounded-sm sticky top-0 flex justify-between w-full mb-4' onClick={setIsOpen}>Create section <PlusCircle className="w-4 h-4" /></Button>
+            <Button variant={"ghost"} className='bg-slate-50 rounded-sm sticky top-0 flex justify-between w-full' onClick={setIsOpen}>Create section <PlusCircle className="w-4 h-4" /></Button>
             <Dialog open={isOpen} onOpenChange={setClose}>
                 <DialogContent>
                     <DialogHeader>

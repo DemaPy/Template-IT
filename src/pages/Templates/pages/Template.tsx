@@ -45,7 +45,7 @@ const Template = () => {
   };
 
   const handleDelete = async () => {
-    const response = await TemplateService.delete(template.id);
+    const response = await TemplateService.delete({ id: template.id });
     if (response) {
       navigate("/templates");
     }

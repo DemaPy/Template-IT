@@ -11,10 +11,10 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { useSectionUpdateModal } from '@/store/sectionUpdateModal'
-import { TemplateService } from '@/services/DI/Template'
 import { useSectionCreateModal } from '@/store/sectionCreateModal'
 import { useLocation, useNavigate } from "react-router-dom"
 import { handleResponse } from "@/utils/handleResponse"
+import { SectionService } from "@/services/DI/Section"
 
 const UpdateSection = () => {
     const navigate = useNavigate()
@@ -38,7 +38,7 @@ const UpdateSection = () => {
     const onSubmit = async () => {
         if (section && title && content) {
             setLoading(true)
-            const response = await TemplateService.updateSection({ ...section, content: content, title: title })
+            const response = await SectionService.update({ ...section, content: content, title: title })
             const parsed = handleResponse<Section>(response, location, navigate)
             setLoading(false)
             if (parsed) {
