@@ -3,6 +3,7 @@ import { AccessError } from "../Errors/AccessError";
 import { AuthError } from "../Errors/AuthError";
 import { ValidationError } from "../Errors/ValidationError";
 import { UpdateComponentDTO } from "../types/Component";
+import { PlaceholderResponse, UpdatePlaceholderDTO } from "../types/Section";
 
 class _ComponentService {
   service: any;
@@ -253,6 +254,40 @@ class _ComponentService {
     try {
       const result: ServerResponseSuccess<Component> =
         await this.service.getOne(id);
+      return result;
+    } catch (err: unknown) {
+      if (err instanceof AccessError) {
+        return err;
+      }
+
+      if (err instanceof AuthError) {
+        return err;
+      }
+
+      if (err instanceof ValidationError) {
+        return err;
+      }
+
+      if (err instanceof Error) {
+        return {
+          status: "error",
+          message: err.message,
+        };
+      }
+
+      return {
+        status: "error",
+        message: "Unknown error happend",
+      };
+    }
+  };
+
+  updatePlaceholder = async (
+    section: UpdatePlaceholderDTO
+  ): PlaceholderResponse<Placeholder> => {
+    try {
+      const result: ServerResponseSuccess<Placeholder> =
+        await this.service.updatePlaceholder(section);
       return result;
     } catch (err: unknown) {
       if (err instanceof AccessError) {

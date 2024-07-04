@@ -1,6 +1,7 @@
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
+import { DeleteTemplateDTO } from "./types/Template";
 
 const BASE_URL = "http://localhost:7777";
 
@@ -41,9 +42,9 @@ export class TemplateServiceDB {
     }
   }
 
-  static async delete(template_id: Template["id"]) {
+  static async delete({ id }: DeleteTemplateDTO) {
     try {
-      const response = await fetch(BASE_URL + `/templates/${template_id}`, {
+      const response = await fetch(BASE_URL + `/templates/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
@@ -276,7 +277,7 @@ export class TemplateServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({placeholders: placeholders}),
+        body: JSON.stringify({ placeholders: placeholders }),
       });
       const json = await response.json();
       if (!response.ok) {

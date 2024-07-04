@@ -3,6 +3,7 @@ import { DataToReturn } from "@/pages/Campaigns/pages/components/Section";
 import { AccessError } from "../Errors/AccessError";
 import { AuthError } from "../Errors/AuthError";
 import { ValidationError } from "../Errors/ValidationError";
+import { CampaignResponse } from "../types/Campaign";
 
 class _CampaignService {
   service: any;
@@ -10,15 +11,7 @@ class _CampaignService {
     this.service = service;
   }
 
-  delete = async (
-    campaign_id: Campaign["id"]
-  ): Promise<
-    | ServerResponseSuccess<Campaign>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  delete = async (campaign_id: Campaign["id"]): CampaignResponse => {
     try {
       const result: ServerResponseSuccess<Campaign> = await this.service.delete(
         campaign_id
@@ -53,13 +46,7 @@ class _CampaignService {
 
   create = async (
     campaign: Omit<Campaign, "id" | "userId" | "layout" | "data">
-  ): Promise<
-    | ServerResponseSuccess<Campaign>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  ): CampaignResponse => {
     try {
       const result: ServerResponseSuccess<Campaign> = await this.service.create(
         campaign
@@ -92,15 +79,7 @@ class _CampaignService {
     }
   };
 
-  update = async (
-    campaign: Campaign
-  ): Promise<
-    | ServerResponseSuccess<Campaign>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  update = async (campaign: Campaign): CampaignResponse => {
     try {
       const result: ServerResponseSuccess<Campaign> = await this.service.update(
         campaign
@@ -171,15 +150,7 @@ class _CampaignService {
     }
   };
 
-  getOne = async (
-    id: Campaign["id"]
-  ): Promise<
-    | ServerResponseSuccess<Campaign>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  getOne = async (id: Campaign["id"]): CampaignResponse => {
     try {
       const result: ServerResponseSuccess<Campaign> = await this.service.getOne(
         id
@@ -231,15 +202,7 @@ class _CampaignService {
     return dataToReturn;
   };
 
-  updateLayout = async (
-    layout: Partial<Layout>
-  ): Promise<
-    | ServerResponseSuccess<Campaign>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  updateLayout = async (layout: Partial<Layout>): CampaignResponse => {
     try {
       const result: ServerResponseSuccess<Campaign> =
         await this.service.updateLayout(layout);
@@ -271,15 +234,7 @@ class _CampaignService {
     }
   };
 
-  updateLayoutsOrder = async (
-    layout: Layout[]
-  ): Promise<
-    | ServerResponseSuccess<Campaign>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  updateLayoutsOrder = async (layout: Layout[]): CampaignResponse => {
     try {
       const result: ServerResponseSuccess<Campaign> =
         await this.service.updateLayoutsOrder(layout);
@@ -314,13 +269,7 @@ class _CampaignService {
   savePlaceholderData = async (data: {
     campaignId: Campaign["id"];
     data: Record<string, Record<string, Record<string, string>>>;
-  }): Promise<
-    | ServerResponseSuccess<Campaign>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  }): CampaignResponse => {
     try {
       const result: ServerResponseSuccess<Campaign> =
         await this.service.savePlaceholderData(data);

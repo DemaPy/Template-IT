@@ -1,8 +1,12 @@
-import { ensureError } from "@/lib/utils";
 import { TemplateServiceDB } from "../TemplateDB";
 import { AccessError } from "../Errors/AccessError";
 import { AuthError } from "../Errors/AuthError";
 import { ValidationError } from "../Errors/ValidationError";
+import {
+  CreateTemplateDTO,
+  DeleteTemplateDTO,
+  TemplateResponse,
+} from "../types/Template";
 
 class _TemplateService {
   service: any;
@@ -10,55 +14,9 @@ class _TemplateService {
     this.service = service;
   }
 
-  duplicateSection = async (
-    section_id: Section["id"]
-  ): Promise<
-    | ServerResponseSuccess<Section>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
-    try {
-      const result: ServerResponseSuccess<Section> =
-        await this.service.duplicateSection(section_id);
-      return result;
-    } catch (err) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
-      if (err instanceof Error) {
-        return {
-          status: "error",
-          message: err.message,
-        };
-      }
-
-      return {
-        status: "error",
-        message: "Unknown error happend",
-      };
-    }
-  };
-
   delete = async (
-    template_id: Template["id"]
-  ): Promise<
-    | ServerResponseSuccess<Template>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+    template_id: DeleteTemplateDTO
+  ): TemplateResponse<Template> => {
     try {
       const result: ServerResponseSuccess<Template> = await this.service.delete(
         template_id
@@ -91,15 +49,7 @@ class _TemplateService {
     }
   };
 
-  create = async (
-    template: Omit<Template, "id" | "sections" | "userId">
-  ): Promise<
-    | ServerResponseSuccess<Template>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  create = async (template: CreateTemplateDTO): TemplateResponse<Template> => {
     try {
       const result: ServerResponseSuccess<Template> = await this.service.create(
         template
@@ -132,15 +82,7 @@ class _TemplateService {
     }
   };
 
-  update = async (
-    template: Template
-  ): Promise<
-    | ServerResponseSuccess<Template>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  update = async (template: Template): TemplateResponse<Template> => {
     try {
       const result: ServerResponseSuccess<Template> = await this.service.update(
         template
@@ -173,213 +115,7 @@ class _TemplateService {
     }
   };
 
-  createSection = async (
-    section: Omit<Section, "id" | "placeholders">
-  ): Promise<
-    | ServerResponseSuccess<Section>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
-    try {
-      const result: ServerResponseSuccess<Section> =
-        await this.service.createSection(section);
-      return result;
-    } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
-      if (err instanceof Error) {
-        return {
-          status: "error",
-          message: err.message,
-        };
-      }
-
-      return {
-        status: "error",
-        message: "Unknown error happend",
-      };
-    }
-  };
-
-  createSectionFromComponent = async (
-    section: Omit<Section, "id">
-  ): Promise<
-    | ServerResponseSuccess<Section>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
-    try {
-      const result: ServerResponseSuccess<Section> =
-        await this.service.createSection(section);
-      return result;
-    } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
-      if (err instanceof Error) {
-        return {
-          status: "error",
-          message: err.message,
-        };
-      }
-
-      return {
-        status: "error",
-        message: "Unknown error happend",
-      };
-    }
-  };
-
-  createPlaceholders = async (
-    placeholders: Omit<Placeholder, "id">[]
-  ): Promise<
-    | ServerResponseSuccess<Placeholder>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
-    try {
-      const result: ServerResponseSuccess<Placeholder> =
-        await this.service.createPlaceholders(placeholders);
-      return result;
-    } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
-      if (err instanceof Error) {
-        return {
-          status: "error",
-          message: err.message,
-        };
-      }
-
-      return {
-        status: "error",
-        message: "Unknown error happend",
-      };
-    }
-  };
-
-  deletePlaceholder = async (
-    placeholder_id: Placeholder["id"]
-  ): Promise<
-    | ServerResponseSuccess<Placeholder>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
-    try {
-      const result: ServerResponseSuccess<Placeholder> =
-        await this.service.deletePlaceholder(placeholder_id);
-      return result;
-    } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
-      if (err instanceof Error) {
-        return {
-          status: "error",
-          message: err.message,
-        };
-      }
-
-      return {
-        status: "error",
-        message: "Unknown error happend",
-      };
-    }
-  };
-
-  deleteSection = async (
-    section_id: Section["id"]
-  ): Promise<
-    | ServerResponseSuccess<Section>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
-    try {
-      const result: ServerResponseSuccess<Section> =
-        await this.service.deleteSection(section_id);
-      return result;
-    } catch (err) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
-      if (err instanceof Error) {
-        return {
-          status: "error",
-          message: err.message,
-        };
-      }
-
-      return {
-        status: "error",
-        message: "Unknown error happend",
-      };
-    }
-  };
-
-  getAll = async (): Promise<
-    | ServerResponseSuccess<Template[]>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  getAll = async (): TemplateResponse<Template[]> => {
     try {
       const result: ServerResponseSuccess<Template[]> =
         await this.service.getAll();
@@ -424,46 +160,6 @@ class _TemplateService {
       const result: ServerResponseSuccess<Template> = await this.service.getOne(
         id
       );
-      return result;
-    } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
-      if (err instanceof Error) {
-        return {
-          status: "error",
-          message: err.message,
-        };
-      }
-
-      return {
-        status: "error",
-        message: "Unknown error happend",
-      };
-    }
-  };
-
-  updateSection = async (
-    section: Section
-  ): Promise<
-    | ServerResponseSuccess<Section>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
-    try {
-      const result: ServerResponseSuccess<Section> =
-        await this.service.updateSection(section);
       return result;
     } catch (err: unknown) {
       if (err instanceof AccessError) {
