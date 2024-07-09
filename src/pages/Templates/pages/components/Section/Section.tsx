@@ -81,7 +81,7 @@ const Section = ({ item }: Props) => {
 
   return (
     <li className='w-full flex flex-col gap-4 border rounded-md p-4'>
-      <Heading title={item.title} actions={actions} size='xs' action={{ icon: <Edit2Icon className='w-4 h-4 text-yellow-400' />, onClick: handleClick }} />
+      <Heading title={item.title} actions={actions} size='xs' action={{ isLoading: loading, icon: <Edit2Icon className='w-4 h-4 text-yellow-400' />, onClick: handleClick }} />
       {isOpen && (
         <>
           <Editor PlaceholderService={SectionService} item={item} content={item.content} />
