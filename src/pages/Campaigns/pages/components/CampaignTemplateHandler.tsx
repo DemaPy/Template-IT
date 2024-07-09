@@ -74,7 +74,11 @@ const CampaignTemplateHandler = ({ campaign, setCampaign }: Props) => {
   return (
     <div className="flex gap-4 mt-6 flex-grow">
       <Sidebar isLayoutChanged={isLayoutChanged} handleLayoutChange={handleLayoutChange} layout={layout} moveCard={moveCard} slug={slug} setSelectedSlug={setSelectedSlug} campaign={campaign} sortedSections={sortedSections} inActiveSections={sortedInactiveSections} />
-      <CampaignBuilder layout={layout} slug={slug} campaign={campaign} sortedSections={sortedSections} />
+      {slug ? (
+        <CampaignBuilder layout={layout} slug={slug} campaign={campaign} sortedSections={sortedSections} />
+      ) : (
+        <div className='w-full flex items-center justify-center flex-col text-md font-semibold text-center md:text-3xl text-slate-300'>Select slug to render campaign</div>
+      )}
     </div>
   )
 }

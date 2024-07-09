@@ -48,7 +48,9 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
         body.innerHTML = content;
         for (const placeholder of item.placeholders) {
             const elem = body.querySelector(`[data-template-it_id='${placeholder.id}']`)
-            elem?.addEventListener("click", () => {
+            if (!elem) return
+            elem.textContent = placeholder.title
+            elem.addEventListener("click", () => {
                 setPlaceholder(placeholder)
                 setOpen()
             })
