@@ -1,5 +1,6 @@
 import Nav from "../components/Nav";
 import { Outlet } from "react-router-dom";
+import { Toaster } from 'react-hot-toast';
 
 const WithNavBar = () => {
 
@@ -11,6 +12,7 @@ const WithNavBar = () => {
       <div className="container max-w-screen-2xl mx-auto md:px-6 px-2 pt-24 min-h-screen flex flex-col items-stretch">
         <Outlet />
       </div>
+      <Toaster />
     </main>
   );
 };

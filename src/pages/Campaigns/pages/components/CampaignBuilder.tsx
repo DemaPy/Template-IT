@@ -18,7 +18,7 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
             const campaign_data = campaign.data[section.id]
             const data = campaign_data[placeholder.id][slug]
             const node = doc.querySelector(`[data-template-it_id='${placeholder.id}']`)
-            if (!node) return
+            if (!node) continue
             node.insertAdjacentText("beforebegin", data)
             node.remove()
         }
@@ -34,7 +34,7 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
 
     return (
         <div className="w-full flex flex-col gap-2 relative bg-slate-50 p-2">
-            <NavbarBuilder html={html} campaign={campaign} />
+            <NavbarBuilder html={decode(html)} campaign={campaign} />
             <iframe srcDoc={decode(html)} className="h-full w-full">
             </iframe>
         </div>

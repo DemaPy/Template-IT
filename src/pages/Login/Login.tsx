@@ -11,59 +11,50 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { useState } from "react"
 import { useAuth } from "@/store/login"
 import { Auth } from "@/services/Auth"
 import { useLocation, useNavigate } from "react-router-dom"
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query"
+import toast from "react-hot-toast"
+import { Toaster } from 'react-hot-toast';
+
+type FormValues = {
+    email: string
+    password: string
+}
+
+const options = {
+    defaultValues: {
+        email: "",
+        password: ""
+    }
+}
 
 function Login() {
     const location = useLocation()
     const navigate = useNavigate()
+
+    const { formState: { errors }, register, handleSubmit } = useForm<FormValues>(options);
     const login = useAuth(store => store.setIsLoggedIn)
-    const [password, setPassword] = useState<string>("")
-    const [email, setEmail] = useState<string>("")
 
-    const handleLogin = async () => {
-        const response = await Auth.login({ email, password })
-        
-        if (response.status === "error") {
-
-            if ("errors" in response) {
-                let error_message = ""
-                for (const error of response.errors) {
-                    error_message += response.message + ": " + error.msg
-                }
-                alert(error_message)
-                return
-            }
-
-            alert(response.message)
-            return
+    const { mutate, isPending } = useMutation({
+        mutationFn: Auth.login,
+        onSuccess: (data) => {
+            toast.success("Success. You will be redirected in 3 seconds...");
+            let id = setTimeout(() => {
+                //@ts-ignore
+                localStorage.setItem("token", data.data.token)
+                login()
+                const redirect = location.search.split("=")[1]
+                navigate(redirect ? redirect : '/templates')
+                clearInterval(id)
+            }, 3000)
+        },
+        onError: (data) => {
+            toast.error(data.message);
         }
-
-        
-        if (response.status === "success") {
-            localStorage.setItem("token", response.data.token)
-            login()
-            const redirect = location.search.split("=")[1]
-            navigate(redirect ? redirect : '/templates')
-        }
-    }
-
-    const handleLoginGuest = async () => {
-        const response = await Auth.login({ email: "guest@gmail.com", password: "guest" })
-        if (response.status === "error") {
-            alert(response.message)
-            return
-        }
-
-        if (response.status === "success") {
-            localStorage.setItem("token", response.data?.token!)
-            login()
-            const redirect = location.search.split("=")[1]
-            navigate(redirect ? redirect : '/templates')
-        }
-    }
+    })
 
     return (
         <div className="flex items-center justify-center mx-10 h-full">
@@ -74,8 +65,9 @@ function Login() {
                         Enter your email below to login into account
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="grid gap-4">
-                    {/* <div className="grid grid-cols-2 gap-6">
+                <form onSubmit={handleSubmit(({ email, password }) => mutate({ email, password }))}>
+                    <CardContent className="grid gap-4">
+                        {/* <div className="grid grid-cols-2 gap-6">
                         <Button variant="outline">
                             <Icons.gitHub className="mr-2 h-4 w-4" />
                             Github
@@ -95,20 +87,53 @@ function Login() {
                             </span>
                         </div>
                     </div> */}
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" value={email || ""} onChange={(ev) => setEmail(ev.target.value)} type="email" placeholder="m@example.com" />
-                    </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input id="password" value={password || ""} onChange={(ev) => setPassword(ev.target.value)} type="password" />
-                    </div>
-                </CardContent>
-                <CardFooter className="gap-2">
-                    <Button className="w-full" variant={"outline"} onClick={handleLoginGuest}>Continue as Guest</Button>
-                    <Button className="w-full" onClick={handleLogin}>Login</Button>
-                </CardFooter>
+                        <div className="grid gap-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                {...register("email", {
+                                    required: "Enter email",
+                                    minLength: {
+                                        value: 10,
+                                        message: "Email too short."
+                                    },
+                                    pattern: {
+                                        value: /\S+@\S+\.\S+/,
+                                        message: "Entered value does not match email format"
+                                    }
+                                })}
+                                id="email"
+                                type="email"
+                                placeholder="mail@example.com"
+                            />
+                            {"email" in errors && (
+                                <p className="text-sm font-semibold text-red-300">{errors.email?.message}</p>
+                            )}
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="password">Password</Label>
+                            <Input
+                                {...register("password", {
+                                    required: "Enter password",
+                                    minLength: {
+                                        value: 4,
+                                        message: "Password too short."
+                                    }
+                                })}
+                                id="password"
+                                type="password"
+                            />
+                            {"password" in errors && (
+                                <p className="text-sm font-semibold text-red-300">{errors.password?.message}</p>
+                            )}
+                        </div>
+                    </CardContent>
+                    <CardFooter className="gap-2">
+                        <Button className="w-full" variant={"outline"} onClick={() => mutate({ email: "guest@gmail.com", password: "guest" })}>Continue as Guest</Button>
+                        <Button disabled={isPending} className="w-full" type="submit">Login</Button>
+                    </CardFooter>
+                </form>
             </Card>
+            <Toaster />
         </div>
     )
 }

@@ -8,8 +8,13 @@ import { useCampaignUpdateModal } from "@/store/campaignUpdateModal";
 import UpdateCampaign from "../components/UpdateCampaign";
 import { CampaignService } from "@/services/DI/Campaign";
 import { handleResponse } from "@/utils/handleResponse";
+import { usePreview } from "@/store/preview";
+import NavbarBuilder from "./components/NavbarBuilder";
 
 const Campaign = () => {
+  const isOpen = usePreview(store => store.isOpen)
+  const html = usePreview(store => store.html)
+
   const location = useLocation();
   const setOpen = useCampaignUpdateModal((state) => state.setOpen);
   const setCampaignStore = useCampaignUpdateModal((state) => state.setCampaign);
@@ -48,23 +53,34 @@ const Campaign = () => {
   };
 
   return (
-    <PageContainer>
-      <Heading
-        title={campaign.title}
-        action={{
-          icon: <Trash className="w-4 h-4" />,
-          onClick: handleDelete,
-        }}
-        actions={[
-          {
-            icon: <Edit className="w-4 h-4" />,
-            onClick: handleUpdate,
-          },
-        ]}
-      />
-      <UpdateCampaign />
-      <CampaignTemplateHandler setCampaign={setCampaign} campaign={campaign} />
-    </PageContainer>
+    <>
+      <PageContainer>
+        <Heading
+          title={campaign.title}
+          action={{
+            icon: <Trash className="w-4 h-4" />,
+            onClick: handleDelete,
+          }}
+          actions={[
+            {
+              icon: <Edit className="w-4 h-4" />,
+              onClick: handleUpdate,
+            },
+          ]}
+        />
+        <UpdateCampaign />
+        <CampaignTemplateHandler setCampaign={setCampaign} campaign={campaign} />
+      </PageContainer>
+      {isOpen && (
+        <div className="fixed inset-0 bg-slate-50 z-50 rounded-md">
+          <div className="p-4">
+            <NavbarBuilder html={html} campaign={campaign} />
+          </div>
+          <iframe srcDoc={html} className="fixed h-full w-full">
+          </iframe>
+        </div>
+      )}
+    </>
   );
 };
 
