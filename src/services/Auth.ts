@@ -1,3 +1,5 @@
+import { ValidationError } from "./Errors/ValidationError";
+
 const BASE_URL = "http://localhost:7777";
 
 export class Auth {
@@ -22,8 +24,7 @@ export class Auth {
         const error: ServerResponseValidationError = {
           message: json.message,
           status: "error",
-          errors: json.errors
-
+          errors: json.errors,
         };
         throw error;
       }
@@ -40,7 +41,12 @@ export class Auth {
     email: string;
     password: string;
   }): Promise<
-    | ServerResponseSuccess<{ token: string }>
+    | ServerResponseSuccess<{
+        data: {
+          token: string;
+        };
+        status: "success";
+      }>
     | ServerResponseValidationError
     | ServerResponseError
   > => {
@@ -55,20 +61,23 @@ export class Auth {
       });
       const json = await response.json();
       if (!response.ok) {
-        const error: ServerResponseValidationError = {
-          message: json.message,
-          status: "error",
-          errors: json.errors
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
+        }
 
-        };
-        return error;
+        throw new Error(json.message);
       }
-      return json as ServerResponseSuccess<{ token: string }>;
+      return json as ServerResponseSuccess<{
+        data: {
+          token: string;
+        };
+        status: "success";
+      }>;
     } catch (error) {
-      return {
-        status: "error",
-        message: "Unknown error happend",
-      };
+      throw error;
     }
   };
 }
