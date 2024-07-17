@@ -1,7 +1,4 @@
 import { TemplateServiceDB } from "../TemplateDB";
-import { AccessError } from "../Errors/AccessError";
-import { AuthError } from "../Errors/AuthError";
-import { ValidationError } from "../Errors/ValidationError";
 import {
   CreateTemplateDTO,
   DeleteTemplateDTO,
@@ -23,26 +20,14 @@ class _TemplateService {
       );
       return result;
     } catch (err) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -56,26 +41,14 @@ class _TemplateService {
       );
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -89,26 +62,14 @@ class _TemplateService {
       );
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -121,67 +82,35 @@ class _TemplateService {
         await this.service.getAll();
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
     }
   };
 
-  getOne = async (
-    id: string
-  ): Promise<
-    | ServerResponseSuccess<Template>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  getOne = async (id: string): Promise<ServerResponseSuccess<Template>> => {
     try {
       const result: ServerResponseSuccess<Template> = await this.service.getOne(
         id
       );
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };

@@ -1,0 +1,1 @@
+export type CreateComponentPlaceholderDTO = Omit<Placeholder, "id" | "sectionId">

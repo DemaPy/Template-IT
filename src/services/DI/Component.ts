@@ -1,8 +1,8 @@
 import { ComponentServiceDB } from "../ComponentDB";
 import { AccessError } from "../Errors/AccessError";
 import { AuthError } from "../Errors/AuthError";
-import { ValidationError } from "../Errors/ValidationError";
 import { UpdateComponentDTO } from "../types/Component";
+import { CreateComponentPlaceholderDTO } from "../types/Placeholder";
 import { PlaceholderResponse, UpdatePlaceholderDTO } from "../types/Section";
 
 class _ComponentService {
@@ -24,26 +24,14 @@ class _ComponentService {
         await this.service.delete(component);
       return result;
     } catch (err) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -52,37 +40,20 @@ class _ComponentService {
 
   create = async (
     component: ComponentCreateDTO
-  ): Promise<
-    | ServerResponseSuccess<Component>
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  ): Promise<ServerResponseSuccess<Component>> => {
     try {
       const result: ServerResponseSuccess<Component> =
         await this.service.create(component);
       return result;
     } catch (err) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -102,26 +73,14 @@ class _ComponentService {
         await this.service.update(component);
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -141,26 +100,14 @@ class _ComponentService {
         await this.service.deletePlaceholder(placeholder_id);
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -168,114 +115,61 @@ class _ComponentService {
   };
 
   createPlaceholders = async (
-    placeholders: Omit<Placeholder, "id">[]
-  ): Promise<
-    | ServerResponseSuccess<Placeholder[]>
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+    placeholders: CreateComponentPlaceholderDTO[]
+  ): Promise<ServerResponseSuccess<Component["id"]>> => {
     try {
-      const result: ServerResponseSuccess<Placeholder[]> =
+      const result: ServerResponseSuccess<Component["id"]> =
         await this.service.createPlaceholders(placeholders);
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
     }
   };
 
-  getAll = async (): Promise<
-    | ServerResponseSuccess<Component[]>
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  getAll = async (): Promise<ServerResponseSuccess<Component[]>> => {
     try {
       const result: ServerResponseSuccess<Component[]> =
         await this.service.getAll();
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
     }
   };
 
-  getOne = async (
-    id: string
-  ): Promise<
-    | ServerResponseSuccess<Component>
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  getOne = async (id: string): Promise<ServerResponseSuccess<Component>> => {
     try {
       const result: ServerResponseSuccess<Component> =
         await this.service.getOne(id);
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -290,26 +184,14 @@ class _ComponentService {
         await this.service.updatePlaceholder(section);
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };

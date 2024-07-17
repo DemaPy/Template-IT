@@ -29,26 +29,14 @@ class _SectionService implements SectionServiceInterface {
         await this.service.duplicate(id);
       return result;
     } catch (err) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -62,26 +50,14 @@ class _SectionService implements SectionServiceInterface {
       );
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -96,26 +72,14 @@ class _SectionService implements SectionServiceInterface {
         await this.service.createFromComponent(section);
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -130,26 +94,14 @@ class _SectionService implements SectionServiceInterface {
         await this.service.createPlaceholders(placeholders);
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -164,26 +116,14 @@ class _SectionService implements SectionServiceInterface {
         await this.service.deletePlaceholder(placeholder_id);
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -197,26 +137,14 @@ class _SectionService implements SectionServiceInterface {
       );
       return result;
     } catch (err) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -230,26 +158,14 @@ class _SectionService implements SectionServiceInterface {
       );
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -264,26 +180,14 @@ class _SectionService implements SectionServiceInterface {
         await this.service.updatePlaceholder(placeholder);
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };

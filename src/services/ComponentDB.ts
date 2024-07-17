@@ -1,6 +1,7 @@
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
+import { CreateComponentPlaceholderDTO } from "./types/Placeholder";
 import { UpdatePlaceholderDTO, UpdateSectionDTO } from "./types/Section";
 
 const BASE_URL = "http://localhost:7777";
@@ -79,7 +80,7 @@ export class ComponentServiceDB {
   }
 
   static async createPlaceholders(
-    placeholders: Omit<Placeholder, "id">[]
+    placeholders: CreateComponentPlaceholderDTO[]
   ) {
     try {
       const response = await fetch(BASE_URL + `/component-palceholders/`, {

@@ -18,26 +18,14 @@ class _CampaignService {
       );
       return result;
     } catch (err) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -53,26 +41,14 @@ class _CampaignService {
       );
       return result;
     } catch (err) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -86,26 +62,14 @@ class _CampaignService {
       );
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -124,26 +88,14 @@ class _CampaignService {
         await this.service.getAll();
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -157,26 +109,14 @@ class _CampaignService {
       );
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -208,26 +148,14 @@ class _CampaignService {
         await this.service.updateLayout(layout);
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -240,26 +168,14 @@ class _CampaignService {
         await this.service.updateLayoutsOrder(layout);
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
@@ -275,26 +191,14 @@ class _CampaignService {
         await this.service.savePlaceholderData(data);
       return result;
     } catch (err: unknown) {
-      if (err instanceof AccessError) {
-        return err;
-      }
-
-      if (err instanceof AuthError) {
-        return err;
-      }
-
-      if (err instanceof ValidationError) {
-        return err;
-      }
-
       if (err instanceof Error) {
-        return {
+        throw {
           status: "error",
           message: err.message,
         };
       }
 
-      return {
+      throw {
         status: "error",
         message: "Unknown error happend",
       };
