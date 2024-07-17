@@ -10,34 +10,21 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import { TemplateService } from '@/services/DI/Template'
-import { useTemplateUpdateModal } from '@/store/templateUpdateModal'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { handleResponse } from '@/utils/handleResponse'
+import { useCreateTemplate } from '../pages/hooks/useTemplate'
 
 
 const CreateTemplate = () => {
-    const location = useLocation()
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState<boolean>(false)
     const isOpen = useTemplateCreateModal(state => state.isOpen)
     const setClose = useTemplateCreateModal(state => state.setClose)
-    const [templateName, setTemplateName] = useState("")
-    const setTemplate = useTemplateUpdateModal(state => state.setTemplate)
+    const [title, setTitle] = useState("")
 
-    const onSubmit = async () => {
-        if (templateName.length >= 3) {
-            setLoading(true)
-            const response = await TemplateService.create({ title: templateName })
-            const parsed = handleResponse<Template>(response, location, navigate)
-            setLoading(false)
-            if (parsed) {
-                setTemplate(parsed.data!)
-            }
-            setClose()
-        } else {
-            alert("Minimum length: 3 symbols.")
-        }
+    const { isPending, mutate } = useCreateTemplate()
+
+    const handleCreate = () => {
+        mutate({
+            title: title
+        })
+        setClose()
     }
     return (
         <Dialog open={isOpen} onOpenChange={setClose}>
@@ -52,23 +39,14 @@ const CreateTemplate = () => {
                         </Label>
                         <Input
                             id="name"
-                            value={templateName}
-                            onChange={ev => setTemplateName(ev.target.value)}
+                            value={title}
+                            onChange={ev => setTitle(ev.target.value)}
                             className="col-span-4"
                         />
-                        {/* <Label htmlFor="wrapper" className="text-left">
-                            Wrapper
-                        </Label>
-                        <Textarea
-                            id="wrapper"
-                            value={wrapper}
-                            onChange={ev => setTemplateWrapper(ev.target.value)}
-                            className="col-span-4"
-                        /> */}
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button disabled={loading} onClick={onSubmit}>Save changes</Button>
+                    <Button disabled={isPending} onClick={handleCreate}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

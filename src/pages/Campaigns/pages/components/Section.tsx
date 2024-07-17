@@ -7,6 +7,7 @@ import Placeholders from './Placeholders'
 import SectionData from './SectionData'
 import { CampaignService } from '@/services/DI/Campaign'
 import { useSectionUpdateModal } from '@/store/sectionUpdateModal'
+import { decode } from 'html-entities'
 
 export type DataToReturn = { id: string, title: string, data: Record<string, string> }[]
 
@@ -44,7 +45,7 @@ const Section = ({ campaign, item }: Props) => {
         action={{ icon: isOpen ? <ChevronUpIcon className='w-4 h-4' /> : <ChevronDown className='w-4 h-4' />, onClick: () => setIsOpen(!isOpen) }} />
       {isOpen && (
         <>
-          <Textarea disabled={true} defaultValue={item.content} className='resize-none w-full min-h-60 max-h-72' />
+          <Textarea disabled={true} defaultValue={decode(item.content)} className='resize-none w-full min-h-60 max-h-72' />
           <Placeholders placeholders={item.placeholders} />
         </>
       )}

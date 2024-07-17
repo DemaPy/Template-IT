@@ -3,8 +3,7 @@ import { QueryKey } from "@tanstack/react-query";
 export const USER_KEY: QueryKey = ["user"];
 export const AUTH_PROVIDERS_KEY: QueryKey = ["auth", "providers"];
 
-export const LANGUAGES_KEY: QueryKey = ["translation", "languages"];
 
-export const RESUME_KEY: QueryKey = ["resume"];
-export const RESUMES_KEY: QueryKey = ["resumes"];
-export const RESUME_PREVIEW_KEY: QueryKey = ["resume", "preview"];
+export const COMPONENTS_KEY: QueryKey = ["components"];
+export const TEMPLATES_KEY: QueryKey = ["templates"];
+export const CAMPAIGNS_KEY: QueryKey = ["campaigns"];

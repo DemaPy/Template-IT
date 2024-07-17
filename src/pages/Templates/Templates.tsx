@@ -3,31 +3,26 @@ import { PlusCircle } from "lucide-react";
 import CreateTemplate from "./components/CreateTemplate";
 import GridView from "../../components/GridView";
 import TemplateCard from "./components/TemplateCard";
-import { useEffect, useState } from "react";
-import { TemplateService } from "../../services/DI/Template";
 import Heading from "../../components/Heading";
 import { useTemplateCreateModal } from "../../store/templateCreateModal";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useTemplateUpdateModal } from "@/store/templateUpdateModal";
-import { handleResponse } from "@/utils/handleResponse";
+import { useFetchTemplates } from "./pages/hooks/useTemplate";
+import toast from "react-hot-toast";
+import ComponentsSkeleton from "../Components/components/Skeleton";
 
 const Templates = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [templates, setTemplates] = useState<Array<Template> | null>(null);
-  const template = useTemplateUpdateModal((state) => state.template);
   const setIsOpen = useTemplateCreateModal((state) => state.setOpen);
-  const IsOpen = useTemplateCreateModal((state) => state.isOpen);
 
-  useEffect(() => {
-    (async () => {
-      const response = await TemplateService.getAll();
-      const parsed = handleResponse<Template[]>(response, location, navigate);
-      if (parsed) {
-        setTemplates(parsed.data);
-      }
-    })();
-  }, [template]);
+  const { data, isError, error, isPending } = useFetchTemplates()
+
+  if (isPending) return <ComponentsSkeleton />
+
+  if (isError) {
+    return toast.error(error.message);
+  }
+
+  if (!data) {
+    return toast.error("Unexpected error happend.");
+  }
 
   return (
     <PageContainer>
@@ -39,8 +34,8 @@ const Templates = () => {
           title: "create",
         }}
       />
-      <GridView items={templates} component={TemplateCard} />
-      {IsOpen && <CreateTemplate />}
+      <GridView items={data.data} component={TemplateCard} />
+      <CreateTemplate />
     </PageContainer>
   );
 };

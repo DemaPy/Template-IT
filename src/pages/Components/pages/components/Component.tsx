@@ -3,20 +3,14 @@ import { Editor } from '@/pages/Templates/pages/components/Section/Editor'
 import Placeholders from '@/pages/Templates/pages/components/Section/Placeholders'
 import { ComponentService } from '@/services/DI/Component'
 import { useComponentUpdateModal } from '@/store/componentUpdateModal'
-import { handleResponse } from '@/utils/handleResponse'
 import { ChevronDown, ChevronUpIcon, Edit2Icon } from 'lucide-react'
 import { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
 
 type Props = {
   item: Component
 }
 
 const Component = ({ item }: Props) => {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState<boolean>(false)
-
   const [isOpen, setIsOpenTextArea] = useState(false)
   const setIsOpen = useComponentUpdateModal(state => state.setOpen)
   const setComponent = useComponentUpdateModal(state => state.setComponent)
@@ -25,16 +19,6 @@ const Component = ({ item }: Props) => {
     setIsOpen()
     setComponent(item)
     setIsOpenTextArea(false)
-  }
-
-  const handleDeletePlaceholder = async (placeholderId: Placeholder['id']) => {
-    setLoading(true)
-    const response = await ComponentService.deletePlaceholder(placeholderId)
-    const parsed = handleResponse<Component>(response, location, navigate)
-    setLoading(false)
-    if (parsed) {
-      setComponent(parsed.data!)
-    }
   }
 
   const actions = [{
@@ -49,7 +33,7 @@ const Component = ({ item }: Props) => {
       {isOpen && (
         <>
           <Editor PlaceholderService={ComponentService} item={item} content={item.content} />
-          <Placeholders handleDeletePlaceholder={handleDeletePlaceholder} placeholders={item.placeholders} />
+          <Placeholders placeholders={item.placeholders} />
         </>
       )}
 

@@ -2,37 +2,27 @@ import PageContainer from "../../components/PageContainer";
 import { PlusCircle } from "lucide-react";
 import Heading from "@/components/Heading";
 import GridView from "../../components/GridView";
-import { useEffect, useState } from "react";
 import ComponentCard from "./components/ComponentCard";
 import { useComponentCreateModal } from "@/store/componentCreateModal";
 import CreateComponent from "./components/CreateComponent";
-import { ComponentService } from "@/services/DI/Component";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useComponentUpdateModal } from "@/store/componentUpdateModal";
-import { handleResponse } from "@/utils/handleResponse";
+import toast from "react-hot-toast";
+import ComponentsSkeleton from "./components/Skeleton";
+import { useFetchComponents } from "./pages/hooks/useComponent";
 
 const Components = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState<boolean>(false)
-
-  const isOpen = useComponentCreateModal(state => state.isOpen)
   const setIsOpen = useComponentCreateModal((state) => state.setOpen);
 
-  const [components, setComponents] = useState<Array<Component>>([]);
-  const component = useComponentUpdateModal((state) => state.component);
+  const { data, isPending, isError, error } = useFetchComponents()
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true)
-      const response = await ComponentService.getAll();
-      const parsed = handleResponse<Component[]>(response, location, navigate);
-      if (parsed) {
-        setComponents(parsed.data);
-      }
-      setLoading(false)
-    })();
-  }, [component]);
+  if (isPending) return <ComponentsSkeleton />
+
+  if (isError) {
+    return toast.error(error.message);
+  }
+
+  if (!data) {
+    return toast.error("Unexpected error happend.");
+  }
 
   return (
     <PageContainer>
@@ -44,12 +34,8 @@ const Components = () => {
           title: "create",
         }}
       />
-      {
-        isOpen && (
-          <CreateComponent />
-        )
-      }
-      <GridView isLoading={loading} items={components} component={ComponentCard} />
+      <CreateComponent />
+      <GridView items={data.data} component={ComponentCard} />
     </PageContainer>
   );
 };

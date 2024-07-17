@@ -4,14 +4,13 @@ import Placeholder from './Placeholder'
 
 type Props = {
     placeholders: Placeholder[] | null
-    handleDeletePlaceholder: (id: string) => void
 }
 
-const Placeholders = ({ handleDeletePlaceholder, placeholders }: Props) => {
+const Placeholders = ({ placeholders }: Props) => {
     return (
         <div>
             <Title title={"Placeholders"} size='xs' />
-            <ListView component={Placeholder} handleDeletePlaceholder={handleDeletePlaceholder} items={placeholders} />
+            <ListView component={Placeholder} items={placeholders} />
         </div>
     )
 }

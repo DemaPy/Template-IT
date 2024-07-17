@@ -6,6 +6,7 @@ import { SectionService } from '@/services/DI/Section';
 import { usePlaceholderUpdateModal } from '@/store/placeholderUpdateModal';
 import { useSectionCreateModal } from '@/store/sectionCreateModal';
 import { handleResponse } from '@/utils/handleResponse';
+import { useQueryClient } from '@tanstack/react-query';
 import { PlusCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -18,6 +19,8 @@ type Props = {
 }
 
 export const Editor = ({ content, item, PlaceholderService }: Props) => {
+    const queryClient = useQueryClient();
+
     const setOpen = usePlaceholderUpdateModal(state => state.setOpen)
     const setPlaceholder = usePlaceholderUpdateModal(state => state.setPlaceholder)
     const setSection = useSectionCreateModal((state) => state.setSection);
@@ -57,7 +60,7 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
                 setOpen()
             })
         }
-    }, []);
+    }, [content]);
 
     useEffect(() => {
         if (!ref.current) return;
@@ -108,8 +111,10 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
             if ("templateId" in parsed.data) {
                 setSection(parsed.data)
             }
+            queryClient.invalidateQueries({ queryKey: [parsed.data.id] });
         }
         setLoading(false)
+        setIsEditing(false);
     }
 
     const handleAddPlaceholder = () => {
@@ -174,7 +179,7 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
             ></iframe>
             {isEditing && (
                 <>
-                    {position && (
+                    {position === 0 || position && (
                         <div className='p-4 bg-slate-50 rounded space-y-2'>
                             <Label className='flex flex-col gap-2'>
                                 Title

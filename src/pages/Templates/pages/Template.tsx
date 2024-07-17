@@ -1,63 +1,47 @@
 import Heading from "@/components/Heading";
 import PageContainer from "@/components/PageContainer";
 import { Edit, Trash } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import TemplateHandler from "./components/TemplateHandler";
-import { TemplateService } from "@/services/DI/Template";
 import { useTemplateUpdateModal } from "@/store/templateUpdateModal";
 import UpdateTemplate from "../components/UpdateTemplate";
-import { useSectionCreateModal } from "@/store/sectionCreateModal";
-import { handleResponse } from "@/utils/handleResponse";
+import { useDeleteTemplate, useFetchTemplate } from "./hooks/useTemplate";
+import ComponentsSkeleton from "@/pages/Components/components/Skeleton";
+import toast from "react-hot-toast";
 
 const Template = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
   const params = useParams<{ id: string }>();
-  const [template, setTemplate] = useState<Template | null>(null);
-
-  const section = useSectionCreateModal((state) => state.section);
+  const { isPending: isFetching, isError, data, error } = useFetchTemplate(params.id!)
+  const { isPending: isDeleting, mutate } = useDeleteTemplate()
 
   const setIsOpen = useTemplateUpdateModal((store) => store.setOpen);
   const setTemplateUpdate = useTemplateUpdateModal(
     (store) => store.setTemplate
   );
-  const updatedTemplate = useTemplateUpdateModal((store) => store.template);
 
-  useEffect(() => {
-    (async () => {
-      const response = await TemplateService.getOne(params.id!);
-      const parsed = handleResponse<Template>(response, location, navigate);
-      if (parsed) {
-        setTemplate(parsed.data);
-      } else {
-        navigate("/templates");
-      }
-    })();
-  }, [updatedTemplate, section]);
+  if (isFetching) return <ComponentsSkeleton />
 
-  if (!template) return null;
+  if (isError) {
+    return toast.error(error.message);
+  }
+
+  if (!data) {
+    return toast.error("Unexpected error happend.");
+  }
 
   const handleUpdate = () => {
-    setTemplateUpdate(template);
+    setTemplateUpdate(data.data);
     setIsOpen();
-  };
-
-  const handleDelete = async () => {
-    const response = await TemplateService.delete({ id: template.id });
-    if (response) {
-      navigate("/templates");
-    }
   };
 
   return (
     <PageContainer>
       <Heading
-        title={template.title}
+        title={data.data.title}
         action={{
+          isLoading: isDeleting,
           icon: <Trash className="w-4 h-4 text-red-400" />,
-          onClick: handleDelete,
+          onClick: () => mutate({ id: data.data.id }),
         }}
         actions={[
           {
@@ -67,7 +51,7 @@ const Template = () => {
         ]}
       />
       <UpdateTemplate />
-      <TemplateHandler template={template} />
+      <TemplateHandler template={data.data} />
     </PageContainer>
   );
 };

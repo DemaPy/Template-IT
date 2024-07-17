@@ -18,7 +18,7 @@ const Placeholder = ({ item }: Props) => {
     }
     return (
         <div className='flex w-full justify-between gap-2 items-center' key={item.id}>
-            <p className="p-2 border rounded-md grow text-sm" >Name: {item.title} | Position: {item.position}</p>
+            <p className="p-2 border rounded-md grow text-sm" >{item.title}</p>
             <Button className={`${isCopied ? "bg-green-50" : ""} transition-all`} onClick={handleCopyTitle} variant={"outline"} size={"sm"}>{isCopied ? <CopyCheck className="w-4 h-4" /> : <Copy className="w-4 h-4" />}</Button>
         </div>
     )

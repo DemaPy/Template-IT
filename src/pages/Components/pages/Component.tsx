@@ -1,62 +1,47 @@
 import Heading from "@/components/Heading";
 import PageContainer from "@/components/PageContainer";
 import { Edit, Trash } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useComponentUpdateModal } from "@/store/componentUpdateModal";
 import ComponentHandler from "./components/ComponentHandler";
-import { useNavigate } from "react-router-dom";
-import { ComponentService } from "@/services/DI/Component";
 import UpdateComponent from "../components/UpdateComponent";
-import { handleResponse } from "@/utils/handleResponse";
+import toast from "react-hot-toast";
+import { useDeleteComponent, useFetchComponent } from "./hooks/useComponent";
 
 const Component = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-
+  const params = useParams<{ id: string }>();
   const setOpen = useComponentUpdateModal((state) => state.setOpen);
+  const isOpen = useComponentUpdateModal((state) => state.isOpen);
   const setComponentStore = useComponentUpdateModal(
     (state) => state.setComponent
   );
-  const _component = useComponentUpdateModal((state) => state.component);
-  const params = useParams<{ id: string }>();
-  const [component, setComponent] = useState<Component | null>();
 
-  if (!("id" in params)) return null;
+  const { isPending: isFetching, data, isError, error } = useFetchComponent(params.id!)
+  const { isPending: isDeleting, mutate } = useDeleteComponent()
 
-  useEffect(() => {
-    (async () => {
-      const response = await ComponentService.getOne(params.id!);
-      const parsed = handleResponse<Component>(response, location, navigate);
-      if (parsed) {
-        setComponent(parsed.data);
-      } else {
-        navigate("/components");
-      }
-    })();
-  }, [_component]);
+  if (isFetching) return 'Loading...'
 
-  if (!component) return null
+  if (isError && !data) {
+    return toast.error(error.message);
+  }
 
-  const handleDelete = async () => {
-    const response = await ComponentService.delete(component.id!);
-    if (response) {
-      navigate("/components");
-    }
-  };
+  if (!data) {
+    return toast.error("Unexpected error happend.");
+  }
 
   const handleUpdate = () => {
-    setComponentStore(component);
+    setComponentStore(data.data);
     setOpen();
   };
 
   return (
     <PageContainer>
       <Heading
-        title={component.title}
+        title={data.data.title}
         action={{
+          isLoading: isDeleting,
           icon: <Trash className="w-4 h-4 text-red-400" />,
-          onClick: handleDelete,
+          onClick: () => mutate(params.id!),
         }}
         actions={[
           {
@@ -65,8 +50,12 @@ const Component = () => {
           },
         ]}
       />
-      <UpdateComponent />
-      <ComponentHandler component={component} />
+      {
+        isOpen && (
+          <UpdateComponent />
+        )
+      }
+      <ComponentHandler component={data.data} />
     </PageContainer>
   );
 };
