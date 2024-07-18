@@ -35,17 +35,17 @@ const Nav = () => {
             {isLogged && (
                 <ol className="flex items-center gap-2">
                     <Link to={'/templates'}>
-                        <li style={{ background: location.pathname.includes('/templates') ? "#a78bfa" : "#ffffff", color: location.pathname.includes("/templates") ? "#ffffff" : "#a78bfa" }} className="font-semibold text-sm rounded-md border-2 border-violet-300 cursor-pointer px-3 py-2 transition text-violet-400 hover:text-violet-600">
+                        <li style={{ background: location.pathname.includes('/templates') ? "#a78bfa" : "#ffffff", color: location.pathname.includes("/templates") ? "#ffffff" : "#a78bfa" }} className="font-semibold text-sm rounded-md border-2 border-violet-300 cursor-pointer px-3 py-2 transition text-violet-400">
                             Templates
                         </li>
                     </Link>
                     <Link to={'/campaigns'}>
-                        <li style={{ background: location.pathname.includes("/campaigns") ? "#a78bfa" : "#ffffff", color: location.pathname.includes("/campaigns") ? "#ffffff" : "#a78bfa" }} className="font-semibold text-sm rounded-md border-2 border-violet-300 cursor-pointer px-3 py-2 transition text-violet-400 hover:text-violet-600">
+                        <li style={{ background: location.pathname.includes("/campaigns") ? "#a78bfa" : "#ffffff", color: location.pathname.includes("/campaigns") ? "#ffffff" : "#a78bfa" }} className="font-semibold text-sm rounded-md border-2 border-violet-300 cursor-pointer px-3 py-2 transition text-violet-400">
                             Campaigns
                         </li>
                     </Link>
                     <Link to={'/components'}>
-                        <li style={{ background: location.pathname.includes("/components") ? "#a78bfa" : "#ffffff", color: location.pathname.includes("/components") ? "#ffffff" : "#a78bfa" }} className="font-semibold text-sm rounded-md border-2 border-violet-300 cursor-pointer px-3 py-2 transition text-violet-400 hover:text-violet-600">
+                        <li style={{ background: location.pathname.includes("/components") ? "#a78bfa" : "#ffffff", color: location.pathname.includes("/components") ? "#ffffff" : "#a78bfa" }} className="font-semibold text-sm rounded-md border-2 border-violet-300 cursor-pointer px-3 py-2 transition text-violet-400">
                             Components
                         </li>
                     </Link>

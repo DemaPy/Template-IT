@@ -13,7 +13,9 @@ const LoginGuard = ({ children }: PropsWithChildren) => {
 
 
     return (
-        <>{children}</>
+        <div className="container max-w-screen-2xl mx-auto md:px-6 px-2 pt-24 min-h-screen flex flex-col items-stretch">
+            {children}
+        </div>
     )
 }
 

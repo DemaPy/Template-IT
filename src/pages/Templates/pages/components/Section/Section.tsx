@@ -8,6 +8,8 @@ import Placeholders from './Placeholders'
 import { Editor } from './Editor'
 import { SectionService } from '@/services/DI/Section'
 import { useState } from 'react'
+import { useDeleteSection } from '../../hooks/useSection'
+import toast from 'react-hot-toast'
 
 type Props = {
   item: Section
@@ -15,6 +17,9 @@ type Props = {
 }
 
 const Section = ({ item }: Props) => {
+
+  const { mutate, isPending: isDeleting, isError, error } = useDeleteSection({ invalidate_key: item.templateId })
+
   const location = useLocation()
   const navigate = useNavigate()
   // Problem???
@@ -29,28 +34,6 @@ const Section = ({ item }: Props) => {
   const handleClick = () => {
     setIsOpen()
     setSection(item)
-  }
-
-
-  const handleDeleteSection = async () => {
-    setLoading(true)
-    const response = await SectionService.delete({ id: item.id })
-    const parsed = handleResponse<Section>(response, location, navigate)
-    setLoading(false)
-    if (parsed) {
-      setSectionCreate(parsed.data)
-    }
-    setLoading(false)
-  }
-
-  const handleDeletePlaceholder = async (placeholder_id: Placeholder["id"]) => {
-    setLoading(true)
-    const response = await SectionService.deletePlaceholder(placeholder_id)
-    const parsed = handleResponse<Placeholder>(response, location, navigate)
-    if (parsed) {
-      setSectionCreate({ ...item, placeholders: [...item.placeholders, parsed.data] })
-    }
-    setLoading(false)
   }
 
   const handleDuplicate = async () => {
@@ -70,8 +53,8 @@ const Section = ({ item }: Props) => {
     },
     {
       icon: <TrashIcon className='w-4 h-4 text-red-400' />,
-      onClick: handleDeleteSection,
-      isLoading: loading
+      onClick: () => mutate({ id: item.id }),
+      isLoading: isDeleting
     },
     {
       icon: <CopyIcon className='w-4 h-4 text-blue-400' />,
@@ -79,13 +62,17 @@ const Section = ({ item }: Props) => {
       isLoading: loading
     }]
 
+  if (isError) {
+    toast.error(error.message)
+  }
+
   return (
     <li className='w-full flex flex-col gap-4 border rounded-md p-4'>
       <Heading title={item.title} actions={actions} size='xs' action={{ icon: <Edit2Icon className='w-4 h-4 text-yellow-400' />, onClick: handleClick }} />
       {isOpen && (
         <>
           <Editor PlaceholderService={SectionService} item={item} content={item.content} />
-          <Placeholders handleDeletePlaceholder={handleDeletePlaceholder} placeholders={item.placeholders} />
+          <Placeholders placeholders={item.placeholders} />
         </>
       )}
     </li>

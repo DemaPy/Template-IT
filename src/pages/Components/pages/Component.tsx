@@ -7,6 +7,7 @@ import ComponentHandler from "./components/ComponentHandler";
 import UpdateComponent from "../components/UpdateComponent";
 import toast from "react-hot-toast";
 import { useDeleteComponent, useFetchComponent } from "./hooks/useComponent";
+import ComponentsSkeleton from "../components/Skeleton";
 
 const Component = () => {
   const params = useParams<{ id: string }>();
@@ -19,7 +20,7 @@ const Component = () => {
   const { isPending: isFetching, data, isError, error } = useFetchComponent(params.id!)
   const { isPending: isDeleting, mutate } = useDeleteComponent()
 
-  if (isFetching) return 'Loading...'
+  if (isFetching) return <ComponentsSkeleton />
 
   if (isError && !data) {
     return toast.error(error.message);

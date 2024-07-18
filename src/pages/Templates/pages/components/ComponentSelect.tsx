@@ -3,15 +3,18 @@ import { ComponentService } from '@/services/DI/Component'
 import { handleResponse } from '@/utils/handleResponse'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useCreateFromComponent } from '../hooks/useSection'
+import toast from 'react-hot-toast'
 
 
 type Props = {
-    component_id: Component['id']
-    setComponent: (id: Component['id']) => void
+    template_id: Template['id']
     isRender?: boolean
 }
 
-const ComponentSelect = ({ isRender = true, component_id, setComponent }: Props) => {
+const ComponentSelect = ({ isRender = true, template_id }: Props) => {
+    const { isError, isPending, error, mutate } = useCreateFromComponent({ invalidate_key: template_id })
+
     const location = useLocation()
     const navigate = useNavigate()
 
@@ -29,14 +32,21 @@ const ComponentSelect = ({ isRender = true, component_id, setComponent }: Props)
             setLoading(false)
         })()
     }, [])
+
+    if (isError) {
+        toast.error(error.message)
+    }
+
     return (
         <>
             {
                 isRender && (
                     <Select
-                        disabled={loading}
-                        value={component_id}
-                        onValueChange={value => setComponent(value)}
+                        disabled={loading || isPending}
+                        onValueChange={id => mutate({
+                            componentId: id,
+                            templateId: template_id
+                        })}
                     >
                         <SelectTrigger className="col-span-4">
                             <SelectValue placeholder="Select component" />

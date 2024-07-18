@@ -8,6 +8,7 @@ type Props = {
     layout: Layout[]
 }
 
+//@ts-ignore
 const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
     let html = ""
     for (const section of sortedSections) {
@@ -15,11 +16,21 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
         const doc = new DOMParser().parseFromString(decode_html, "text/html")
         
         for (const placeholder of section.placeholders) {
-            const campaign_data = campaign.data[section.id]
-            const data = campaign_data[placeholder.id][slug]
             const node = doc.querySelector(`[data-template-it_id='${placeholder.id}']`)
             if (!node) continue
-            node.insertAdjacentText("beforebegin", data)
+
+            let text = ""
+            if (!(section.id in campaign.data)) {
+                text += placeholder.fallback
+            } else {
+                const campaign_data = campaign.data[section.id]
+                // In case of sections has different amounts of slugs
+                if (!(slug in campaign_data[placeholder.id])) {
+                    text = placeholder.fallback
+                }
+                text = campaign_data[placeholder.id][slug]
+            }
+            node.insertAdjacentText("beforebegin", text)
             node.remove()
         }
 
