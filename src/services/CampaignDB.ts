@@ -1,6 +1,7 @@
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
+import { UpdateCampaignDTO } from "./types/Campaign";
 
 const BASE_URL = "http://localhost:7777";
 
@@ -13,7 +14,7 @@ export class CampaignServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(campaign),
+        body: JSON.stringify({campaign: campaign}),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -31,7 +32,7 @@ export class CampaignServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -47,7 +48,7 @@ export class CampaignServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(layout),
+        body: JSON.stringify({layout: layout}),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -65,7 +66,7 @@ export class CampaignServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -105,7 +106,7 @@ export class CampaignServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -132,7 +133,7 @@ export class CampaignServiceDB {
             "Content-Type": "application/json",
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
-          body: JSON.stringify(_data.data),
+          body: JSON.stringify({campaign: _data.data}),
         }
       );
       const json = await response.json();
@@ -151,7 +152,7 @@ export class CampaignServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -183,7 +184,7 @@ export class CampaignServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -191,7 +192,7 @@ export class CampaignServiceDB {
     }
   }
 
-  static async update(campaign: Campaign) {
+  static async update(campaign: UpdateCampaignDTO) {
     try {
       const response = await fetch(BASE_URL + "/campaigns", {
         method: "PATCH",
@@ -199,7 +200,7 @@ export class CampaignServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(campaign),
+        body: JSON.stringify({campaign: campaign}),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -217,7 +218,7 @@ export class CampaignServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -248,7 +249,7 @@ export class CampaignServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -279,7 +280,7 @@ export class CampaignServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {

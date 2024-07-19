@@ -37,7 +37,7 @@ export class SectionServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -69,7 +69,7 @@ export class SectionServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -104,7 +104,7 @@ export class SectionServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -120,7 +120,7 @@ export class SectionServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({ placeholders: placeholders }),
+        body: JSON.stringify({ placeholder: placeholders }),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -138,7 +138,7 @@ export class SectionServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -154,7 +154,7 @@ export class SectionServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(section),
+        body: JSON.stringify({section: section}),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -172,7 +172,7 @@ export class SectionServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -188,7 +188,7 @@ export class SectionServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({section: data}),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -206,7 +206,7 @@ export class SectionServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -222,7 +222,7 @@ export class SectionServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(section),
+        body: JSON.stringify({section: section}),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -240,7 +240,7 @@ export class SectionServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -255,7 +255,7 @@ export class SectionServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(placeholder),
+        body: JSON.stringify({placeholder: placeholder}),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -273,7 +273,7 @@ export class SectionServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {

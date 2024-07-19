@@ -3,6 +3,7 @@ import {
   CreateTemplateDTO,
   DeleteTemplateDTO,
   TemplateResponse,
+  UpdateTemplateDTO,
 } from "../types/Template";
 
 class _TemplateService {
@@ -55,10 +56,10 @@ class _TemplateService {
     }
   };
 
-  update = async (template: Template): TemplateResponse<Template> => {
+  update = async (data: UpdateTemplateDTO): TemplateResponse<Template> => {
     try {
       const result: ServerResponseSuccess<Template> = await this.service.update(
-        template
+        data
       );
       return result;
     } catch (err: unknown) {

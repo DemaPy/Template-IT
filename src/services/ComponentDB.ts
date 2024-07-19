@@ -1,6 +1,7 @@
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
+import { CreateComponentDTO } from "./types/Component";
 import { CreateComponentPlaceholderDTO } from "./types/Placeholder";
 import { UpdatePlaceholderDTO, UpdateSectionDTO } from "./types/Section";
 
@@ -8,7 +9,7 @@ const BASE_URL = "http://localhost:7777";
 
 export class ComponentServiceDB {
   static async create(
-    component: Omit<Component, "id">
+    component: CreateComponentDTO
   ): Promise<ServerResponseSuccess<Component> | ServerResponseError> {
     try {
       const response = await fetch(BASE_URL + "/components", {
@@ -17,7 +18,7 @@ export class ComponentServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(component),
+        body: JSON.stringify({ component: component }),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -35,7 +36,7 @@ export class ComponentServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error: any) {
@@ -71,7 +72,7 @@ export class ComponentServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -89,7 +90,7 @@ export class ComponentServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({placeholders: placeholders}),
+        body: JSON.stringify({ placeholder: placeholders }),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -107,7 +108,7 @@ export class ComponentServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -123,7 +124,7 @@ export class ComponentServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(placeholder),
+        body: JSON.stringify({placeholder: placeholder}),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -141,7 +142,7 @@ export class ComponentServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -173,7 +174,7 @@ export class ComponentServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -191,7 +192,7 @@ export class ComponentServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(component),
+        body: JSON.stringify({component: component}),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -209,7 +210,7 @@ export class ComponentServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -240,7 +241,7 @@ export class ComponentServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -271,7 +272,7 @@ export class ComponentServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {
@@ -286,7 +287,7 @@ export class ComponentServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(placeholder),
+        body: JSON.stringify({placeholder: placeholder}),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -304,7 +305,7 @@ export class ComponentServiceDB {
           });
         }
 
-        throw new Error(response.statusText);
+        throw new Error(json.message);
       }
       return json;
     } catch (error) {

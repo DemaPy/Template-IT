@@ -1,9 +1,11 @@
 import { CampaignServiceDB } from "../CampaignDB";
 import { DataToReturn } from "@/pages/Campaigns/pages/components/Section";
-import { AccessError } from "../Errors/AccessError";
-import { AuthError } from "../Errors/AuthError";
-import { ValidationError } from "../Errors/ValidationError";
-import { CampaignResponse } from "../types/Campaign";
+import {
+  CampaignResponse,
+  CreateCampaignDTO,
+  DeleteCampaignDTO,
+  UpdateCampaignDTO,
+} from "../types/Campaign";
 
 class _CampaignService {
   service: any;
@@ -11,7 +13,7 @@ class _CampaignService {
     this.service = service;
   }
 
-  delete = async (campaign_id: Campaign["id"]): CampaignResponse => {
+  delete = async (campaign_id: DeleteCampaignDTO): CampaignResponse => {
     try {
       const result: ServerResponseSuccess<Campaign> = await this.service.delete(
         campaign_id
@@ -32,9 +34,7 @@ class _CampaignService {
     }
   };
 
-  create = async (
-    campaign: Omit<Campaign, "id" | "userId" | "layout" | "data">
-  ): CampaignResponse => {
+  create = async (campaign: CreateCampaignDTO): CampaignResponse => {
     try {
       const result: ServerResponseSuccess<Campaign> = await this.service.create(
         campaign
@@ -55,7 +55,7 @@ class _CampaignService {
     }
   };
 
-  update = async (campaign: Campaign): CampaignResponse => {
+  update = async (campaign: UpdateCampaignDTO): CampaignResponse => {
     try {
       const result: ServerResponseSuccess<Campaign> = await this.service.update(
         campaign
@@ -76,13 +76,7 @@ class _CampaignService {
     }
   };
 
-  getAll = async (): Promise<
-    | ServerResponseSuccess<Campaign[]>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  getAll = async (): Promise<ServerResponseSuccess<Campaign[]>> => {
     try {
       const result: ServerResponseSuccess<Campaign[]> =
         await this.service.getAll();
