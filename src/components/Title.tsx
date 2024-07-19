@@ -20,10 +20,10 @@ const Title = ({ title, size, color }: { color?: AvailableColors, title: string 
   if (!title) return null
   const sizes: Sizes = {
     xxs: "text-sm",
-    xs: "lg:text-md text-sm",
+    xs: "lg:text-md",
     sm: "lg:text-2xl md:text-md text-sm",
-    md: "lg:text-4xl md:text-2xl text-md",
-    lg: "lg:text-6xl md:text-4xl text-2xl",
+    md: "lg:text-4xl md:text-2xl text-xl",
+    lg: "lg:text-6xl md:text-4xl text-3xl",
   };
   const colors: Colors = {
     neutral: 'text-neutral-300',

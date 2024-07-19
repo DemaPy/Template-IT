@@ -5,29 +5,27 @@ import { useCampaignCreateModal } from "@/store/campaignCreateModal";
 import CreateCampaign from "./components/CreateCampaign";
 import GridView from "../../components/GridView";
 import CampaignCard from "./components/CampaignCard";
-import { useEffect, useState } from "react";
-import { CampaignService } from "@/services/DI/Campaign";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useCampaignUpdateModal } from "@/store/campaignUpdateModal";
-import { handleResponse } from "@/utils/handleResponse";
+import ComponentsSkeleton from "../Components/components/Skeleton";
+import { useFetchCampaigns } from "./pages/hooks/useCampaign";
+import toast from "react-hot-toast";
+import Error from "../Error/Error";
 
 const Campaigns = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [campaigns, setCampaigns] = useState<Array<Campaign> | null>(null);
   const setIsOpen = useCampaignCreateModal((state) => state.setOpen);
-  const IsOpen = useCampaignCreateModal((state) => state.isOpen);
-  const campaign = useCampaignUpdateModal((state) => state.campaign);
 
-  useEffect(() => {
-    (async () => {
-      const response = await CampaignService.getAll();
-      const parsed = handleResponse<Campaign[]>(response, location, navigate);
-      if (parsed) {
-        setCampaigns(parsed.data);
-      }
-    })();
-  }, [campaign]);
+  const { data, isError, error, isPending } = useFetchCampaigns()
+
+  if (isPending) return <ComponentsSkeleton />
+
+  if (isError) {
+    toast.error(error.message);
+    return <Error message={error.message} path="/" />
+  }
+
+  if (!data) {
+    toast.error("Unexpected error happend.");
+    return
+  }
 
   return (
     <PageContainer>
@@ -39,8 +37,8 @@ const Campaigns = () => {
           title: "create",
         }}
       />
-      <GridView items={campaigns} component={CampaignCard} />
-      {IsOpen && <CreateCampaign />}
+      <GridView items={data.data} component={CampaignCard} />
+      <CreateCampaign />
     </PageContainer>
   );
 };

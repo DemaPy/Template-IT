@@ -8,6 +8,7 @@ import { useTemplateCreateModal } from "../../store/templateCreateModal";
 import { useFetchTemplates } from "./pages/hooks/useTemplate";
 import toast from "react-hot-toast";
 import ComponentsSkeleton from "../Components/components/Skeleton";
+import Error from "../Error/Error";
 
 const Templates = () => {
   const setIsOpen = useTemplateCreateModal((state) => state.setOpen);
@@ -17,11 +18,13 @@ const Templates = () => {
   if (isPending) return <ComponentsSkeleton />
 
   if (isError) {
-    return toast.error(error.message);
+    toast.error(error.message);
+    return <Error message={error.message} path="/" />
   }
 
   if (!data) {
-    return toast.error("Unexpected error happend.");
+    toast.error("Unexpected error happend.");
+    return
   }
 
   return (

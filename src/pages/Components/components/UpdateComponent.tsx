@@ -5,49 +5,38 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { ComponentService } from "@/services/DI/Component"
 import { useComponentUpdateModal } from "@/store/componentUpdateModal"
-import { handleResponse } from "@/utils/handleResponse"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useComponentUpdate, useFetchComponent } from "../pages/hooks/useComponent"
+import ComponentsSkeleton from "./Skeleton"
+import toast from "react-hot-toast"
+import Error from "@/pages/Error/Error"
 
-const UpdateComponent = () => {
-    const location = useLocation()
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState<boolean>(false)
+const UpdateComponent = ({ component_id }: { component_id: Component['id'] }) => {
+
+    const { isPending: isFetching, data, isError, error } = useFetchComponent(component_id)
+    const { isPending, mutate } = useComponentUpdate({ invalidate_key: component_id })
 
     const isOpen = useComponentUpdateModal(state => state.isOpen)
     const setClose = useComponentUpdateModal(state => state.setClose)
-    const component = useComponentUpdateModal(state => state.component)
-    const setComponent = useComponentUpdateModal(state => state.setComponent)
-    
-    const [title, setTitle] = useState<string | null>(null)
-    const [content, setContent] = useState<string | null>(null)
 
-    useEffect(() => {
-        if (component) {
-            setTitle(component?.title)
-            setContent(component?.content)
-        }
-    }, [component])
+    const [title, setTitle] = useState<string>("")
+    const [content, setContent] = useState<string>(data!.data.content)
 
-    const onSubmit = async () => {
-        if (!content || !title || !component) return
-        setLoading(true)
-        const response = await ComponentService.update({ ...component, content: content, title: title })
-        const parsed = handleResponse<Component>(response, location, navigate)
-        setLoading(false)
-        if (parsed) {
-            setComponent(parsed.data!)
-        }
-        setLoading(false)
-        setClose()
-        setTitle(null)
-        setContent(null)
+    if (isFetching) return <ComponentsSkeleton />
+
+    if (isError) {
+        toast.error(error.message);
+        return <Error message={error.message} path="/components" />
+    }
+
+    if (!data) {
+        toast.error("Unexpected error happend.");
+        return
     }
 
     return (
@@ -63,7 +52,7 @@ const UpdateComponent = () => {
                         </Label>
                         <Input
                             id="name"
-                            value={title || ""}
+                            value={title || data.data.title}
                             onChange={ev => setTitle(ev.target.value)}
                             className="col-span-4"
                         />
@@ -72,14 +61,14 @@ const UpdateComponent = () => {
                         </Label>
                         <Textarea
                             id="content"
-                            value={content || ""}
+                            value={content || data.data.content}
                             onChange={ev => setContent(ev.target.value)}
                             className="col-span-4 resize-y min-h-96 max-h-96"
                         />
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button disabled={loading} onClick={onSubmit}>Save changes</Button>
+                    <Button disabled={isPending} onClick={() => mutate({ id: component_id, content: content, title: title })}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

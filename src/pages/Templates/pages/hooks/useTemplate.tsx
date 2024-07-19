@@ -1,6 +1,6 @@
 import { TEMPLATES_KEY } from "@/constance/query-key";
 import { TemplateService } from "@/services/DI/Template";
-import { CreateTemplateDTO, DeleteTemplateDTO } from "@/services/types/Template";
+import { CreateTemplateDTO, DeleteTemplateDTO, UpdateTemplateDTO } from "@/services/types/Template";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +20,7 @@ export function useDeleteTemplate() {
         mutationFn: (id: DeleteTemplateDTO) => TemplateService.delete(id),
         onSuccess: () => {
             toast.success("Template has been deleted");
-            navigate("/components")
+            navigate("/templates")
             queryClient.invalidateQueries({ queryKey: TEMPLATES_KEY })
         },
         onError: (data) => {
@@ -51,6 +51,36 @@ export function useCreateTemplate() {
             toast.error(data.message);
         }
     })
+}
+
+export function useTemplateUpdate({
+    invalidate_key,
+}: {
+    invalidate_key: Template["id"];
+}) {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (template: UpdateTemplateDTO) => {
+            for (const key in template) {
+                const value = template[key as keyof UpdateTemplateDTO];
+                if (value.trim().length < 3) {
+                    throw new Error(
+                        key.charAt(0).toUpperCase() + key.slice(1) + " too short."
+                    );
+                }
+            }
+
+            return TemplateService.update(template);
+        },
+        onSuccess: () => {
+            toast.success("Template has been updated");
+            queryClient.invalidateQueries({ queryKey: [invalidate_key] });
+        },
+        onError: (data) => {
+            toast.error(data.message);
+        },
+    });
 }
 
 export function useFetchTemplates() {

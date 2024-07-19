@@ -1,17 +1,22 @@
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import PageContainer from "@/components/PageContainer"
+import Title from "@/components/Title"
+import { Button } from "@/components/ui/button"
+import { Link } from "react-router-dom"
 
+type Props = {
+    message: string
+    path: string
+}
 
-const Error = () => {
-    const navigate = useNavigate()
-
-
-    useEffect(() => {
-        navigate("/login")
-    }, [])
+const Error = ({ message, path }: Props) => {
 
     return (
-        <div>Error page</div>
+        <PageContainer>
+            <Title title={message} />
+            <Button variant={"outline"} asChild>
+                <Link to={path}>Go to {path}</Link>
+            </Button>
+        </PageContainer>
     )
 }
 

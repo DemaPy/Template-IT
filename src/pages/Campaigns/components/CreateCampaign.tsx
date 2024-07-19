@@ -8,54 +8,37 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from '@/components/ui/button'
-import { useEffect, useState } from 'react'
 import { useCampaignCreateModal } from '@/store/campaignCreateModal'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { TemplateService } from "@/services/DI/Template"
-import { CampaignService } from "@/services/DI/Campaign"
-import { useCampaignUpdateModal } from "@/store/campaignUpdateModal"
-import { handleResponse } from "@/utils/handleResponse"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useFetchTemplates } from "@/pages/Templates/pages/hooks/useTemplate"
+import ComponentsSkeleton from "@/pages/Components/components/Skeleton"
+import toast from "react-hot-toast"
+import { useCreateCampaign } from "../pages/hooks/useCampaign"
+import { useState } from "react"
+import Error from "@/pages/Error/Error"
 
 
 const CreateCampaign = () => {
-    const location = useLocation()
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState<boolean>(false)
+    const [title, setTitle] = useState("")
+    const [template_id, setTemplateId] = useState<string>("")
 
-    const [templates, setTemplates] = useState<Array<Template> | null>(null)
+    const { data, isError, error, isPending: isFetching } = useFetchTemplates()
+    const { isPending, mutate } = useCreateCampaign()
+
     const isOpen = useCampaignCreateModal(state => state.isOpen)
     const setClose = useCampaignCreateModal(state => state.setClose)
-    const [campaignName, setCampaignName] = useState("")
-    const setCampaign = useCampaignUpdateModal(state => state.setCampaign)
-    const [template_id, setTemplateId] = useState<string | null>(null)
 
-    const onSubmit = async () => {
-        if (campaignName.length >= 3 && template_id) {
-            setLoading(true)
-            const response = await CampaignService.create({ title: campaignName, templateId: template_id })
-            const parsed = handleResponse<Campaign>(response, location, navigate)
-            setLoading(false)
-            if (parsed) {
-                setCampaign(parsed.data!)
-            }
-            setClose()
-        } else {
-            alert("Minimum length 3")
-        }
+    if (isFetching) return <ComponentsSkeleton />
+
+    if (isError) {
+        toast.error(error.message);
+        return <Error message={error.message} path="/campaigns" />
     }
 
-    useEffect(() => {
-        (async () => {
-            const response = await TemplateService.getAll()
-            const parsed = handleResponse<Template[]>(response, location, navigate)
-            if (parsed) {
-                setTemplates(parsed.data)
-            }
-        })()
-    }, [])
-
-    if (!templates) return null
+    if (!data) {
+        toast.error("Unexpected error happend.");
+        return
+    }
 
     return (
         <Dialog open={isOpen} onOpenChange={setClose}>
@@ -66,13 +49,13 @@ const CreateCampaign = () => {
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="name" className="text-left">
-                            Name
+                            Title
                         </Label>
                         <Input
                             id="name"
-                            placeholder="campaign name"
-                            value={campaignName}
-                            onChange={ev => setCampaignName(ev.target.value)}
+                            placeholder="campaign title"
+                            value={title}
+                            onChange={ev => setTitle(ev.target.value)}
                             className="col-span-4"
                         />
                         <Label htmlFor="template_id" className="text-left">
@@ -86,13 +69,16 @@ const CreateCampaign = () => {
                                 <SelectValue placeholder="Select template" />
                             </SelectTrigger>
                             <SelectContent>
-                                {templates.map((item, idx) => <SelectItem key={idx} value={item.id.toString()}>{item.title}</SelectItem>)}
+                                {data.data.map((item, idx) => <SelectItem key={idx} value={item.id.toString()}>{item.title}</SelectItem>)}
                             </SelectContent>
                         </Select>
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button disabled={loading} onClick={onSubmit}>Save changes</Button>
+                    <Button disabled={isPending} onClick={() => mutate({
+                        title: title,
+                        templateId: template_id
+                    })}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

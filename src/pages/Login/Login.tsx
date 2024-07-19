@@ -38,10 +38,10 @@ function Login() {
     const { formState: { errors }, register, handleSubmit } = useForm<FormValues>(options);
     const login = useAuth(store => store.setIsLoggedIn)
 
-    const { mutate, isPending } = useMutation({
+    const { mutate, isPending, isSuccess } = useMutation({
         mutationFn: Auth.login,
         onSuccess: (data) => {
-            toast.success("Success. You will be redirected in 3 seconds...");
+            toast.success("Success. You will be redirected in 2 seconds...");
             let id = setTimeout(() => {
                 //@ts-ignore
                 localStorage.setItem("token", data.data.token)
@@ -49,7 +49,7 @@ function Login() {
                 const redirect = location.search.split("=")[1]
                 navigate(redirect ? redirect : '/templates')
                 clearInterval(id)
-            }, 3000)
+            }, 2000)
         },
         onError: (data) => {
             toast.error(data.message);
@@ -128,8 +128,8 @@ function Login() {
                         </div>
                     </CardContent>
                     <CardFooter className="gap-2">
-                        <Button className="w-full" variant={"outline"} onClick={() => mutate({ email: "guest@gmail.com", password: "guest" })}>Continue as Guest</Button>
-                        <Button disabled={isPending} className="w-full" type="submit">Login</Button>
+                        <Button disabled={isPending || isSuccess} className="w-full" variant={"outline"} onClick={() => mutate({ email: "guest@gmail.com", password: "guest" })}>Continue as Guest</Button>
+                        <Button disabled={isPending || isSuccess} className="w-full" type="submit">Login</Button>
                     </CardFooter>
                 </form>
             </Card>

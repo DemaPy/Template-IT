@@ -12,9 +12,11 @@ import Title from '@/components/Title'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { useAddDataToPlaceholderModal } from '@/store/addDataToPlaceholderModal'
+import { useLayoutOrderUpdate } from '../hooks/useLayout'
 
 type Props = {
   isLayoutChanged: boolean
+  setIsLayoutChanged: (val: boolean) => void
   slug: string | null
   setSelectedSlug: (slug: string) => void
   inActiveSections: Section[]
@@ -22,10 +24,10 @@ type Props = {
   campaign: Campaign
   layout: Layout[]
   moveCard: (dragIndex: number, hoverIndex: number) => void
-  handleLayoutChange: () => void
 }
 
-const Sidebar = ({ isLayoutChanged, handleLayoutChange, setSelectedSlug, layout, slug, campaign, sortedSections, inActiveSections, moveCard }: Props) => {
+const Sidebar = ({ isLayoutChanged, setIsLayoutChanged, setSelectedSlug, layout, slug, campaign, sortedSections, inActiveSections, moveCard }: Props) => {
+  const { isPending, mutate } = useLayoutOrderUpdate({ invalidate_key: campaign.id })
   const isOpen = useAddDataToPlaceholderModal(state => state.isOpen)
 
   const generateSlugs = () => {
@@ -42,11 +44,12 @@ const Sidebar = ({ isLayoutChanged, handleLayoutChange, setSelectedSlug, layout,
           }
         }
       })
-      
+
     }
     return _slugs.filter(Boolean)
   }
-  
+
+
   return (
     <div className='w-3/4 overflow-auto max-h-[80vh]'>
       <Tabs defaultValue="sections">
@@ -89,7 +92,10 @@ const Sidebar = ({ isLayoutChanged, handleLayoutChange, setSelectedSlug, layout,
             <div className='flex justify-between items-center'>
               <Title size='sm' title={"Swap layout sections"} />
               {isLayoutChanged && (
-                <Button onClick={handleLayoutChange} variant={"secondary"} size={"sm"}>Save layout</Button>
+                <Button disabled={isPending} onClick={() => {
+                  mutate(layout)
+                  setIsLayoutChanged(false)
+                }} variant={"secondary"} size={"sm"}>Save layout</Button>
               )}
             </div>
             <CampaignLayout isLayoutChanged={isLayoutChanged} moveCard={moveCard} layout={layout} sections={inActiveSections} />

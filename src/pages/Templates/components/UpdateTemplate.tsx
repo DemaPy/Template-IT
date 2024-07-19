@@ -5,45 +5,38 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useTemplateUpdateModal } from '@/store/templateUpdateModal'
-import { TemplateService } from '@/services/DI/Template'
-import { useLocation, useNavigate } from "react-router-dom"
-import { handleResponse } from "@/utils/handleResponse"
+import ComponentsSkeleton from "@/pages/Components/components/Skeleton"
+import { useFetchTemplate, useTemplateUpdate } from "../pages/hooks/useTemplate"
+import toast from "react-hot-toast"
+import Error from "@/pages/Error/Error"
 
-const UpdateTemplate = () => {
-    const location = useLocation()
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState<boolean>(false)
-    
+const UpdateTemplate = ({ template_id }: { template_id: Template['id'] }) => {
+
+    const { isPending: isFetching, data, isError, error } = useFetchTemplate(template_id)
+    const { isPending, mutate } = useTemplateUpdate({ invalidate_key: template_id })
+
     const isOpen = useTemplateUpdateModal(state => state.isOpen)
     const setClose = useTemplateUpdateModal(state => state.setClose)
-    const setTemplate = useTemplateUpdateModal(state => state.setTemplate)
-    const template = useTemplateUpdateModal(state => state.template)
 
     const [title, setTitle] = useState("")
 
-    useEffect(() => {
-        if (template) {
-            setTitle(template?.title)
-        }
-    }, [template])
+    if (isFetching) return <ComponentsSkeleton />
 
-    const onSubmit = async () => {
-        if (template && title.length > 4) {
-            setLoading(true)
-            const response = await TemplateService.update({ ...template, title: title })
-            const parsed = handleResponse<Template>(response, location, navigate)
-            setLoading(false)
-            if (parsed) {
-                setTemplate(parsed.data!)
-            }
-            setClose()
-        }
+    if (isError && !data) {
+        toast.error(error.message);
+        return <Error message={error.message} path="/templates" />
     }
+
+    if (!data) {
+        toast.error("Unexpected error happend.");
+        return
+    }
+
     return (
         <Dialog open={isOpen} onOpenChange={setClose}>
             <DialogContent>
@@ -53,19 +46,19 @@ const UpdateTemplate = () => {
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="name" className="text-left">
-                            Name
+                            Title
                         </Label>
                         <Input
                             id="name"
-                            placeholder="template name"
-                            value={title}
+                            placeholder="template title"
+                            value={title || data.data.title}
                             onChange={ev => setTitle(ev.target.value)}
                             className="col-span-4"
                         />
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onSubmit} disabled={loading}>Save changes</Button>
+                    <Button onClick={() => mutate({ title: title, id: data.data.id })} disabled={isPending}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

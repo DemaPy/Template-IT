@@ -23,10 +23,6 @@ const Nav = () => {
         navigate('/')
     }
 
-    const handleLogin = () => {
-        window.location.href = '/login'
-    }
-
     return (
         <nav className="flex items-center justify-between p-4">
             <p className="text-2xl font-bold">
@@ -54,7 +50,9 @@ const Nav = () => {
             )}
             {
                 !isLogged && (
-                    <Button onClick={handleLogin} variant={"outline"} size={"sm"}>Login</Button>
+                    <Button variant={"outline"} size={"sm"} asChild>
+                        <Link to={'/login'}>Login</Link>
+                    </Button>
                 )
             }
         </nav >

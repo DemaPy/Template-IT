@@ -8,6 +8,7 @@ import CreateComponent from "./components/CreateComponent";
 import toast from "react-hot-toast";
 import ComponentsSkeleton from "./components/Skeleton";
 import { useFetchComponents } from "./pages/hooks/useComponent";
+import Error from "../Error/Error";
 
 const Components = () => {
   const setIsOpen = useComponentCreateModal((state) => state.setOpen);
@@ -17,11 +18,14 @@ const Components = () => {
   if (isPending) return <ComponentsSkeleton />
 
   if (isError) {
-    return toast.error(error.message);
+    toast.error(error.message);
+    return <Error message={error.message} path="/" />
+
   }
 
   if (!data) {
-    return toast.error("Unexpected error happend.");
+    toast.error("Unexpected error happend.");
+    return
   }
 
   return (

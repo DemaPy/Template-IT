@@ -8,6 +8,7 @@ import UpdateTemplate from "../components/UpdateTemplate";
 import { useDeleteTemplate, useFetchTemplate } from "./hooks/useTemplate";
 import ComponentsSkeleton from "@/pages/Components/components/Skeleton";
 import toast from "react-hot-toast";
+import Error from "@/pages/Error/Error";
 
 const Template = () => {
   const params = useParams<{ id: string }>();
@@ -15,24 +16,18 @@ const Template = () => {
   const { isPending: isDeleting, mutate } = useDeleteTemplate()
 
   const setIsOpen = useTemplateUpdateModal((store) => store.setOpen);
-  const setTemplateUpdate = useTemplateUpdateModal(
-    (store) => store.setTemplate
-  );
 
   if (isFetching) return <ComponentsSkeleton />
 
   if (isError) {
-    return toast.error(error.message);
+    toast.error(error.message);
+    return <Error message={error.message} path="/templates" />
   }
 
   if (!data) {
-    return toast.error("Unexpected error happend.");
+    toast.error("Unexpected error happend.");
+    return
   }
-
-  const handleUpdate = () => {
-    setTemplateUpdate(data.data);
-    setIsOpen();
-  };
 
   return (
     <PageContainer>
@@ -46,11 +41,11 @@ const Template = () => {
         actions={[
           {
             icon: <Edit className="w-4 h-4" />,
-            onClick: handleUpdate,
+            onClick: setIsOpen,
           },
         ]}
       />
-      <UpdateTemplate />
+      <UpdateTemplate template_id={data.data.id} />
       <TemplateHandler template={data.data} />
     </PageContainer>
   );

@@ -8,32 +8,26 @@ import UpdateComponent from "../components/UpdateComponent";
 import toast from "react-hot-toast";
 import { useDeleteComponent, useFetchComponent } from "./hooks/useComponent";
 import ComponentsSkeleton from "../components/Skeleton";
+import Error from "@/pages/Error/Error";
 
 const Component = () => {
   const params = useParams<{ id: string }>();
   const setOpen = useComponentUpdateModal((state) => state.setOpen);
-  const isOpen = useComponentUpdateModal((state) => state.isOpen);
-  const setComponentStore = useComponentUpdateModal(
-    (state) => state.setComponent
-  );
 
   const { isPending: isFetching, data, isError, error } = useFetchComponent(params.id!)
   const { isPending: isDeleting, mutate } = useDeleteComponent()
 
   if (isFetching) return <ComponentsSkeleton />
 
-  if (isError && !data) {
-    return toast.error(error.message);
+  if (isError) {
+    toast.error(error.message);
+    return <Error message={error.message} path="/components" />
   }
 
   if (!data) {
-    return toast.error("Unexpected error happend.");
+    toast.error("Unexpected error happend.");
+    return
   }
-
-  const handleUpdate = () => {
-    setComponentStore(data.data);
-    setOpen();
-  };
 
   return (
     <PageContainer>
@@ -47,15 +41,11 @@ const Component = () => {
         actions={[
           {
             icon: <Edit className="w-4 h-4" />,
-            onClick: handleUpdate,
+            onClick: () => setOpen(),
           },
         ]}
       />
-      {
-        isOpen && (
-          <UpdateComponent />
-        )
-      }
+      <UpdateComponent component_id={data.data.id} />
       <ComponentHandler component={data.data} />
     </PageContainer>
   );

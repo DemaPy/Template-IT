@@ -5,45 +5,37 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { useEffect, useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useCampaignUpdateModal } from '@/store/campaignUpdateModal'
-import { CampaignService } from "@/services/DI/Campaign"
-import { handleResponse } from "@/utils/handleResponse"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useCampaignUpdate, useFetchCampaign } from "../pages/hooks/useCampaign"
+import ComponentsSkeleton from "@/pages/Components/components/Skeleton"
+import toast from "react-hot-toast"
+import { useState } from "react"
+import Error from "@/pages/Error/Error"
 
-const UpdateCampaign = () => {
-    const location = useLocation()
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState<boolean>(false)
-    
-    const isOpen = useCampaignUpdateModal(state => state.isOpen)
-    const setClose = useCampaignUpdateModal(state => state.setClose)
-    const campaign = useCampaignUpdateModal(state => state.campaign)
-    const setCampaign = useCampaignUpdateModal(state => state.setCampaign)
-
+const UpdateCampaign = ({ campaign_id }: { campaign_id: Campaign['id'] }) => {
     const [title, setTitle] = useState("")
 
-    useEffect(() => {
-        if (campaign) {
-            setTitle(campaign?.title)
-        }
-    }, [campaign])
+    const { isPending: isFetching, data, isError, error } = useFetchCampaign(campaign_id)
+    const { isPending, mutate } = useCampaignUpdate({ invalidate_key: campaign_id })
 
-    const onSubmit = async () => {
-        if (campaign && title.length > 4) {
-            setLoading(true)
-            const response = await CampaignService.update({ ...campaign, title: title })
-            const parsed = handleResponse<Campaign>(response, location, navigate)
-            setLoading(false)
-            if (parsed) {
-                setCampaign(parsed.data!)
-            }
-            setClose()
-        }
+    const isOpen = useCampaignUpdateModal(state => state.isOpen)
+    const setClose = useCampaignUpdateModal(state => state.setClose)
+
+    if (isFetching) return <ComponentsSkeleton />
+
+    if (isError && !data) {
+        toast.error(error.message);
+        return <Error message={error.message} path="/campaigns" />
     }
+
+    if (!data) {
+        toast.error("Unexpected error happend.");
+        return
+    }
+
     return (
         <Dialog open={isOpen} onOpenChange={setClose}>
             <DialogContent>
@@ -58,14 +50,17 @@ const UpdateCampaign = () => {
                         <Input
                             id="name"
                             placeholder="campaign name"
-                            value={title}
+                            value={title || data.data.title}
                             onChange={ev => setTitle(ev.target.value)}
                             className="col-span-4"
                         />
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button disabled={loading} onClick={onSubmit}>Save changes</Button>
+                    <Button disabled={isPending} onClick={() => mutate({
+                        title: title,
+                        id: campaign_id,
+                    })}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

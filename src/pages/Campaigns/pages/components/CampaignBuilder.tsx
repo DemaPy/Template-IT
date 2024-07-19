@@ -8,13 +8,17 @@ type Props = {
     layout: Layout[]
 }
 
-//@ts-ignore
 const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
     let html = ""
     for (const section of sortedSections) {
         const decode_html = section.content
         const doc = new DOMParser().parseFromString(decode_html, "text/html")
-        
+        const section_layout = layout.find(item => item.sectionId === section.id)!
+
+        if (!section_layout.renderOn[slug]) {
+            continue
+        }
+
         for (const placeholder of section.placeholders) {
             const node = doc.querySelector(`[data-template-it_id='${placeholder.id}']`)
             if (!node) continue
@@ -28,6 +32,7 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
                 if (!(slug in campaign_data[placeholder.id])) {
                     text = placeholder.fallback
                 }
+
                 text = campaign_data[placeholder.id][slug]
             }
             node.insertAdjacentText("beforebegin", text)
