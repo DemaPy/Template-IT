@@ -1,15 +1,15 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import ErrorPage from '@/pages/Error/Error';
 import { ComponentService } from '@/services/DI/Component';
 import { SectionService } from '@/services/DI/Section';
+import { CreatePlaceholdersDTO } from '@/services/types/Placeholder';
 import { usePlaceholderUpdateModal } from '@/store/placeholderUpdateModal';
-import { useSectionCreateModal } from '@/store/sectionCreateModal';
-import { handleResponse } from '@/utils/handleResponse';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { PlusCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
@@ -21,19 +21,41 @@ type Props = {
 export const Editor = ({ content, item, PlaceholderService }: Props) => {
     const queryClient = useQueryClient();
 
+    const { isPending, isError, error, mutate } = useMutation({
+        mutationFn: (placeholders: CreatePlaceholdersDTO) => {
+            for (const key in placeholders) {
+                const value = placeholders[key as keyof CreatePlaceholdersDTO]
+
+                if (Array.isArray(value)) continue
+
+                if (value.trim().length < 3) {
+                    throw new Error(key.charAt(0).toUpperCase() + key.slice(1) + " too short.")
+                }
+            }
+            return PlaceholderService.createPlaceholders(placeholders)
+        },
+        onSuccess: () => {
+            toast.success("Placeholders has been created");
+            if ("templateId" in item) {
+                queryClient.invalidateQueries({ queryKey: [item.templateId] })
+            } else {
+                queryClient.invalidateQueries({ queryKey: [item.id] })
+            }
+        },
+        onError: (data) => {
+            toast.error(data.message);
+        }
+    })
+
     const setOpen = usePlaceholderUpdateModal(state => state.setOpen)
     const setPlaceholder = usePlaceholderUpdateModal(state => state.setPlaceholder)
-    const setSection = useSectionCreateModal((state) => state.setSection);
 
     const [position, setPosition] = useState<number | null>(null)
-    const location = useLocation()
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState<boolean>(false)
 
     const [title, setTitle] = useState("")
     const [fallback, setFallback] = useState("")
 
-    const [placeholders, setPlaceholders] = useState<Placeholder[]>([])
+    const [placeholders, setPlaceholders] = useState<CreatePlaceholdersDTO['placeholders']>([])
     const [isEditing, setIsEditing] = useState(false);
     const ref = useRef<HTMLIFrameElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -47,10 +69,11 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
         if (!ref.current) return;
         const iframe = ref.current.contentDocument;
         if (!iframe) {
-            return console.warn("Document not found")
+            toast.error("Document not found")
+            return
         }
         const body = iframe.body;
-        body.innerHTML = content;
+        body.innerHTML = content
         for (const placeholder of item.placeholders) {
             const elem = body.querySelector(`[data-template-it_id='${placeholder.id}']`)
             if (!elem) return
@@ -74,13 +97,14 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
             if (!ref.current) return;
             const iframe = ref.current.contentDocument;
             if (!iframe) {
-                return console.warn("Document not found")
+                toast.error("Document not found")
+                return
             }
             const selection = iframe!.getSelection();
             if (!selection) return
             if (!selection.anchorNode) return
             if (selection.anchorNode.nodeName === "BODY") {
-                console.log("Please select place");
+                toast.error("Please, select place.")
                 return
             }
             setPosition(selection.anchorOffset)
@@ -98,40 +122,30 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
         if (!ref.current) return;
         const iframe = ref.current.contentDocument;
         if (!iframe) {
-            return console.warn("Document not found")
+            toast.error("Document not found")
+            return
         }
         const body = iframe.body;
-
-        setLoading(true)
-        // TODO body.innerHTML
-        const response = await PlaceholderService.update({ id: item.id, content: body.innerHTML, title: item.title, placeholders: placeholders })
-        const parsed = handleResponse<Component | Section>(response, location, navigate)
-        if (parsed) {
-            console.log(parsed.data!)
-            if ("templateId" in parsed.data) {
-                setSection(parsed.data)
-            }
-            queryClient.invalidateQueries({ queryKey: [parsed.data.id] });
-        }
-        setLoading(false)
+        mutate({ id: item.id, content: body.innerHTML, placeholders: placeholders })
         setIsEditing(false);
     }
 
     const handleAddPlaceholder = () => {
         if (fallback.trim().length < 3 || title.trim().length < 3) {
-            return alert("Min length 3 symbols")
+            return toast.error("Minimum length 3 symbols.")
         }
 
         if (!ref.current) return;
         const iframe = ref.current.contentDocument;
         if (!iframe) {
-            return console.warn("Document not found")
+            toast.error("Document not found")
+            return
         }
         const selection = iframe!.getSelection();
         if (!selection) return
         if (!selection.anchorNode) return
         if (selection.anchorNode.nodeName === "BODY") {
-            console.log("Please select place");
+            toast.error("Please, select place.")
             return
         }
         // Create Range
@@ -143,7 +157,7 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
         // Create Span
         const span = document.createElement("span");
         span.textContent = title
-        span.style.cssText = "cursor: pointer; padding: 0.2rem 0.4rem; border-radius: 0.2rem; border: 1px solid black; background: #ececec; font-size: 14px; box-shadow: 0px 0px 5px #00000060";
+        span.style.cssText = "cursor: pointer; padding: 0.2rem 0.4rem; border-radius: 0.2rem; background: #095cec63; font-size: 14px; box-shadow: 0px 0px 5px #00000060";
         span.setAttribute("data-template-it_id", id);
         span.addEventListener("click", () => {
             console.log("Placeholder created");
@@ -159,7 +173,8 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
         if (!ref.current) return;
         const iframe = ref.current.contentDocument;
         if (!iframe) {
-            return console.warn("Document not found")
+            toast.error("Document not found")
+            return
         }
         const body = iframe.body;
         body.innerHTML = content;
@@ -167,8 +182,12 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
         setFallback("");
         setPosition(null)
         setIsEditing(false);
+        setPlaceholders([])
     }
-
+    if (isError) {
+        toast.error(error.message);
+        return <ErrorPage error={error} message={error.message} path="/" />
+    }
     return (
         <>
             <iframe
@@ -196,7 +215,7 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
                     )}
                     <div className='flex gap-2'>
                         <Button onClick={handleCancel} className='w-full' variant={"ghost"} size={"sm"}>cancel</Button>
-                        <Button disabled={loading} onClick={handleSave} className='w-full' variant={"outline"} size={"sm"}>save</Button>
+                        <Button disabled={isPending} onClick={handleSave} className='w-full' variant={"outline"} size={"sm"}>save</Button>
                     </div>
                 </>
             )}

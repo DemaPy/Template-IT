@@ -31,7 +31,7 @@ const Campaign = () => {
 
   if (!data) {
     toast.error("Unexpected error happend.");
-    return
+    return <Error message={`Id ${params.id} not found.`} path="/campaigns" />
   }
 
   return (

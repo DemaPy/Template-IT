@@ -54,7 +54,7 @@ const UpdatePlaceholder = ({ Service }: { Service: typeof SectionService | typeo
         <Dialog open={isOpen} onOpenChange={setClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Edit component</DialogTitle>
+                    <DialogTitle>Edit placeholder</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">

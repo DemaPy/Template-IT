@@ -21,12 +21,12 @@ const Template = () => {
 
   if (isError) {
     toast.error(error.message);
-    return <Error message={error.message} path="/templates" />
+    return <Error error={error} message={error.message} path="/templates" />
   }
 
-  if (!data) {
+  if (!data.data) {
     toast.error("Unexpected error happend.");
-    return
+    return <Error error={error} message={`Id ${params.id} not found.`} path="/templates" />
   }
 
   return (

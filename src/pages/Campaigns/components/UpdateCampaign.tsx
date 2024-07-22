@@ -16,13 +16,14 @@ import { useState } from "react"
 import Error from "@/pages/Error/Error"
 
 const UpdateCampaign = ({ campaign_id }: { campaign_id: Campaign['id'] }) => {
-    const [title, setTitle] = useState("")
 
     const { isPending: isFetching, data, isError, error } = useFetchCampaign(campaign_id)
     const { isPending, mutate } = useCampaignUpdate({ invalidate_key: campaign_id })
 
     const isOpen = useCampaignUpdateModal(state => state.isOpen)
     const setClose = useCampaignUpdateModal(state => state.setClose)
+
+    const [title, setTitle] = useState(data?.data.title || "")
 
     if (isFetching) return <ComponentsSkeleton />
 

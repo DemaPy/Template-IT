@@ -21,12 +21,12 @@ const Component = () => {
 
   if (isError) {
     toast.error(error.message);
-    return <Error message={error.message} path="/components" />
+    return <Error error={error} message={error.message} path="/components" />
   }
 
   if (!data) {
     toast.error("Unexpected error happend.");
-    return
+    return <Error error={error} message={`Id ${params.id} not found.`} path="/components" />
   }
 
   return (
@@ -40,6 +40,7 @@ const Component = () => {
         }}
         actions={[
           {
+            isLoading: isDeleting,
             icon: <Edit className="w-4 h-4" />,
             onClick: () => setOpen(),
           },

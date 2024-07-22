@@ -13,11 +13,9 @@ type Props = {
 const Component = ({ item }: Props) => {
   const [isOpen, setIsOpenTextArea] = useState(false)
   const setIsOpen = useComponentUpdateModal(state => state.setOpen)
-  const setComponent = useComponentUpdateModal(state => state.setComponent)
 
   const handleEdit = () => {
     setIsOpen()
-    setComponent(item)
     setIsOpenTextArea(false)
   }
 

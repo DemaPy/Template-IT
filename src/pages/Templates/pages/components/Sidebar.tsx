@@ -1,7 +1,6 @@
 import ListView from '@/components/List'
 import Section from './Section/Section'
 import CreateSection from './Section/CreateSection'
-import UpdateSection from './Section/UpdateSection'
 import ComponentSelect from './ComponentSelect'
 import { SectionService } from '@/services/DI/Section'
 import UpdatePlaceholder from '@/pages/Components/pages/components/UpdatePlaceholder'
@@ -19,7 +18,6 @@ const Sidebar = ({ sections, template_id }: Props) => {
         <CreateSection template_id={template_id} />
         <ComponentSelect template_id={template_id} />
       </div>
-      <UpdateSection />
       <UpdatePlaceholder Service={SectionService} />
       <div className='mt-4'>
         <ListView component={Section} items={sections} />

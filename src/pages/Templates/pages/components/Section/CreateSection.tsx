@@ -12,37 +12,30 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { handleResponse } from '@/utils/handleResponse'
-import { SectionService } from '@/services/DI/Section'
+import { useCreateSection } from '../../hooks/useSection'
+import ComponentsSkeleton from '@/pages/Components/components/Skeleton'
+import Error from '@/pages/Error/Error'
+import toast from 'react-hot-toast'
 
 type Props = {
     template_id: string
 }
 
 const CreateSection = ({ template_id }: Props) => {
-    const location = useLocation()
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState<boolean>(false)
+
+    const { isPending, isError, error, mutate } = useCreateSection({ invalidate_key: template_id })
 
     const isOpen = useSectionCreateModal(state => state.isOpen)
     const setClose = useSectionCreateModal(state => state.setClose)
     const setIsOpen = useSectionCreateModal(state => state.setOpen)
-    const setSection = useSectionCreateModal(state => state.setSection)
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
 
-    const onSubmit = async () => {
-        if (title.length > 3 && content.length > 10) {
-            setLoading(true)
-            const response = await SectionService.create({ templateId: template_id, content, title: title })
-            const parsed = handleResponse<Section>(response, location, navigate)
-            if (parsed) {
-                setSection(parsed.data!)
-            }
-            setLoading(false)
-            setClose()
-        }
+    if (isPending) return <ComponentsSkeleton />
+
+    if (isError) {
+        toast.error(error.message);
+        return <Error error={error} message={error.message} path={`/templates/${template_id}`} />
     }
 
     return (
@@ -77,7 +70,10 @@ const CreateSection = ({ template_id }: Props) => {
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button disabled={loading} onClick={onSubmit}>Save changes</Button>
+                        <Button disabled={isPending} onClick={() => {
+                            mutate(({ templateId: template_id, content, title: title }))
+                            setClose()
+                        }}>Save changes</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

@@ -23,7 +23,7 @@ const UpdateTemplate = ({ template_id }: { template_id: Template['id'] }) => {
     const isOpen = useTemplateUpdateModal(state => state.isOpen)
     const setClose = useTemplateUpdateModal(state => state.setClose)
 
-    const [title, setTitle] = useState("")
+    const [title, setTitle] = useState(data.data.title || "")
 
     if (isFetching) return <ComponentsSkeleton />
 
