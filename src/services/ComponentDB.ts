@@ -1,9 +1,9 @@
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
-import { CreateComponentDTO } from "./types/Component";
-import { CreateComponentPlaceholderDTO } from "./types/Placeholder";
-import { UpdatePlaceholderDTO, UpdateSectionDTO } from "./types/Section";
+import { CreateComponentDTO, UpdateComponentDTO } from "./types/Component";
+import { CreatePlaceholdersDTO } from "./types/Placeholder";
+import { UpdatePlaceholderDTO } from "./types/Section";
 
 const BASE_URL = "http://localhost:7777";
 
@@ -80,9 +80,7 @@ export class ComponentServiceDB {
     }
   }
 
-  static async createPlaceholders(
-    placeholders: CreateComponentPlaceholderDTO[]
-  ) {
+  static async createPlaceholders(placeholders: CreatePlaceholdersDTO[]) {
     try {
       const response = await fetch(BASE_URL + `/component-palceholders/`, {
         method: "POST",
@@ -124,7 +122,7 @@ export class ComponentServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({placeholder: placeholder}),
+        body: JSON.stringify({ placeholder: placeholder }),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -183,7 +181,7 @@ export class ComponentServiceDB {
   }
 
   static async update(
-    component: UpdateSectionDTO
+    component: UpdateComponentDTO
   ): Promise<ServerResponseSuccess<Component> | ServerResponseError> {
     try {
       const response = await fetch(BASE_URL + `/components/`, {
@@ -192,7 +190,7 @@ export class ComponentServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({component: component}),
+        body: JSON.stringify({ component: component }),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -287,7 +285,7 @@ export class ComponentServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({placeholder: placeholder}),
+        body: JSON.stringify({ placeholder: placeholder }),
       });
       const json = await response.json();
       if (!response.ok) {

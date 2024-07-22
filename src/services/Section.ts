@@ -1,6 +1,7 @@
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
+import { CreatePlaceholdersDTO } from "./types/Placeholder";
 import {
   CreateSectionDTO,
   CreateSectionFromComponentDTO,
@@ -77,6 +78,37 @@ export class SectionServiceDB {
     }
   }
 
+  static async getOne(id: Section["id"]) {
+    try {
+      const response = await fetch(BASE_URL + `/sections/${id}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+      const json = await response.json();
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new AccessError({ message: json.message });
+        }
+        if (response.status === 401) {
+          throw new AuthError({ message: json.message });
+        }
+
+        if ("errors" in json) {
+          throw new ValidationError({
+            message: json.message,
+            errors: json.errors,
+          });
+        }
+
+        throw new Error(json.message);
+      }
+      return json;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async deletePlaceholder(placeholder_id: Placeholder["id"]) {
     try {
       const response = await fetch(
@@ -112,7 +144,7 @@ export class SectionServiceDB {
     }
   }
 
-  static async createPlaceholders(placeholders: Omit<Placeholder, "id">[]) {
+  static async createPlaceholders(placeholders: CreatePlaceholdersDTO) {
     try {
       const response = await fetch(BASE_URL + `/section-palceholders/`, {
         method: "POST",
@@ -154,7 +186,7 @@ export class SectionServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({section: section}),
+        body: JSON.stringify({ section: section }),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -188,7 +220,7 @@ export class SectionServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({section: data}),
+        body: JSON.stringify({ section: data }),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -222,7 +254,7 @@ export class SectionServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({section: section}),
+        body: JSON.stringify({ section: section }),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -255,7 +287,7 @@ export class SectionServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({placeholder: placeholder}),
+        body: JSON.stringify({ placeholder: placeholder }),
       });
       const json = await response.json();
       if (!response.ok) {

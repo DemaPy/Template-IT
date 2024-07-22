@@ -1,9 +1,7 @@
 import { ComponentServiceDB } from "../ComponentDB";
-import { AccessError } from "../Errors/AccessError";
-import { AuthError } from "../Errors/AuthError";
 import { UpdateComponentDTO } from "../types/Component";
-import { CreateComponentPlaceholderDTO } from "../types/Placeholder";
-import { PlaceholderResponse, UpdatePlaceholderDTO } from "../types/Section";
+import { CreatePlaceholdersDTO } from "../types/Placeholder";
+import { UpdatePlaceholderDTO } from "../types/Section";
 
 class _ComponentService {
   service: any;
@@ -11,24 +9,13 @@ class _ComponentService {
     this.service = service;
   }
 
-  delete = async (
-    component: ComponentDeleteDTO
-  ): Promise<
-    | ServerResponseSuccess<Component>
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  delete = async (component: ComponentDeleteDTO) => {
     try {
-      const result: ServerResponseSuccess<Component> =
-        await this.service.delete(component);
+      const result = await this.service.delete(component);
       return result;
     } catch (err) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -38,19 +25,13 @@ class _ComponentService {
     }
   };
 
-  create = async (
-    component: ComponentCreateDTO
-  ): Promise<ServerResponseSuccess<Component>> => {
+  create = async (component: ComponentCreateDTO) => {
     try {
-      const result: ServerResponseSuccess<Component> =
-        await this.service.create(component);
+      const result = await this.service.create(component);
       return result;
     } catch (err) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -60,24 +41,13 @@ class _ComponentService {
     }
   };
 
-  update = async (
-    component: UpdateComponentDTO
-  ): Promise<
-    | ServerResponseSuccess<Component>
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  update = async (component: UpdateComponentDTO) => {
     try {
-      const result: ServerResponseSuccess<Component> =
-        await this.service.update(component);
+      const result = await this.service.update(component);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -87,24 +57,13 @@ class _ComponentService {
     }
   };
 
-  deletePlaceholder = async (
-    placeholder_id: Placeholder["id"]
-  ): Promise<
-    | ServerResponseSuccess<Component>
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  > => {
+  deletePlaceholder = async (placeholder_id: Placeholder["id"]) => {
     try {
-      const result: ServerResponseSuccess<Component> =
-        await this.service.deletePlaceholder(placeholder_id);
+      const result = await this.service.deletePlaceholder(placeholder_id);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -114,19 +73,14 @@ class _ComponentService {
     }
   };
 
-  createPlaceholders = async (
-    placeholders: CreateComponentPlaceholderDTO[]
-  ): Promise<ServerResponseSuccess<Component["id"]>> => {
+  createPlaceholders = async (placeholders: CreatePlaceholdersDTO) => {
     try {
       const result: ServerResponseSuccess<Component["id"]> =
         await this.service.createPlaceholders(placeholders);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -136,17 +90,13 @@ class _ComponentService {
     }
   };
 
-  getAll = async (): Promise<ServerResponseSuccess<Component[]>> => {
+  getAll = async () => {
     try {
-      const result: ServerResponseSuccess<Component[]> =
-        await this.service.getAll();
+      const result = await this.service.getAll();
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -156,17 +106,13 @@ class _ComponentService {
     }
   };
 
-  getOne = async (id: string): Promise<ServerResponseSuccess<Component>> => {
+  getOne = async (id: Component["id"]) => {
     try {
-      const result: ServerResponseSuccess<Component> =
-        await this.service.getOne(id);
+      const result = await this.service.getOne(id);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -176,19 +122,13 @@ class _ComponentService {
     }
   };
 
-  updatePlaceholder = async (
-    section: UpdatePlaceholderDTO
-  ): PlaceholderResponse<Placeholder> => {
+  updatePlaceholder = async (section: UpdatePlaceholderDTO) => {
     try {
-      const result: ServerResponseSuccess<Placeholder> =
-        await this.service.updatePlaceholder(section);
+      const result = await this.service.updatePlaceholder(section);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {

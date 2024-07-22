@@ -1,7 +1,6 @@
 import { CampaignServiceDB } from "../CampaignDB";
 import { DataToReturn } from "@/pages/Campaigns/pages/components/Section";
 import {
-  CampaignResponse,
   CreateCampaignDTO,
   DeleteCampaignDTO,
   UpdateCampaignDTO,
@@ -13,18 +12,13 @@ class _CampaignService {
     this.service = service;
   }
 
-  delete = async (campaign_id: DeleteCampaignDTO): CampaignResponse => {
+  delete = async (campaign_id: DeleteCampaignDTO) => {
     try {
-      const result: ServerResponseSuccess<Campaign> = await this.service.delete(
-        campaign_id
-      );
+      const result = await this.service.delete(campaign_id);
       return result;
     } catch (err) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -34,18 +28,13 @@ class _CampaignService {
     }
   };
 
-  create = async (campaign: CreateCampaignDTO): CampaignResponse => {
+  create = async (campaign: CreateCampaignDTO) => {
     try {
-      const result: ServerResponseSuccess<Campaign> = await this.service.create(
-        campaign
-      );
+      const result = await this.service.create(campaign);
       return result;
     } catch (err) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -55,18 +44,13 @@ class _CampaignService {
     }
   };
 
-  update = async (campaign: UpdateCampaignDTO): CampaignResponse => {
+  update = async (campaign: UpdateCampaignDTO) => {
     try {
-      const result: ServerResponseSuccess<Campaign> = await this.service.update(
-        campaign
-      );
+      const result = await this.service.update(campaign);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -78,15 +62,11 @@ class _CampaignService {
 
   getAll = async (): Promise<ServerResponseSuccess<Campaign[]>> => {
     try {
-      const result: ServerResponseSuccess<Campaign[]> =
-        await this.service.getAll();
+      const result = await this.service.getAll();
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -96,18 +76,13 @@ class _CampaignService {
     }
   };
 
-  getOne = async (id: Campaign["id"]): CampaignResponse => {
+  getOne = async (id: Campaign["id"]) => {
     try {
-      const result: ServerResponseSuccess<Campaign> = await this.service.getOne(
-        id
-      );
+      const result = await this.service.getOne(id);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -136,17 +111,13 @@ class _CampaignService {
     return dataToReturn;
   };
 
-  updateLayout = async (layout: Partial<Layout>): CampaignResponse => {
+  updateLayout = async (layout: Partial<Layout>) => {
     try {
-      const result: ServerResponseSuccess<Campaign> =
-        await this.service.updateLayout(layout);
+      const result = await this.service.updateLayout(layout);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -156,17 +127,13 @@ class _CampaignService {
     }
   };
 
-  updateLayoutsOrder = async (layout: Layout[]): CampaignResponse => {
+  updateLayoutsOrder = async (layout: Layout[]) => {
     try {
-      const result: ServerResponseSuccess<Campaign> =
-        await this.service.updateLayoutsOrder(layout);
+      const result = await this.service.updateLayoutsOrder(layout);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -179,17 +146,13 @@ class _CampaignService {
   savePlaceholderData = async (data: {
     campaignId: Campaign["id"];
     data: Record<string, Record<string, Record<string, string>>>;
-  }): CampaignResponse => {
+  }) => {
     try {
-      const result: ServerResponseSuccess<Campaign> =
-        await this.service.savePlaceholderData(data);
+      const result = await this.service.savePlaceholderData(data);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {

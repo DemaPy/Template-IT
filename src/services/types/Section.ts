@@ -6,7 +6,7 @@ export type UpdateSectionDTO = {
   id: Section["id"];
   title: Section["title"];
   content: Section["content"];
-  placeholders: Placeholder[];
+  templateId: Template["id"];
 };
 
 export type UpdatePlaceholderDTO = {
@@ -43,9 +43,9 @@ export type SectionResponse = Promise<
 >;
 
 export type PlaceholderResponse<T> = Promise<
-    | ServerResponseSuccess<T>
-    | ValidationError
-    | AccessError
-    | AuthError
-    | ServerResponseError
-  >
+  | ServerResponseSuccess<T>
+  | ValidationError
+  | AccessError
+  | AuthError
+  | ServerResponseError
+>;

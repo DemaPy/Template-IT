@@ -12,20 +12,13 @@ class _TemplateService {
     this.service = service;
   }
 
-  delete = async (
-    template_id: DeleteTemplateDTO
-  ): TemplateResponse<Template> => {
+  delete = async (template_id: DeleteTemplateDTO) => {
     try {
-      const result: ServerResponseSuccess<Template> = await this.service.delete(
-        template_id
-      );
+      const result = await this.service.delete(template_id);
       return result;
     } catch (err) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -35,18 +28,13 @@ class _TemplateService {
     }
   };
 
-  create = async (template: CreateTemplateDTO): TemplateResponse<Template> => {
+  create = async (template: CreateTemplateDTO) => {
     try {
-      const result: ServerResponseSuccess<Template> = await this.service.create(
-        template
-      );
+      const result = await this.service.create(template);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -56,18 +44,13 @@ class _TemplateService {
     }
   };
 
-  update = async (data: UpdateTemplateDTO): TemplateResponse<Template> => {
+  update = async (data: UpdateTemplateDTO) => {
     try {
-      const result: ServerResponseSuccess<Template> = await this.service.update(
-        data
-      );
+      const result = await this.service.update(data);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -79,15 +62,11 @@ class _TemplateService {
 
   getAll = async (): TemplateResponse<Template[]> => {
     try {
-      const result: ServerResponseSuccess<Template[]> =
-        await this.service.getAll();
+      const result = await this.service.getAll();
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -97,18 +76,13 @@ class _TemplateService {
     }
   };
 
-  getOne = async (id: string): Promise<ServerResponseSuccess<Template>> => {
+  getOne = async (id: string) => {
     try {
-      const result: ServerResponseSuccess<Template> = await this.service.getOne(
-        id
-      );
+      const result = await this.service.getOne(id);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {

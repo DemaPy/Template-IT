@@ -1,18 +1,14 @@
-import { AccessError } from "../Errors/AccessError";
-import { AuthError } from "../Errors/AuthError";
-import { ValidationError } from "../Errors/ValidationError";
 import {
   SectionServiceInterface,
   SectionServiceInterfaceDB,
 } from "../Interfaces";
 import { SectionServiceDB } from "../Section";
+import { CreatePlaceholdersDTO } from "../types/Placeholder";
 import {
   CreateSectionDTO,
   CreateSectionFromComponentDTO,
   DeleteSectionDTO,
   DuplicateSectionDTO,
-  PlaceholderResponse,
-  SectionResponse,
   UpdatePlaceholderDTO,
   UpdateSectionDTO,
 } from "../types/Section";
@@ -23,17 +19,29 @@ class _SectionService implements SectionServiceInterface {
     this.service = service;
   }
 
-  duplicate = async (id: DuplicateSectionDTO): SectionResponse => {
+  getOne = async (id: Section["id"]) => {
     try {
-      const result: ServerResponseSuccess<Section> =
-        await this.service.duplicate(id);
+      const result = await this.service.getOne(id);
+      return result;
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        throw err
+      }
+
+      throw {
+        status: "error",
+        message: "Unknown error happend",
+      };
+    }
+  };
+
+  duplicate = async (id: DuplicateSectionDTO) => {
+    try {
+      const result = await this.service.duplicate(id);
       return result;
     } catch (err) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -43,18 +51,13 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  create = async (section: CreateSectionDTO): SectionResponse => {
+  create = async (section: CreateSectionDTO) => {
     try {
-      const result: ServerResponseSuccess<Section> = await this.service.create(
-        section
-      );
+      const result = await this.service.create(section);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -64,19 +67,13 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  createFromComponent = async (
-    section: CreateSectionFromComponentDTO
-  ): SectionResponse => {
+  createFromComponent = async (section: CreateSectionFromComponentDTO) => {
     try {
-      const result: ServerResponseSuccess<Section> =
-        await this.service.createFromComponent(section);
+      const result = await this.service.createFromComponent(section);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -86,19 +83,13 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  createPlaceholders = async (
-    placeholders: Omit<Placeholder, "id">[]
-  ): PlaceholderResponse<Placeholder[]> => {
+  createPlaceholders = async (placeholders: CreatePlaceholdersDTO) => {
     try {
-      const result: ServerResponseSuccess<Placeholder[]> =
-        await this.service.createPlaceholders(placeholders);
+      const result = await this.service.createPlaceholders(placeholders);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -108,19 +99,13 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  deletePlaceholder = async (
-    placeholder_id: Placeholder["id"]
-  ): PlaceholderResponse<Placeholder> => {
+  deletePlaceholder = async (placeholder_id: Placeholder["id"]) => {
     try {
-      const result: ServerResponseSuccess<Placeholder> =
-        await this.service.deletePlaceholder(placeholder_id);
+      const result = await this.service.deletePlaceholder(placeholder_id);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -130,18 +115,13 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  delete = async (id: DeleteSectionDTO): SectionResponse => {
+  delete = async (id: DeleteSectionDTO) => {
     try {
-      const result: ServerResponseSuccess<Section> = await this.service.delete(
-        id
-      );
+      const result = await this.service.delete(id);
       return result;
     } catch (err) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -151,18 +131,13 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  update = async (section: UpdateSectionDTO): SectionResponse => {
+  update = async (section: UpdateSectionDTO) => {
     try {
-      const result: ServerResponseSuccess<Section> = await this.service.update(
-        section
-      );
+      const result = await this.service.update(section);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {
@@ -172,19 +147,13 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  updatePlaceholder = async (
-    placeholder: UpdatePlaceholderDTO
-  ): PlaceholderResponse<Placeholder> => {
+  updatePlaceholder = async (placeholder: UpdatePlaceholderDTO) => {
     try {
-      const result: ServerResponseSuccess<Placeholder> =
-        await this.service.updatePlaceholder(placeholder);
+      const result = await this.service.updatePlaceholder(placeholder);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw {
-          status: "error",
-          message: err.message,
-        };
+        throw err
       }
 
       throw {

@@ -1,1 +1,5 @@
-export type CreateComponentPlaceholderDTO = Omit<Placeholder, "id" | "sectionId">
+export type CreatePlaceholdersDTO = {
+  id: Component["id"] | Section["id"];
+  content: Component["content"];
+  placeholders: Placeholder[];
+};

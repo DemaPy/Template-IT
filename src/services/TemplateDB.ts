@@ -1,14 +1,16 @@
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
-import { DeleteTemplateDTO, UpdateTemplateDTO } from "./types/Template";
+import {
+  CreateTemplateDTO,
+  DeleteTemplateDTO,
+  UpdateTemplateDTO,
+} from "./types/Template";
 
 const BASE_URL = "http://localhost:7777";
 
 export class TemplateServiceDB {
-  static async create(
-    template: Omit<Template, "id">
-  ): Promise<ServerResponseSuccess<Template> | ServerResponseError> {
+  static async create(template: CreateTemplateDTO) {
     try {
       const response = await fetch(BASE_URL + "/templates", {
         method: "POST",
@@ -16,7 +18,7 @@ export class TemplateServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(template),
+        body: JSON.stringify({template: template}),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -139,7 +141,7 @@ export class TemplateServiceDB {
     }
   }
 
-  static async getOne(id: Template['id']) {
+  static async getOne(id: Template["id"]) {
     try {
       const response = await fetch(BASE_URL + `/templates/${id}`, {
         headers: {
@@ -311,7 +313,7 @@ export class TemplateServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify(section),
+        body: JSON.stringify({section: section}),
       });
       const json = await response.json();
       if (!response.ok) {
