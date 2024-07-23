@@ -1,1 +1,28 @@
-What if some HTML will be encoded some decoded???
+<table
+  align="center"
+  border="0"
+  cellpadding="0"
+  cellspacing="0"
+  style="max-width: 650px; width: 100%; background: <span data-template-it_id="23d04942-8f38-492c-af3f-e1c1d4157eeb" style="cursor: pointer; padding: 0.2rem 0.4rem; border-radius: 0.2rem; background: rgba(9, 92, 236, 0.39); font-size: 14px; box-shadow: rgba(0, 0, 0, 0.376) 0px 0px 5px;">Bg color</span>;"
+  class="newsletterContainer"
+  width="650"
+>
+  <tbody>
+    <tr>
+        <td class="newsletterBottom35px"></td>
+      </tr>
+    <tr>
+      <td align="left">
+        <span class="newsletterTitle"><span data-template-it_id="7abf125b-5d7d-4f5d-a729-824e5d61d3df" style="cursor: pointer; padding: 0.2rem 0.4rem; border-radius: 0.2rem; background: rgba(9, 92, 236, 0.39); font-size: 14px; box-shadow: rgba(0, 0, 0, 0.376) 0px 0px 5px;">Title</span></span>
+      </td>
+    </tr>
+    <tr>
+      <td class="newsletterBottom20px"></td>
+    </tr>
+    <tr>
+      <td align="left">
+        <span class="newsletterParagraph"><span data-template-it_id="8ca43ff6-5a3c-4a44-b5db-126cc27fc0b9" style="cursor: pointer; padding: 0.2rem 0.4rem; border-radius: 0.2rem; background: rgba(9, 92, 236, 0.39); font-size: 14px; box-shadow: rgba(0, 0, 0, 0.376) 0px 0px 5px;">Paragraph</span></span>
+      </td>
+    </tr>
+  </tbody>
+</table>
