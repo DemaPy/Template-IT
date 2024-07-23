@@ -7,28 +7,24 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import { useAddDataToPlaceholderModal } from "@/store/addDataToPlaceholderModal"
 import CSVReader from "react-csv-reader"
-import { useCampaignUpdateModal } from "@/store/campaignUpdateModal"
 import { Label } from "@/components/ui/label"
-import { useSectionUpdateModal } from "@/store/sectionUpdateModal"
 import MatchColumns from "./MatchColumns"
 import { CampaignService } from "@/services/DI/Campaign"
 import { handleResponse } from "@/utils/handleResponse"
 import { useLocation, useNavigate } from "react-router-dom"
+import { useQueryClient } from "@tanstack/react-query"
+import toast from "react-hot-toast"
 
 
-const ConnectDataWithPlaceholder = ({ campaignId }: { campaignId: Campaign['id'] }) => {
+const ConnectDataWithPlaceholder = ({ setClose, isOpen, section, campaignId }: { setClose: () => void, isOpen: boolean, section: Section, campaignId: Campaign['id'] }) => {
+  const queryClient = useQueryClient()
+
   const location = useLocation()
   const navigate = useNavigate()
   const [selectedColumns, setSelectedColumns] = useState<Record<string, string>>({})
   const [parsedCSV, setParsedCSV] = useState<any[] | null>(null)
   const [columns, setColumns] = useState<string[] | null>(null)
-
-  const isOpen = useAddDataToPlaceholderModal(state => state.isOpen)
-  const setClose = useAddDataToPlaceholderModal(state => state.setClose)
-  const section = useSectionUpdateModal(state => state.section)
-  const setCampaign = useCampaignUpdateModal(state => state.setCampaign)
 
   const onSubmit = async () => {
     const result: Record<string, Record<string, string>> = {}
@@ -42,11 +38,9 @@ const ConnectDataWithPlaceholder = ({ campaignId }: { campaignId: Campaign['id']
       data = {}
     }
     const response = await CampaignService.savePlaceholderData({ campaignId: campaignId, data: { [section!.id]: result } })
-    const parsed = handleResponse<Campaign>(response, location, navigate)
-    if (parsed) {
-      setCampaign(parsed.data!)
-    }
+    handleResponse<Campaign>(response, location, navigate)
     setClose()
+    queryClient.invalidateQueries({ queryKey: [campaignId] })
   }
 
   const handle_CSV = (data: any[]) => {
@@ -60,7 +54,7 @@ const ConnectDataWithPlaceholder = ({ campaignId }: { campaignId: Campaign['id']
     }
 
     if (!isSlugExist) {
-      console.error("Slug required")
+      toast.error("Slug required")
       return
     }
 
@@ -76,9 +70,7 @@ const ConnectDataWithPlaceholder = ({ campaignId }: { campaignId: Campaign['id']
     setParsedCSV(CSV)
   }
 
-  const handleClose = () => {
-    setClose()
-  }
+
 
   const handleSelectColumn = ({ placeholder_id, value }: { placeholder_id: string, value: string }) => {
     if (value === "") {
@@ -104,7 +96,7 @@ const ConnectDataWithPlaceholder = ({ campaignId }: { campaignId: Campaign['id']
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
+    <Dialog open={isOpen} onOpenChange={setClose}>
       <DialogContent className="max-w-xl min-h-96">
         <DialogTitle>Add data</DialogTitle>
         {

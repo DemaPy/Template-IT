@@ -6,11 +6,11 @@ import CampaignTemplateHandler from "./components/CampaignTemplateHandler";
 import { useCampaignUpdateModal } from "@/store/campaignUpdateModal";
 import UpdateCampaign from "../components/UpdateCampaign";
 import { usePreview } from "@/store/preview";
-import NavbarBuilder from "./components/NavbarBuilder";
 import { useDeleteCampaign, useFetchCampaign } from "./hooks/useCampaign";
 import ComponentsSkeleton from "@/pages/Components/components/Skeleton";
 import toast from "react-hot-toast";
 import Error from "@/pages/Error/Error";
+import PreviewPage from "./components/PreviewPage";
 
 const Campaign = () => {
   const isOpen = usePreview(store => store.isOpen)
@@ -26,12 +26,12 @@ const Campaign = () => {
 
   if (isError) {
     toast.error(error.message);
-    return <Error message={error.message} path="/campaigns" />
+    return <Error error={error} message={error.message} path="/campaigns" />
   }
 
   if (!data) {
     toast.error("Unexpected error happend.");
-    return <Error message={`Id ${params.id} not found.`} path="/campaigns" />
+    return <Error error={error} message={`Id ${params.id} not found.`} path="/campaigns" />
   }
 
   return (
@@ -55,13 +55,7 @@ const Campaign = () => {
         <CampaignTemplateHandler campaign={data.data} />
       </PageContainer>
       {isOpen && (
-        <div className="fixed inset-0 bg-slate-50 z-50 rounded-md">
-          <div className="p-4">
-            <NavbarBuilder html={html} campaign={data.data} />
-          </div>
-          <iframe srcDoc={html} className="fixed h-full w-full">
-          </iframe>
-        </div>
+        <PreviewPage campaign={data.data} html={html} />
       )}
     </>
   );

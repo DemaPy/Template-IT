@@ -1,13 +1,12 @@
 import Heading from '@/components/Heading'
 import { Textarea } from '@/components/ui/textarea'
-import { useAddDataToPlaceholderModal } from '@/store/addDataToPlaceholderModal'
 import { ChevronDown, ChevronUpIcon, ImportIcon } from 'lucide-react'
 import { useState } from 'react'
 import Placeholders from './Placeholders'
 import SectionData from './SectionData'
 import { CampaignService } from '@/services/DI/Campaign'
-import { useSectionUpdateModal } from '@/store/sectionUpdateModal'
 import { decode } from 'html-entities'
+import ConnectDataWithPlaceholder from './ConnectDataWithPlaceholder'
 
 export type DataToReturn = { id: string, title: string, data: Record<string, string> }[]
 
@@ -17,29 +16,24 @@ type Props = {
 }
 
 const Section = ({ campaign, item }: Props) => {
+  const [isOpenData, setIsOpenData] = useState(false)
+
   const [isOpen, setIsOpen] = useState(false)
   const [isDataOpen, setIsDataOpen] = useState(false)
-  const setOpen = useAddDataToPlaceholderModal(state => state.setOpen)
-  const setSection = useSectionUpdateModal(state => state.setSection)
-
-  const handleClick = () => {
-    setSection(item)
-    setOpen()
-  }
 
   const connectData = (data: Campaign['data']) => {
     if (!campaign.data[item.id]) return null
     const result = CampaignService.convertPlaceholders(data, item.placeholders, item.id)
     return result
   }
-
+  
   return (
     <li className='w-full flex flex-col gap-4 border rounded-md p-2'>
       <Heading
         title={item.title}
         size='xs'
         actions={[
-          { title: "Add data", onClick: () => handleClick(), icon: <ImportIcon className='w-4 h-4 mr-2' />, isLoading: item.placeholders.length === 0 },
+          { title: "Add data", onClick: () => setIsOpenData(true), icon: <ImportIcon className='w-4 h-4 mr-2' />, isLoading: item.placeholders.length === 0 },
           { icon: isDataOpen ? <ChevronUpIcon className='w-4 h-4 mr-2' /> : <ChevronDown className='w-4 h-4 mr-2' />, title: "Show data", onClick: () => setIsDataOpen(!isDataOpen) }
         ]}
         action={{ icon: isOpen ? <ChevronUpIcon className='w-4 h-4' /> : <ChevronDown className='w-4 h-4' />, onClick: () => setIsOpen(!isOpen) }} />
@@ -49,6 +43,11 @@ const Section = ({ campaign, item }: Props) => {
           <Placeholders placeholders={item.placeholders} />
         </>
       )}
+      {
+        isOpenData && (
+          <ConnectDataWithPlaceholder isOpen={isOpenData} setClose={() => setIsOpenData(false)} section={item} campaignId={campaign.id} />
+        )
+      }
       {isDataOpen && <SectionData data={connectData(campaign.data)} />}
     </li>
   )

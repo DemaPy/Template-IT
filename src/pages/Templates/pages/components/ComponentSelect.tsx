@@ -19,6 +19,7 @@ const ComponentSelect = ({ isRender = true, template_id }: Props) => {
     const navigate = useNavigate()
 
     const [components, setComponents] = useState<Component[]>([])
+    const [component, setComponent] = useState<Component["id"]>("")
     const [loading, setLoading] = useState<boolean>(false)
 
     useEffect(() => {
@@ -42,16 +43,22 @@ const ComponentSelect = ({ isRender = true, template_id }: Props) => {
             {
                 isRender && (
                     <Select
+                        value={component}
                         disabled={loading || isPending}
-                        onValueChange={id => mutate({
-                            componentId: id,
-                            templateId: template_id
-                        })}
+                        onValueChange={id => {
+                            if (id === "default") return
+                            mutate({
+                                componentId: id,
+                                templateId: template_id
+                            })
+                            setComponent("default")
+                        }}
                     >
                         <SelectTrigger className="col-span-4">
                             <SelectValue placeholder="Select component" />
                         </SelectTrigger>
                         <SelectContent>
+                            <SelectItem defaultValue={"Select component"} value={'default'}>Select component</SelectItem>
                             {components.map((item, idx) => <SelectItem key={idx} value={item.id}>{item.title}</SelectItem>)}
                         </SelectContent>
                     </Select>

@@ -132,7 +132,8 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
 
     const handleAddPlaceholder = () => {
         if (fallback.trim().length < 3 || title.trim().length < 3) {
-            return toast.error("Minimum length 3 symbols.")
+            toast.error("Minimum length 3 symbols.")
+            return
         }
 
         if (!ref.current) return;
@@ -142,12 +143,16 @@ export const Editor = ({ content, item, PlaceholderService }: Props) => {
             return
         }
         const selection = iframe!.getSelection();
-        if (!selection) return
+        if (!selection) {
+            toast.error("Please, select place.")
+            return
+        }
         if (!selection.anchorNode) return
         if (selection.anchorNode.nodeName === "BODY") {
             toast.error("Please, select place.")
             return
         }
+
         // Create Range
         const range = new Range();
         range.setStart(selection.anchorNode!, selection.anchorOffset);

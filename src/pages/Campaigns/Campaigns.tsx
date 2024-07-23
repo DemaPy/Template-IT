@@ -19,12 +19,12 @@ const Campaigns = () => {
 
   if (isError) {
     toast.error(error.message);
-    return <Error message={error.message} path="/" />
+    return <Error error={error} message={error.message} path="/" />
   }
 
   if (!data) {
     toast.error("Unexpected error happend.");
-    return <Error message={`Unexpected error happend for Campaigns.tsx`} path="/" />
+    return <Error error={error} message={`Unexpected error happend for Campaigns.tsx`} path="/" />
   }
 
   return (

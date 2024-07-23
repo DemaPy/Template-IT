@@ -44,7 +44,7 @@ export function useCreateCampaign() {
         },
         onSuccess: (data) => {
             toast.success("Campaign has been created");
-            navigate(`/campaings/${data.data.id}`)
+            navigate(`/campaigns/${data.data.id}`)
             queryClient.invalidateQueries({ queryKey: CAMPAIGNS_KEY })
         },
         onError: (data) => {

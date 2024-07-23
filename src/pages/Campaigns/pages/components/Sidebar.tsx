@@ -1,6 +1,5 @@
 import ListView from '@/components/List'
 import Section from './Section'
-import ConnectDataWithPlaceholder from './ConnectDataWithPlaceholder'
 import {
   Tabs,
   TabsContent,
@@ -11,7 +10,6 @@ import CampaignLayout from './CampaignLayout'
 import Title from '@/components/Title'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
-import { useAddDataToPlaceholderModal } from '@/store/addDataToPlaceholderModal'
 import { useLayoutOrderUpdate } from '../hooks/useLayout'
 
 type Props = {
@@ -28,7 +26,6 @@ type Props = {
 
 const Sidebar = ({ isLayoutChanged, setIsLayoutChanged, setSelectedSlug, layout, slug, campaign, sortedSections, inActiveSections, moveCard }: Props) => {
   const { isPending, mutate } = useLayoutOrderUpdate({ invalidate_key: campaign.id })
-  const isOpen = useAddDataToPlaceholderModal(state => state.isOpen)
 
   const generateSlugs = () => {
     const _slugs = [""]
@@ -51,7 +48,7 @@ const Sidebar = ({ isLayoutChanged, setIsLayoutChanged, setSelectedSlug, layout,
 
 
   return (
-    <div className='w-3/4 overflow-auto max-h-[80vh]'>
+    <div className='w-1/2 overflow-auto max-h-[80vh]'>
       <Tabs defaultValue="sections">
         <TabsList className='sticky top-0 flex items-center justify-between bg-transparent z-50'>
           <div>
@@ -79,11 +76,6 @@ const Sidebar = ({ isLayoutChanged, setIsLayoutChanged, setSelectedSlug, layout,
         <TabsContent value="sections">
           <div className='flex flex-col gap-4'>
             <Title size='sm' title={"Connect data with placeholders"} />
-            {
-              isOpen && (
-                <ConnectDataWithPlaceholder campaignId={campaign.id} />
-              )
-            }
             <ListView campaign={campaign} component={Section} items={sortedSections} />
           </div>
         </TabsContent>

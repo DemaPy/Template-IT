@@ -1,6 +1,5 @@
 import Heading from '@/components/Heading'
 import { useSectionCreateModal } from '@/store/sectionCreateModal'
-import { useSectionUpdateModal } from '@/store/sectionUpdateModal'
 import { handleResponse } from '@/utils/handleResponse'
 import { ChevronDown, ChevronUpIcon, CopyIcon, Edit2Icon, TrashIcon } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -20,6 +19,8 @@ type Props = {
 }
 
 const Section = ({ item }: Props) => {
+  const [isOpen, setIsOpenTextArea] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false)
   const { mutate, isPending: isDeleting, isError, error } = useDeleteSection({ invalidate_key: item.templateId })
 
   const location = useLocation()
@@ -31,14 +32,6 @@ const Section = ({ item }: Props) => {
 
   const [loading, setLoading] = useState(false)
 
-  const [isOpen, setIsOpenTextArea] = useState(false)
-  const setIsOpen = useSectionUpdateModal(state => state.setOpen)
-  const setSection = useSectionUpdateModal(state => state.setSection)
-
-  const handleClick = () => {
-    setIsOpen()
-    setSection(item)
-  }
 
   const handleDuplicate = async () => {
     setLoading(true)
@@ -84,12 +77,12 @@ const Section = ({ item }: Props) => {
 
   return (
     <li className='w-full flex flex-col gap-4 border rounded-md p-4'>
-      <UpdateSection section={data.data} template_id={item.templateId} />
+      <UpdateSection isOpen={isEditOpen} setClose={() => setIsEditOpen(false)} section={data.data} template_id={item.templateId} />
       <Heading
         title={item.title}
         actions={actions}
         size='xs'
-        action={{ icon: <Edit2Icon className='w-4 h-4 text-yellow-400' />, onClick: handleClick, isLoading: isFetching || isDeleting }}
+        action={{ icon: <Edit2Icon className='w-4 h-4 text-yellow-400' />, onClick: () => setIsEditOpen(true), isLoading: isFetching || isDeleting }}
       />
       {isOpen && (
         <>

@@ -29,7 +29,7 @@ const UpdateCampaign = ({ campaign_id }: { campaign_id: Campaign['id'] }) => {
 
     if (isError && !data) {
         toast.error(error.message);
-        return <Error message={error.message} path="/campaigns" />
+        return <Error error={error} message={error.message} path="/campaigns" />
     }
 
     if (!data) {
