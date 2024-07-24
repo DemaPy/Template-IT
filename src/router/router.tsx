@@ -17,7 +17,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <WithNavBar />,
-    errorElement: <Error />,
+    errorElement: <Error error={null} message="Router error happend" path="/"/>,
     children: [
       {
         index: true,
