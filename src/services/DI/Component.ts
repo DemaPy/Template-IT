@@ -1,5 +1,5 @@
 import { ComponentServiceDB } from "../ComponentDB";
-import { UpdateComponentDTO } from "../types/Component";
+import { CreateComponentDTO, UpdateComponentDTO } from "../types/Component";
 import { CreatePlaceholdersDTO } from "../types/Placeholder";
 import { UpdatePlaceholderDTO } from "../types/Section";
 
@@ -15,7 +15,7 @@ class _ComponentService {
       return result;
     } catch (err) {
       if (err instanceof Error) {
-        throw err
+        throw err;
       }
 
       throw {
@@ -25,13 +25,13 @@ class _ComponentService {
     }
   };
 
-  create = async (component: ComponentCreateDTO) => {
+  create = async (component: CreateComponentDTO) => {
     try {
       const result = await this.service.create(component);
       return result;
     } catch (err) {
       if (err instanceof Error) {
-        throw err
+        throw err;
       }
 
       throw {
@@ -47,7 +47,7 @@ class _ComponentService {
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw err
+        throw err;
       }
 
       throw {
@@ -63,7 +63,7 @@ class _ComponentService {
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw err
+        throw err;
       }
 
       throw {
@@ -80,7 +80,7 @@ class _ComponentService {
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw err
+        throw err;
       }
 
       throw {
@@ -96,7 +96,7 @@ class _ComponentService {
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw err
+        throw err;
       }
 
       throw {
@@ -108,11 +108,12 @@ class _ComponentService {
 
   getOne = async (id: Component["id"]) => {
     try {
-      const result = await this.service.getOne(id);
+      const result: ServerResponseSuccess<Component> =
+        await this.service.getOne(id);
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw err
+        throw err;
       }
 
       throw {
@@ -128,7 +129,7 @@ class _ComponentService {
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
-        throw err
+        throw err;
       }
 
       throw {

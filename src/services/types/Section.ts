@@ -7,6 +7,8 @@ export type UpdateSectionDTO = {
   title: Section["title"];
   content: Section["content"];
   templateId: Template["id"];
+  placeholdersToDelete: Placeholder[]
+  placeholdersToCreate: Placeholder[]
 };
 
 export type UpdatePlaceholderDTO = {
@@ -24,6 +26,7 @@ export type CreateSectionDTO = {
   title: Section["title"];
   content: Section["content"];
   templateId: Template["id"];
+  placeholders: Placeholder[];
 };
 
 export type DeleteSectionDTO = {

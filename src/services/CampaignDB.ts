@@ -1,7 +1,7 @@
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
-import { UpdateCampaignDTO } from "./types/Campaign";
+import { DeleteCampaignDTO, UpdateCampaignDTO } from "./types/Campaign";
 
 const BASE_URL = "http://localhost:7777";
 
@@ -160,9 +160,9 @@ export class CampaignServiceDB {
     }
   }
 
-  static async delete(campaign_id: Campaign["id"]) {
+  static async delete(campaign_id: DeleteCampaignDTO) {
     try {
-      const response = await fetch(BASE_URL + `/campaigns/${campaign_id}`, {
+      const response = await fetch(BASE_URL + `/campaigns/${campaign_id.id}`, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
