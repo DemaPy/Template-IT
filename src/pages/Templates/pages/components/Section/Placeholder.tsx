@@ -1,13 +1,20 @@
 import { Button } from "@/components/ui/button"
 import { useDeletePlaceholder } from "@/pages/Components/pages/hooks/usePlaceholder"
 import { TrashIcon } from "lucide-react"
+import { useDeleteSectionPlaceholder } from "../../hooks/useSection"
 
 type Props = {
     item: Placeholder
+    service: "section" | "component"
+    invalidate_key: string
 }
 
-const Placeholder = ({ item }: Props) => {
-    const { mutate, isPending } = useDeletePlaceholder({ invalidate_key: item.componentId! })
+const Placeholder = ({ item, service, invalidate_key }: Props) => {
+    const { mutate: mutateComponentPlaceholder, isPending: isComponentPlaceholderPending } = useDeletePlaceholder({ invalidate_key })
+    const { mutate: mutateSectionPlaceholder, isPending: isSectionPlaceholderPending } = useDeleteSectionPlaceholder({ invalidate_key })
+
+    const mutate = service === "component" ? mutateComponentPlaceholder : mutateSectionPlaceholder
+    const isPending = service === "component" ? isComponentPlaceholderPending : isSectionPlaceholderPending
 
     return (
         <div className='flex justify-between gap-2 items-center' key={item.id}>

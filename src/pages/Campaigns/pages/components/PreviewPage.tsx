@@ -22,7 +22,7 @@ const PreviewPage = ({ html, campaign }: Props) => {
                 <NavbarBuilder setDevice={(device: KeyDevices) => setDevice(device)} html={html} campaign={campaign} />
             </div>
             <div className='flex justify-center h-full'>
-            <iframe srcDoc={html} style={{ width: devices[device] }} className="fixed h-full">
+            <iframe srcDoc={html} style={{ width: devices[device] }} className="fixed h-full overflow-y-auto pb-20">
             </iframe>
             </div>
         </div>

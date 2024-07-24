@@ -2,17 +2,18 @@ import Heading from "@/components/Heading";
 import PageContainer from "@/components/PageContainer";
 import { Edit, Trash } from "lucide-react";
 import { useParams } from "react-router-dom";
-import { useComponentUpdateModal } from "@/store/componentUpdateModal";
 import ComponentHandler from "./components/ComponentHandler";
 import UpdateComponent from "../components/UpdateComponent";
 import toast from "react-hot-toast";
 import { useDeleteComponent, useFetchComponent } from "./hooks/useComponent";
 import ComponentsSkeleton from "../components/Skeleton";
 import Error from "@/pages/Error/Error";
+import { useState } from "react";
 
 const Component = () => {
+  const [isEditOpen, setIsEditOpen] = useState(false)
+
   const params = useParams<{ id: string }>();
-  const setOpen = useComponentUpdateModal((state) => state.setOpen);
 
   const { isPending: isFetching, data, isError, error } = useFetchComponent(params.id!)
   const { isPending: isDeleting, mutate } = useDeleteComponent()
@@ -42,11 +43,15 @@ const Component = () => {
           {
             isLoading: isDeleting,
             icon: <Edit className="w-4 h-4" />,
-            onClick: () => setOpen(),
+            onClick: () => setIsEditOpen(true),
           },
         ]}
       />
-      <UpdateComponent component_id={data.data.id} />
+      {
+        isEditOpen && (
+          <UpdateComponent isOpen={isEditOpen} setClose={() => setIsEditOpen(false)} component_id={data.data.id} />
+        )
+      }
       <ComponentHandler component={data.data} />
     </PageContainer>
   );

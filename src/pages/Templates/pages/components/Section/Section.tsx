@@ -1,13 +1,8 @@
 import Heading from '@/components/Heading'
-import { useSectionCreateModal } from '@/store/sectionCreateModal'
-import { handleResponse } from '@/utils/handleResponse'
 import { ChevronDown, ChevronUpIcon, CopyIcon, Edit2Icon, TrashIcon } from 'lucide-react'
-import { useLocation, useNavigate } from 'react-router-dom'
 import Placeholders from './Placeholders'
-import { Editor } from './Editor'
-import { SectionService } from '@/services/DI/Section'
 import { useState } from 'react'
-import { useDeleteSection, useFetchSection } from '../../hooks/useSection'
+import { useDeleteSection, useDuplicate, useFetchSection } from '../../hooks/useSection'
 import toast from 'react-hot-toast'
 import UpdateSection from './UpdateSection'
 import ComponentsSkeleton from '@/pages/Components/components/Skeleton'
@@ -22,26 +17,9 @@ const Section = ({ item }: Props) => {
   const [isOpen, setIsOpenTextArea] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const { mutate, isPending: isDeleting, isError, error } = useDeleteSection({ invalidate_key: item.templateId })
-
-  const location = useLocation()
-  const navigate = useNavigate()
-  // Problem???
-  const setSectionCreate = useSectionCreateModal(state => state.setSection)
+  const { mutate: duplicate, isPending: isDuplicating, } = useDuplicate({ invalidate_key: item.templateId })
 
   const { isPending: isFetching, data, isError: isFetchingError, error: fetchError } = useFetchSection(item.id)
-
-  const [loading, setLoading] = useState(false)
-
-
-  const handleDuplicate = async () => {
-    setLoading(true)
-    const response = await SectionService.duplicate({ id: item.id })
-    const parsed = handleResponse<Section>(response, location, navigate)
-    if (parsed) {
-      setSectionCreate(parsed.data)
-    }
-    setLoading(false)
-  }
 
   const actions = [
     {
@@ -56,8 +34,8 @@ const Section = ({ item }: Props) => {
     },
     {
       icon: <CopyIcon className='w-4 h-4 text-blue-400' />,
-      onClick: handleDuplicate,
-      isLoading: loading || isDeleting
+      onClick: () => duplicate({ id: item.id }),
+      isLoading: isDuplicating || isDeleting
     }]
 
   if (isError) {
@@ -77,7 +55,11 @@ const Section = ({ item }: Props) => {
 
   return (
     <li className='w-full flex flex-col gap-4 border rounded-md p-4'>
-      <UpdateSection isOpen={isEditOpen} setClose={() => setIsEditOpen(false)} section={data.data} template_id={item.templateId} />
+      {
+        isEditOpen && (
+          <UpdateSection isOpen={isEditOpen} setClose={() => setIsEditOpen(false)} section={data.data} template_id={item.templateId} />
+        )
+      }
       <Heading
         title={item.title}
         actions={actions}
@@ -85,10 +67,7 @@ const Section = ({ item }: Props) => {
         action={{ icon: <Edit2Icon className='w-4 h-4 text-yellow-400' />, onClick: () => setIsEditOpen(true), isLoading: isFetching || isDeleting }}
       />
       {isOpen && (
-        <>
-          <Editor PlaceholderService={SectionService} item={item} content={item.content} />
-          <Placeholders placeholders={item.placeholders} />
-        </>
+        <Placeholders invalidate_key={item.templateId} service={"section"} placeholders={item.placeholders} />
       )}
     </li>
   )

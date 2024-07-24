@@ -8,10 +8,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
 import { useComponentCreateModal } from '@/store/componentCreateModal'
 import { useState } from "react"
 import { useCreateComponent } from "../pages/hooks/useComponent"
+import { CreatePlaceholdersDTO } from "@/services/types/Placeholder"
+import Editor from "@/components/Editor/Editor"
 
 
 const CreateComponent = () => {
@@ -19,17 +20,15 @@ const CreateComponent = () => {
 
     const setClose = useComponentCreateModal(state => state.setClose)
 
-    const [componentTitle, setComponentTitle] = useState("")
+    const [title, setTitle] = useState("")
     const [content, setContent] = useState<string>("")
+    const [placeholders, setPlaceholders] = useState<CreatePlaceholdersDTO['placeholders']>([])
 
     const { isPending, mutate } = useCreateComponent()
 
-    const handleCreate = () => {
-        mutate({
-            content: content,
-            title: componentTitle
-        })
-        setClose()
+    const handleEditorSubmit = (data: EditorOnSubmitProps) => {
+        setContent(data.content)
+        setPlaceholders(data.placeholdersToCreate)
     }
 
     return (
@@ -45,23 +44,33 @@ const CreateComponent = () => {
                         </Label>
                         <Input
                             id="name"
-                            value={componentTitle}
-                            onChange={ev => setComponentTitle(ev.target.value)}
+                            value={title}
+                            onChange={ev => setTitle(ev.target.value)}
                             className="col-span-4"
                         />
-                        <Label htmlFor="content" className="text-left">
-                            Content
-                        </Label>
-                        <Textarea
-                            id="content"
-                            onChange={(ev) => setContent(ev.target.value)}
-                            value={content}
-                            className="col-span-4 resize-y max-h-[500px] min-h-[300px] text-xs"
-                        />
+                        <div className="col-span-4 resize-y max-h-[500px] min-h-[300px]">
+                            <Label htmlFor="content" className="text-left">
+                                Content
+                            </Label>
+                            <Editor
+                                content={content}
+                                placeholders={[]}
+                                isLoading={isPending}
+                                isContentEditable={true}
+                                onSubmit={handleEditorSubmit}
+                            />
+                        </div>
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button disabled={isPending} onClick={handleCreate}>Save changes</Button>
+                    <Button disabled={isPending} onClick={() => {
+                        mutate({
+                            content: content,
+                            title: title,
+                            placeholders: placeholders
+                        })
+                        setClose()
+                    }}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

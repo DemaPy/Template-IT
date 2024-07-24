@@ -10,12 +10,13 @@ import { useState } from 'react'
 import { useSectionCreateModal } from '@/store/sectionCreateModal'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { useCreateSection } from '../../hooks/useSection'
 import ComponentsSkeleton from '@/pages/Components/components/Skeleton'
 import Error from '@/pages/Error/Error'
 import toast from 'react-hot-toast'
+import Editor from '@/components/Editor/Editor'
+import { CreatePlaceholdersDTO } from '@/services/types/Placeholder'
 
 type Props = {
     template_id: string
@@ -30,12 +31,18 @@ const CreateSection = ({ template_id }: Props) => {
     const setIsOpen = useSectionCreateModal(state => state.setOpen)
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
+    const [placeholders, setPlaceholders] = useState<CreatePlaceholdersDTO['placeholders']>([])
 
     if (isPending) return <ComponentsSkeleton />
 
     if (isError) {
         toast.error(error.message);
         return <Error error={error} message={error.message} path={`/templates/${template_id}`} />
+    }
+
+    const handleEditorSubmit = (data: EditorOnSubmitProps) => {
+        setContent(data.content)
+        setPlaceholders(data.placeholdersToCreate)
     }
 
     return (
@@ -58,20 +65,23 @@ const CreateSection = ({ template_id }: Props) => {
                                 onChange={ev => setTitle(ev.target.value)}
                                 className="col-span-4"
                             />
-                            <Label htmlFor="content" className="text-left">
-                                Content
-                            </Label>
-                            <Textarea
-                                id="content"
-                                value={content}
-                                onChange={ev => setContent(ev.target.value)}
-                                className="col-span-4 resize-none w-full min-h-60"
-                            />
+                            <div className="col-span-4 resize-y max-h-[500px] min-h-[300px]">
+                                <Label htmlFor="content" className="text-left">
+                                    Content
+                                </Label>
+                                <Editor
+                                    content={content}
+                                    placeholders={[]}
+                                    isLoading={isPending}
+                                    isContentEditable={true}
+                                    onSubmit={handleEditorSubmit}
+                                />
+                            </div>
                         </div>
                     </div>
                     <DialogFooter>
                         <Button disabled={isPending} onClick={() => {
-                            mutate(({ templateId: template_id, content, title: title }))
+                            mutate(({ templateId: template_id, content, title: title, placeholders }))
                             setClose()
                         }}>Save changes</Button>
                     </DialogFooter>

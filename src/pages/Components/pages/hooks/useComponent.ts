@@ -39,6 +39,7 @@ export function useCreateComponent() {
     mutationFn: (component: CreateComponentDTO) => {
       for (const key in component) {
         const value = component[key as keyof CreateComponentDTO];
+        if (Array.isArray(value)) continue
         if (value.trim().length < 3) {
           throw new Error(
             key.charAt(0).toUpperCase() + key.slice(1) + " too short."
@@ -69,6 +70,7 @@ export function useComponentUpdate({
     mutationFn: (component: UpdateComponentDTO) => {
       for (const key in component) {
         const value = component[key as keyof UpdateComponentDTO];
+        if (Array.isArray(value)) continue
         if (value.trim().length < 3) {
           throw new Error(
             key.charAt(0).toUpperCase() + key.slice(1) + " too short."
