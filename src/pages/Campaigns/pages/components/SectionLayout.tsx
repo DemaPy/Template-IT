@@ -6,7 +6,6 @@ import { Switchh } from "@/components/Switch";
 import { Button } from "@/components/ui/button";
 import SectionSlugs from "./SectionSlugs";
 import { CampaignService } from "@/services/DI/Campaign";
-import { useCampaignUpdateModal } from "@/store/campaignUpdateModal";
 import { useDrag, useDrop } from "react-dnd";
 
 type Props = {
@@ -37,7 +36,6 @@ const SectionLayout = ({
   renderOn,
 }: Props) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const setCampaign = useCampaignUpdateModal((state) => state.setCampaign);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -115,7 +113,6 @@ const SectionLayout = ({
       return;
     } else {
       setIsLoading(false);
-      setCampaign(response.data);
     }
   };
 
@@ -135,7 +132,6 @@ const SectionLayout = ({
       return;
     } else {
       setIsLoading(false);
-      setCampaign(response.data);
     }
   };
 
