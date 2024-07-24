@@ -9,7 +9,7 @@ type Props = {
 
 const Placeholders = ({ handleDeletePlaceholder, placeholders }: Props) => {
     return (
-        <div>
+        <div className='space-y-2'>
             <Title title={"Placeholders"} size='xs' />
             <ListView component={Placeholder} handleDeletePlaceholder={handleDeletePlaceholder} items={placeholders} />
         </div>

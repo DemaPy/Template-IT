@@ -29,7 +29,7 @@ const UpdateTemplate = ({ template_id }: { template_id: Template['id'] }) => {
 
     if (isError && !data) {
         toast.error(error.message);
-        return <Error message={error.message} path="/templates" />
+        return <Error error={error} message={error.message} path="/templates" />
     }
 
     if (!data) {
