@@ -19,3 +19,7 @@ body,
 .csv-input {
   display: none;
 }
+
+.test {
+  color: red;
+}
