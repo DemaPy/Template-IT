@@ -11,7 +11,7 @@ import {
   UpdateSectionDTO,
 } from "./types/Section";
 
-const BASE_URL = "http://localhost:7777";
+const BASE_URL = "https://server-it.onrender.com";
 
 export class SectionServiceDB {
   static async duplicate({ id }: DuplicateSectionDTO) {

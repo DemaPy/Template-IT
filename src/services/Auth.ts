@@ -1,6 +1,6 @@
 import { ValidationError } from "./Errors/ValidationError";
 
-const BASE_URL = "http://localhost:7777";
+const BASE_URL = "https://server-it.onrender.com";
 
 export class Auth {
   static registration = async (data: {

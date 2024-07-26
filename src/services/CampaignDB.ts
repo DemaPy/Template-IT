@@ -3,7 +3,7 @@ import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
 import { DeleteCampaignDTO, UpdateCampaignDTO } from "./types/Campaign";
 
-const BASE_URL = "http://localhost:7777";
+const BASE_URL = "https://server-it.onrender.com";
 
 export class CampaignServiceDB {
   static async create(campaign: Omit<Campaign, "id">) {

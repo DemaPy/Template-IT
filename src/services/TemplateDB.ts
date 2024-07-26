@@ -7,7 +7,7 @@ import {
   UpdateTemplateDTO,
 } from "./types/Template";
 
-const BASE_URL = "http://localhost:7777";
+const BASE_URL = "https://server-it.onrender.com";
 
 export class TemplateServiceDB {
   static async create(template: CreateTemplateDTO) {

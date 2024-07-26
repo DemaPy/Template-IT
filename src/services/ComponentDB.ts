@@ -5,7 +5,7 @@ import { CreateComponentDTO, UpdateComponentDTO } from "./types/Component";
 import { CreatePlaceholdersDTO } from "./types/Placeholder";
 import { UpdatePlaceholderDTO } from "./types/Section";
 
-const BASE_URL = "http://localhost:7777";
+const BASE_URL = "https://server-it.onrender.com";
 
 export class ComponentServiceDB {
   static async create(
