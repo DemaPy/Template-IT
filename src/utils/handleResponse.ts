@@ -3,7 +3,7 @@ import { AuthError } from "@/services/Errors/AuthError";
 import { ValidationError } from "@/services/Errors/ValidationError";
 import { Location, NavigateFunction } from "react-router-dom";
 
-type Response<T> =
+type Responses<T> =
   | ServerResponseSuccess<T>
   | ValidationError
   | AccessError
@@ -11,7 +11,7 @@ type Response<T> =
   | ServerResponseError;
 
 export const handleResponse = <T>(
-  response: Response<T>,
+  response: Responses<T>,
   location: Location<any>,
   navigate: NavigateFunction
 ) => {
@@ -38,4 +38,28 @@ export const handleResponse = <T>(
     return null;
   }
   return response;
+};
+
+export const handleResponseDB = ({
+  json,
+  response,
+}: {
+  json: any;
+  response: Response;
+}) => {
+  if (response.status === 403) {
+    throw new AccessError({ message: json.message });
+  }
+  if (response.status === 401) {
+    throw new AuthError({ message: json.message });
+  }
+
+  if ("errors" in json) {
+    throw new ValidationError({
+      message: json.message,
+      errors: json.errors,
+    });
+  }
+
+  throw new Error(json.message);
 };

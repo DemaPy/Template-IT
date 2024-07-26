@@ -1,10 +1,8 @@
 import { BASE_URL } from "@/config";
-import { AccessError } from "./Errors/AccessError";
-import { AuthError } from "./Errors/AuthError";
-import { ValidationError } from "./Errors/ValidationError";
 import { CreateComponentDTO, UpdateComponentDTO } from "./types/Component";
 import { CreatePlaceholdersDTO } from "./types/Placeholder";
 import { UpdatePlaceholderDTO } from "./types/Section";
+import { handleResponseDB } from "@/utils/handleResponse";
 
 export class ComponentServiceDB {
   static async create(
@@ -20,23 +18,7 @@ export class ComponentServiceDB {
         body: JSON.stringify({ component: component }),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error: any) {
       throw error;
@@ -56,23 +38,8 @@ export class ComponentServiceDB {
         }
       );
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
+      handleResponseDB({ json, response });
 
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
       return json;
     } catch (error) {
       throw error;
@@ -90,23 +57,8 @@ export class ComponentServiceDB {
         body: JSON.stringify({ placeholder: placeholders }),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
+      handleResponseDB({ json, response });
 
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
       return json;
     } catch (error) {
       throw error;
@@ -124,23 +76,8 @@ export class ComponentServiceDB {
         body: JSON.stringify({ placeholder: placeholder }),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
+      handleResponseDB({ json, response });
 
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
       return json;
     } catch (error) {
       throw error;
@@ -156,23 +93,8 @@ export class ComponentServiceDB {
         },
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
+      handleResponseDB({ json, response });
 
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
       return json;
     } catch (error) {
       throw error;
@@ -192,23 +114,8 @@ export class ComponentServiceDB {
         body: JSON.stringify({ component: component }),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
+      handleResponseDB({ json, response });
 
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
       return json;
     } catch (error) {
       throw error;
@@ -223,23 +130,8 @@ export class ComponentServiceDB {
         },
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
+      handleResponseDB({ json, response });
 
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
       return json;
     } catch (error) {
       throw error;
@@ -254,23 +146,8 @@ export class ComponentServiceDB {
         },
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
+      handleResponseDB({ json, response });
 
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
       return json;
     } catch (error) {
       throw error;
@@ -287,23 +164,8 @@ export class ComponentServiceDB {
         body: JSON.stringify({ placeholder: placeholder }),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
+      handleResponseDB({ json, response });
 
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
       return json;
     } catch (error) {
       throw error;

@@ -1,8 +1,6 @@
 import { BASE_URL } from "@/config";
-import { AccessError } from "./Errors/AccessError";
-import { AuthError } from "./Errors/AuthError";
-import { ValidationError } from "./Errors/ValidationError";
 import { DeleteCampaignDTO, UpdateCampaignDTO } from "./types/Campaign";
+import { handleResponseDB } from "@/utils/handleResponse";
 
 export class CampaignServiceDB {
   static async create(campaign: Omit<Campaign, "id">) {
@@ -16,23 +14,7 @@ export class CampaignServiceDB {
         body: JSON.stringify({ campaign: campaign }),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -50,23 +32,7 @@ export class CampaignServiceDB {
         body: JSON.stringify({ layout: layout }),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       if (error instanceof Error) {
@@ -90,23 +56,7 @@ export class CampaignServiceDB {
         body: JSON.stringify({ layout: layouts }),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       if (error instanceof Error) {
@@ -136,23 +86,7 @@ export class CampaignServiceDB {
         }
       );
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -168,23 +102,7 @@ export class CampaignServiceDB {
         },
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -202,23 +120,7 @@ export class CampaignServiceDB {
         body: JSON.stringify({ campaign: campaign }),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -233,23 +135,7 @@ export class CampaignServiceDB {
         },
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -264,23 +150,7 @@ export class CampaignServiceDB {
         },
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;

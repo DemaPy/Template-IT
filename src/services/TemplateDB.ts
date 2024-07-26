@@ -1,12 +1,10 @@
 import { BASE_URL } from "@/config";
-import { AccessError } from "./Errors/AccessError";
-import { AuthError } from "./Errors/AuthError";
-import { ValidationError } from "./Errors/ValidationError";
 import {
   CreateTemplateDTO,
   DeleteTemplateDTO,
   UpdateTemplateDTO,
 } from "./types/Template";
+import { handleResponseDB } from "@/utils/handleResponse";
 
 export class TemplateServiceDB {
   static async create(template: CreateTemplateDTO) {
@@ -20,23 +18,7 @@ export class TemplateServiceDB {
         body: JSON.stringify({ template: template }),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -52,23 +34,7 @@ export class TemplateServiceDB {
         },
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -86,23 +52,7 @@ export class TemplateServiceDB {
         body: JSON.stringify({ template: data }),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -117,23 +67,7 @@ export class TemplateServiceDB {
         },
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -148,23 +82,7 @@ export class TemplateServiceDB {
         },
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -180,23 +98,7 @@ export class TemplateServiceDB {
         },
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -212,23 +114,7 @@ export class TemplateServiceDB {
         },
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -247,23 +133,7 @@ export class TemplateServiceDB {
         }
       );
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -281,23 +151,7 @@ export class TemplateServiceDB {
         body: JSON.stringify({ placeholders: placeholders }),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
@@ -315,23 +169,7 @@ export class TemplateServiceDB {
         body: JSON.stringify({ section: section }),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if (response.status === 403) {
-          throw new AccessError({ message: json.message });
-        }
-        if (response.status === 401) {
-          throw new AuthError({ message: json.message });
-        }
-
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (error) {
       throw error;
