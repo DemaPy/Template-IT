@@ -92,7 +92,7 @@ class _ComponentService {
 
   getAll = async () => {
     try {
-      const result = await this.service.getAll();
+      const result: ServerResponseSuccess<Component[]> = await this.service.getAll();
       return result;
     } catch (err: unknown) {
       if (err instanceof Error) {

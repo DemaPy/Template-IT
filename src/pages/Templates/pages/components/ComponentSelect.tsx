@@ -1,10 +1,9 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ComponentService } from '@/services/DI/Component'
-import { handleResponse } from '@/utils/handleResponse'
-import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { useCreateFromComponent } from '../hooks/useSection'
 import toast from 'react-hot-toast'
+import { useFetchComponents } from '@/pages/Components/pages/hooks/useComponent'
+import Error from '@/pages/Error/Error'
+import { useState } from 'react'
 
 
 type Props = {
@@ -14,28 +13,18 @@ type Props = {
 
 const ComponentSelect = ({ isRender = true, template_id }: Props) => {
     const { isError, isPending, error, mutate } = useCreateFromComponent({ invalidate_key: template_id })
+    const { data, isPending: isFetching } = useFetchComponents()
 
-    const location = useLocation()
-    const navigate = useNavigate()
-
-    const [components, setComponents] = useState<Component[]>([])
     const [component, setComponent] = useState<Component["id"]>("")
-    const [loading, setLoading] = useState<boolean>(false)
-
-    useEffect(() => {
-        (async () => {
-            setLoading(true)
-            const response = await ComponentService.getAll()
-            const parsed = handleResponse<Component[]>(response, location, navigate)
-            if (parsed) {
-                setComponents(parsed.data)
-            }
-            setLoading(false)
-        })()
-    }, [])
 
     if (isError) {
-        toast.error(error.message)
+        toast.error(error.message);
+        return <Error error={error} message={error.message} path="/" />
+    }
+
+    if (!data) {
+        toast.error("Unexpected error happend.");
+        return <Error error={error} message={`Unexpected error happend for Components.tsx`} path="/" />
     }
 
     return (
@@ -44,7 +33,7 @@ const ComponentSelect = ({ isRender = true, template_id }: Props) => {
                 isRender && (
                     <Select
                         value={component}
-                        disabled={loading || isPending}
+                        disabled={isFetching || isPending}
                         onValueChange={id => {
                             if (id === "default") return
                             mutate({
@@ -59,7 +48,7 @@ const ComponentSelect = ({ isRender = true, template_id }: Props) => {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem defaultValue={"Select component"} value={'default'}>Select component</SelectItem>
-                            {components.map((item, idx) => <SelectItem key={idx} value={item.id}>{item.title}</SelectItem>)}
+                            {data.data.map((item, idx) => <SelectItem key={idx} value={item.id}>{item.title}</SelectItem>)}
                         </SelectContent>
                     </Select>
 

@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/config";
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
@@ -10,8 +11,6 @@ import {
   UpdatePlaceholderDTO,
   UpdateSectionDTO,
 } from "./types/Section";
-
-const BASE_URL = "https://server-it.onrender.com";
 
 export class SectionServiceDB {
   static async duplicate({ id }: DuplicateSectionDTO) {

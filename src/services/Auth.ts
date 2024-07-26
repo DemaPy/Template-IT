@@ -1,6 +1,5 @@
+import { BASE_URL } from "@/config";
 import { ValidationError } from "./Errors/ValidationError";
-
-const BASE_URL = "https://server-it.onrender.com";
 
 export class Auth {
   static registration = async (data: {

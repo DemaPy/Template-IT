@@ -1,11 +1,10 @@
+import { BASE_URL } from "@/config";
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
 import { CreateComponentDTO, UpdateComponentDTO } from "./types/Component";
 import { CreatePlaceholdersDTO } from "./types/Placeholder";
 import { UpdatePlaceholderDTO } from "./types/Section";
-
-const BASE_URL = "https://server-it.onrender.com";
 
 export class ComponentServiceDB {
   static async create(

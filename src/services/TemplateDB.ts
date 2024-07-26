@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/config";
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
@@ -6,8 +7,6 @@ import {
   DeleteTemplateDTO,
   UpdateTemplateDTO,
 } from "./types/Template";
-
-const BASE_URL = "https://server-it.onrender.com";
 
 export class TemplateServiceDB {
   static async create(template: CreateTemplateDTO) {
@@ -18,7 +17,7 @@ export class TemplateServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({template: template}),
+        body: JSON.stringify({ template: template }),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -313,7 +312,7 @@ export class TemplateServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({section: section}),
+        body: JSON.stringify({ section: section }),
       });
       const json = await response.json();
       if (!response.ok) {

@@ -1,9 +1,8 @@
+import { BASE_URL } from "@/config";
 import { AccessError } from "./Errors/AccessError";
 import { AuthError } from "./Errors/AuthError";
 import { ValidationError } from "./Errors/ValidationError";
 import { DeleteCampaignDTO, UpdateCampaignDTO } from "./types/Campaign";
-
-const BASE_URL = "https://server-it.onrender.com";
 
 export class CampaignServiceDB {
   static async create(campaign: Omit<Campaign, "id">) {
@@ -14,7 +13,7 @@ export class CampaignServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({campaign: campaign}),
+        body: JSON.stringify({ campaign: campaign }),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -48,7 +47,7 @@ export class CampaignServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({layout: layout}),
+        body: JSON.stringify({ layout: layout }),
       });
       const json = await response.json();
       if (!response.ok) {
@@ -133,7 +132,7 @@ export class CampaignServiceDB {
             "Content-Type": "application/json",
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
-          body: JSON.stringify({campaign: _data.data}),
+          body: JSON.stringify({ campaign: _data.data }),
         }
       );
       const json = await response.json();
@@ -200,7 +199,7 @@ export class CampaignServiceDB {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        body: JSON.stringify({campaign: campaign}),
+        body: JSON.stringify({ campaign: campaign }),
       });
       const json = await response.json();
       if (!response.ok) {
