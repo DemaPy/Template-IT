@@ -47,19 +47,21 @@ export const handleResponseDB = ({
   json: any;
   response: Response;
 }) => {
-  if (response.status === 403) {
-    throw new AccessError({ message: json.message });
+  if (!response.ok) {
+    if (response.status === 403) {
+      throw new AccessError({ message: json.message });
+    }
+    if (response.status === 401) {
+      throw new AuthError({ message: json.message });
+    }
+  
+    if ("errors" in json) {
+      throw new ValidationError({
+        message: json.message,
+        errors: json.errors,
+      });
+    }
+  
+    throw new Error(json.message);
   }
-  if (response.status === 401) {
-    throw new AuthError({ message: json.message });
-  }
-
-  if ("errors" in json) {
-    throw new ValidationError({
-      message: json.message,
-      errors: json.errors,
-    });
-  }
-
-  throw new Error(json.message);
 };
