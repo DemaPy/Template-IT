@@ -7,5 +7,4 @@ type TUpdateCampaign = {
 type TFetchCampaignToUpdate = {
   campaign_id: Campaign["id"];
   setTitle: (value: Campaign["title"]) => void;
-  title: Campaign["title"];
 };

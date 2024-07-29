@@ -3,9 +3,11 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useFetchSection } from "../../../hooks/useSection"
 import Editor from "@/components/Editor/Editor"
-import ComponentsSkeleton from "@/pages/Components/components/Skeleton"
+import ComponentsSkeleton from "@/pages/Components/components/ComponentsSkeleton"
+import { DialogFooter } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 
-export function FetchSectionToUpdate({ section_id, setTitle, title, handleEditorSubmit }: TFetchSectionToUpdate) {
+export function FetchSectionToUpdate({ section_id, setTitle, handleEditorSubmit, title, handleSubmit }: TFetchSectionToUpdate) {
     const { isPending, data, isError, error } = useFetchSection(section_id)
 
     if (isPending) return <ComponentsSkeleton />
@@ -38,6 +40,14 @@ export function FetchSectionToUpdate({ section_id, setTitle, title, handleEditor
                     onSubmit={handleEditorSubmit}
                 />
             </div>
+            <DialogFooter className="col-span-4">
+                <Button onClick={() => handleSubmit({
+                    old_title: data.data.title,
+                    old_content: data.data.content
+                })} disabled={isPending}>
+                    Save changes
+                </Button>
+            </DialogFooter>
         </div>
     )
 }

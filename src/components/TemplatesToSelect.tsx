@@ -1,7 +1,7 @@
 import Error from "@/pages/Error/Error"
 import { SelectItem } from "./ui/select"
 import { useFetchTemplates } from "@/pages/Templates/pages/hooks/useTemplate";
-import ComponentsSkeleton from "@/pages/Components/components/Skeleton";
+import ComponentsSkeleton from "@/pages/Components/components/ComponentsSkeleton";
 
 export function TemplatesToSelect() {
     const { data, isError, error, isPending } = useFetchTemplates();

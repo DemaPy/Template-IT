@@ -4,7 +4,7 @@ import Heading from "@/components/Heading";
 import CreateCampaign from "./components/Create/CreateCampaign";
 import GridView from "../../components/GridView";
 import CampaignCard from "./components/CampaignCard";
-import ComponentsSkeleton from "../Components/components/Skeleton";
+import ComponentsSkeleton from "../Components/components/ComponentsSkeleton";
 import { useFetchCampaigns } from "./pages/hooks/useCampaign";
 import Error from "../Error/Error";
 import { useState } from "react";

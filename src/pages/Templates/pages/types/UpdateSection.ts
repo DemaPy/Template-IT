@@ -8,7 +8,15 @@ type TUpdateSection = {
 type TFetchSectionToUpdate = {
   section_id: Section["id"];
 
-  setTitle: (value: Section["title"]) => void;
   title: Section["title"];
+  handleSubmit: ({
+    old_title,
+    old_content,
+  }: {
+    old_title: Section["title"];
+    old_content: Section["content"];
+  }) => void;
+
+  setTitle: (value: Section["title"]) => void;
   handleEditorSubmit: (value: EditorOnSubmitProps) => void;
 };

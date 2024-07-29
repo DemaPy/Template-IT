@@ -23,7 +23,7 @@ const UpdateTemplate = ({ isOpen, setClose, template_id }: TUpdateTemplate) => {
                     <DialogTitle>Update template</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                    <FetchTemplateToUpdate template_id={template_id} title={title} setTitle={(value: Template['title']) => setTitle(value)} />
+                    <FetchTemplateToUpdate template_id={template_id} setTitle={(value: Template['title']) => setTitle(value)} />
                 </div>
                 <DialogFooter>
                     <Button onClick={() => mutate({ title: title, id: template_id })} disabled={isPending}>Save changes</Button>

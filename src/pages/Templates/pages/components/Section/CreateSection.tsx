@@ -14,7 +14,7 @@ import { useCreateSection } from '../../hooks/useSection'
 import Error from '@/pages/Error/Error'
 import Editor from '@/components/Editor/Editor'
 import { CreatePlaceholders } from '@/services/types/Placeholder'
-import ComponentsSkeleton from '@/pages/Components/components/Skeleton'
+import ComponentsSkeleton from '@/pages/Components/components/ComponentsSkeleton'
 
 const CreateSection = ({ template_id }: TCreateSection) => {
     const [isOpen, setIsOpen] = useState<boolean>(false)

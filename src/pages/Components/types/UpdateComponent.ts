@@ -11,4 +11,11 @@ type TFetchComponentToUpdate = {
   title: Component["title"];
 
   handleEditorSubmit: (value: EditorOnSubmitProps) => void;
+  handleSubmit: ({
+    old_title,
+    old_content,
+  }: {
+    old_title: Component["title"];
+    old_content: Component["content"];
+  }) => void;
 };

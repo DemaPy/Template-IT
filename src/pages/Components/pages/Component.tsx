@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import ComponentHandler from "./components/ComponentHandler";
 import UpdateComponent from "../components/Update/UpdateComponent";
 import { useDeleteComponent, useFetchComponent } from "./hooks/useComponent";
-import ComponentsSkeleton from "../components/Skeleton";
+import ComponentsSkeleton from "../components/ComponentsSkeleton";
 import Error from "@/pages/Error/Error";
 import { useState } from "react";
 

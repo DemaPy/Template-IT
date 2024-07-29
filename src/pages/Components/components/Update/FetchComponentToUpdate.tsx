@@ -3,9 +3,11 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useFetchComponent } from "../../pages/hooks/useComponent"
 import Editor from "@/components/Editor/Editor"
-import ComponentsSkeleton from "../Skeleton"
+import ComponentsSkeleton from "../ComponentsSkeleton"
+import { Button } from "@/components/ui/button"
+import { DialogFooter } from "@/components/ui/dialog"
 
-export function FetchComponentToUpdate({ component_id, setTitle, title, handleEditorSubmit }: TFetchComponentToUpdate) {
+export function FetchComponentToUpdate({ component_id, setTitle, title, handleEditorSubmit, handleSubmit }: TFetchComponentToUpdate) {
     const { isPending, data, isError, error } = useFetchComponent(component_id)
 
     if (isPending) return <ComponentsSkeleton />
@@ -38,6 +40,14 @@ export function FetchComponentToUpdate({ component_id, setTitle, title, handleEd
                     onSubmit={handleEditorSubmit}
                 />
             </div>
+            <DialogFooter className="col-span-4">
+                <Button onClick={() => handleSubmit({
+                    old_title: data.data.title,
+                    old_content: data.data.content
+                })} disabled={isPending}>
+                    Save changes
+                </Button>
+            </DialogFooter>
         </div>
     )
 }

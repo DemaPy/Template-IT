@@ -2,9 +2,9 @@ import Error from "@/pages/Error/Error"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useFetchCampaign } from "../../pages/hooks/useCampaign"
-import ComponentsSkeleton from "@/pages/Components/components/Skeleton"
+import ComponentsSkeleton from "@/pages/Components/components/ComponentsSkeleton"
 
-export function FetchCampaignToUpdate({ campaign_id, setTitle, title }: TFetchCampaignToUpdate) {
+export function FetchCampaignToUpdate({ campaign_id, setTitle }: TFetchCampaignToUpdate) {
     const { isPending: isFetching, data, isError, error } = useFetchCampaign(campaign_id)
 
     if (isFetching) return <ComponentsSkeleton />
@@ -21,7 +21,7 @@ export function FetchCampaignToUpdate({ campaign_id, setTitle, title }: TFetchCa
             <Input
                 id="name"
                 placeholder="campaign title"
-                value={title || data.data.title}
+                defaultValue={data.data.title}
                 onChange={ev => setTitle(ev.target.value)}
                 className="col-span-4"
             />

@@ -1,28 +1,25 @@
 import {
     Dialog,
     DialogContent,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { useComponentUpdate, useFetchComponent } from "../../pages/hooks/useComponent"
-import ComponentsSkeleton from "../Skeleton"
+import { useComponentUpdate } from "../../pages/hooks/useComponent"
+import ComponentsSkeleton from "../ComponentsSkeleton"
 import Error from "@/pages/Error/Error"
 import { CreatePlaceholders } from "@/services/types/Placeholder"
 import { FetchComponentToUpdate } from "./FetchComponentToUpdate"
 
 const UpdateComponent = ({ component_id, isOpen, setClose }: TUpdateComponent) => {
-    const { isPending: isFetching, data, isError, error } = useFetchComponent(component_id)
-    const { isPending, mutate } = useComponentUpdate({ invalidate_key: component_id })
+    const { isPending, mutate, isError, error } = useComponentUpdate({ invalidate_key: component_id })
 
-    const [title, setTitle] = useState<string>(data!.data.title)
-    const [content, setContent] = useState<string>(data!.data.content)
+    const [title, setTitle] = useState<string>("")
+    const [content, setContent] = useState<string>("")
     const [placeholdersToDelete, setPlaceholdersToDelete] = useState<CreatePlaceholders['placeholders']>([])
     const [placeholdersToCreate, setPlaceholdersToCreate] = useState<CreatePlaceholders['placeholders']>([])
 
-    if (isFetching) return <ComponentsSkeleton />
+    if (isPending) return <ComponentsSkeleton />
 
     if (isError) {
         return <Error error={error} message={error.message} path="/components" />
@@ -32,6 +29,16 @@ const UpdateComponent = ({ component_id, isOpen, setClose }: TUpdateComponent) =
         setContent(data.content)
         setPlaceholdersToCreate(data.placeholdersToCreate)
         setPlaceholdersToDelete(data.placeholdersToDelete)
+    }
+
+    const handleSubmit = ({ old_content, old_title }: {
+        old_title: Section["title"];
+        old_content: Section["content"];
+    }) => {
+        const new_title = title.length !== 0 ? title : old_title
+        const new_content = old_content.length !== content.length ? content : old_content
+        mutate({ id: component_id, content: new_content, title: new_title, placeholdersToCreate, placeholdersToDelete })
+        setClose()
     }
 
     return (
@@ -46,14 +53,9 @@ const UpdateComponent = ({ component_id, isOpen, setClose }: TUpdateComponent) =
                         handleEditorSubmit={handleEditorSubmit}
                         setTitle={(value) => setTitle(value)}
                         title={title}
+                        handleSubmit={handleSubmit}
                     />
                 </div>
-                <DialogFooter>
-                    <Button disabled={isPending} onClick={() => {
-                        mutate({ id: component_id, content: content, title: title, placeholdersToCreate, placeholdersToDelete })
-                        setClose()
-                    }}>Save changes</Button>
-                </DialogFooter>
             </DialogContent>
         </Dialog>
 

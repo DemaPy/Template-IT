@@ -5,7 +5,7 @@ import GridView from "../../components/GridView";
 import TemplateCard from "./components/TemplateCard";
 import Heading from "../../components/Heading";
 import { useFetchTemplates } from "./pages/hooks/useTemplate";
-import ComponentsSkeleton from "../Components/components/Skeleton";
+import ComponentsSkeleton from "../Components/components/ComponentsSkeleton";
 import Error from "../Error/Error";
 import { useState } from "react";
 

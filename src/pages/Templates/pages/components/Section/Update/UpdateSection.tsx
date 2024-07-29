@@ -1,17 +1,15 @@
 import {
     Dialog,
     DialogContent,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { useUpdateSection } from "../../../hooks/useSection"
 import Error from "@/pages/Error/Error"
 import { CreatePlaceholders } from "@/services/types/Placeholder"
 import { FetchSectionToUpdate } from "./FetchSectionToUpdate"
-import ComponentsSkeleton from "@/pages/Components/components/Skeleton"
+import ComponentsSkeleton from "@/pages/Components/components/ComponentsSkeleton"
 
 const UpdateSection = ({ section_id, template_id, isOpen, setClose }: TUpdateSection) => {
     const { isPending, mutate, isError, error } = useUpdateSection({ invalidate_key: template_id })
@@ -33,6 +31,16 @@ const UpdateSection = ({ section_id, template_id, isOpen, setClose }: TUpdateSec
         setPlaceholdersToDelete(data.placeholdersToDelete)
     }
 
+    const handleSubmit = ({ old_content, old_title }: {
+        old_title: Section["title"];
+        old_content: Section["content"];
+    }) => {
+        const new_title = title.length !== 0 ? title : old_title
+        const new_content = old_content.length !== content.length ? content : old_content
+        mutate({ id: section_id, content: new_content, title: new_title, templateId: template_id, placeholdersToCreate, placeholdersToDelete })
+        setClose()
+    }
+
     return (
         <Dialog open={isOpen} onOpenChange={setClose}>
             <DialogContent>
@@ -45,16 +53,9 @@ const UpdateSection = ({ section_id, template_id, isOpen, setClose }: TUpdateSec
                         section_id={section_id}
                         setTitle={(value) => setTitle(value)}
                         title={title}
+                        handleSubmit={handleSubmit}
                     />
                 </div>
-                <DialogFooter>
-                    <Button onClick={() => {
-                        mutate({ id: section_id, content: content, title: title, templateId: template_id, placeholdersToCreate, placeholdersToDelete })
-                        setClose()
-                    }} disabled={isPending}>
-                        Save changes
-                    </Button>
-                </DialogFooter>
             </DialogContent>
         </Dialog>
 

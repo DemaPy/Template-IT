@@ -28,7 +28,7 @@ const UpdateCampaign = ({ isOpen, setClose, campaign_id }: TUpdateCampaign) => {
                     <DialogTitle>Update campaign</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                    <FetchCampaignToUpdate campaign_id={campaign_id} title={title} setTitle={(value) => setTitle(value)} />
+                    <FetchCampaignToUpdate campaign_id={campaign_id} setTitle={(value) => setTitle(value)} />
                 </div>
                 <DialogFooter>
                     <Button disabled={isPending} onClick={() => mutate({

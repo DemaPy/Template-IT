@@ -4,7 +4,7 @@ import CreateSection from './Section/CreateSection'
 import ComponentSelect from '../../../../components/ComponentSelect'
 import { useCreateFromComponent } from '../hooks/useSection'
 import Error from '@/pages/Error/Error'
-import ComponentsSkeleton from '@/pages/Components/components/Skeleton'
+import ComponentsSkeleton from '@/pages/Components/components/ComponentsSkeleton'
 
 type Props = {
   sections: Section[] | null
