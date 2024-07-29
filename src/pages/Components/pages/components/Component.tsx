@@ -1,5 +1,5 @@
 import Heading from '@/components/Heading'
-import Placeholders from '@/pages/Templates/pages/components/Section/Placeholders'
+import Placeholders from '@/components/Placeholders'
 import { ChevronDown, ChevronUpIcon } from 'lucide-react'
 import { useState } from 'react'
 

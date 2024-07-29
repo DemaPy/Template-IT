@@ -11,12 +11,6 @@ export type UpdateSection = {
   placeholdersToCreate: Placeholder[]
 };
 
-export type UpdatePlaceholder = {
-  id: Placeholder["id"];
-  title: Placeholder["title"];
-  fallback: Placeholder["fallback"];
-};
-
 export type CreateSectionFromComponent = {
   templateId: Template["id"];
   componentId: Component["id"];

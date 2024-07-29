@@ -1,6 +1,6 @@
 import Heading from '@/components/Heading'
 import { ChevronDown, ChevronUpIcon, CopyIcon, Edit2Icon, TrashIcon } from 'lucide-react'
-import Placeholders from './Placeholders'
+import Placeholders from '../../../../../components/Placeholders'
 import { useState } from 'react'
 import { useDeleteSection, useDuplicate } from '../../hooks/useSection'
 import UpdateSection from './Update/UpdateSection'

@@ -1,11 +1,10 @@
 import { BASE_URL } from "@/config";
-import { CreatePlaceholders } from "./types/Placeholder";
+import { CreatePlaceholders, UpdatePlaceholder } from "./types/Placeholder";
 import {
   CreateSection,
   CreateSectionFromComponent,
   DeleteSection,
   DuplicateSection,
-  UpdatePlaceholder,
   UpdateSection,
 } from "./types/Section";
 import { handleResponseDB } from "@/utils/handleResponse";

@@ -1,7 +1,6 @@
 import { BASE_URL } from "@/config";
 import { CreateComponent, UpdateComponent } from "./types/Component";
-import { CreatePlaceholders } from "./types/Placeholder";
-import { UpdatePlaceholder } from "./types/Section";
+import { CreatePlaceholders, UpdatePlaceholder } from "./types/Placeholder";
 import { handleResponseDB } from "@/utils/handleResponse";
 
 export class ComponentServiceDB {
@@ -44,7 +43,7 @@ export class ComponentServiceDB {
     }
   }
 
-  static async createPlaceholders(placeholders: CreatePlaceholders[]) {
+  static async createPlaceholders(placeholders: CreatePlaceholders) {
     try {
       const response = await fetch(BASE_URL + `/component-palceholders/`, {
         method: "POST",

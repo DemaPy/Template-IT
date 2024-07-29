@@ -1,4 +1,5 @@
 import { SectionServiceDB } from "@/services/Section";
+import { UpdatePlaceholder } from "@/services/types/Placeholder";
 import { CreateSection, CreateSectionFromComponent, DeleteSection, DuplicateSection, UpdateSection } from "@/services/types/Section";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -117,6 +118,21 @@ export function useDeleteSectionPlaceholder({ invalidate_key }: { invalidate_key
         mutationFn: (id: Placeholder["id"]) => SectionServiceDB.deletePlaceholder(id),
         onSuccess: () => {
             toast.success("Placeholder has been deleted");
+            queryClient.invalidateQueries({ queryKey: [invalidate_key] })
+        },
+        onError: (data) => {
+            toast.error(data.message);
+        }
+    })
+}
+
+export function useUpdateSectionPlaceholder({ invalidate_key }: { invalidate_key: string }) {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: (placeholders: UpdatePlaceholder) => SectionServiceDB.updatePlaceholder(placeholders),
+        onSuccess: () => {
+            toast.success("Placeholders has been created");
             queryClient.invalidateQueries({ queryKey: [invalidate_key] })
         },
         onError: (data) => {
