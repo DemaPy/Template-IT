@@ -1,4 +1,4 @@
-import { CreatePlaceholdersDTO } from "@/services/types/Placeholder";
+import { CreatePlaceholders } from "@/services/types/Placeholder";
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from '@/components/ui/button';
@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 
 import { v4 as uuidv4 } from 'uuid';
 import { isUserChangedSomethingInPlaceholders, createPlaceholderNode } from "./utils";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, X } from "lucide-react";
 import Title from "../Title";
 import { encode } from "html-entities";
 
@@ -26,15 +26,15 @@ const Editor = ({
   const [title, setTitle] = useState("")
   const [fallback, setFallback] = useState("")
 
-  const [_placeholders, setPlaceholders] = useState<CreatePlaceholdersDTO['placeholders']>([])
+  const [_placeholders, setPlaceholders] = useState<CreatePlaceholders['placeholders']>([])
+
+  const [error, setError] = useState('')
 
   // Focus on input when position selected
   useEffect(() => {
     if (!inputRef.current) return
     inputRef.current.focus()
   }, [position])
-
-
 
   // Initialize placeholders
   useEffect(() => {
@@ -57,7 +57,7 @@ const Editor = ({
       //@ts-ignore
       if (!selection.rangeCount) return;
       //@ts-ignore
-      selection.getRangeAt(0).insertNode(document.createTextNode(encode(paste, {mode: "nonAsciiPrintableOnly"})))
+      selection.getRangeAt(0).insertNode(document.createTextNode(encode(paste, { mode: "nonAsciiPrintableOnly" })))
     }
 
     body.addEventListener("paste", handlePaste)
@@ -121,24 +121,24 @@ const Editor = ({
   // Insert placeholder to cursor position
   const handleAddPlaceholder = () => {
     if (fallback.trim().length < 3 || title.trim().length < 3) {
-      toast.error("Minimum length 3 symbols.")
+      setError("Minimum length 3 symbols.")
       return
     }
 
     if (!ref.current) return;
     const iframe = ref.current.contentDocument;
     if (!iframe) {
-      toast.error("Document not found.")
+      setError("Document not found.")
       return
     }
-    const selection = iframe!.getSelection();
+    const selection = iframe.getSelection();
     if (!selection) {
-      toast.error("Please, select place.")
+      setError("Please, select place.")
       return
     }
     if (!selection.anchorNode) return
     if (selection.anchorNode.nodeName === "BODY") {
-      toast.error("Please, select place.")
+      setError("Please, select place.")
       return
     }
 
@@ -171,7 +171,7 @@ const Editor = ({
     if (!ref.current) return;
     const iframe = ref.current.contentDocument;
     if (!iframe) {
-      toast.error("Document not found")
+      setError("Document not found")
       return
     }
     const body = iframe.body;
@@ -183,10 +183,10 @@ const Editor = ({
       setPosition(null)
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(error.message)
+        setError(error.message)
         return
       }
-      toast.error("Unexpected error happend")
+      setError("Unexpected error happend")
     }
   }
 
@@ -194,7 +194,7 @@ const Editor = ({
     if (!ref.current) return;
     const iframe = ref.current.contentDocument;
     if (!iframe) {
-      toast.error("Document not found")
+      setError("Document not found")
       return
     }
     const body = iframe.body;
@@ -232,6 +232,10 @@ const Editor = ({
         <Button disabled={isLoading} onClick={handleSave} className='w-full' variant={"outline"} size={"sm"}>save</Button>
       </div>
       <Title title="Hold Ctr or Cmd and Click to start" size="xxs" color="neutral" />
+      {error && (<div>
+        <Title title={error} size="xxs" color="default" />
+        <Button onClick={() => setError("")}><X className="w-4 h-4" /></Button>
+      </div>)}
     </div>
   )
 }

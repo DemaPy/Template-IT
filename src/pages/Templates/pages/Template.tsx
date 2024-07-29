@@ -3,30 +3,23 @@ import PageContainer from "@/components/PageContainer";
 import { Edit, Trash } from "lucide-react";
 import { useParams } from "react-router-dom";
 import TemplateHandler from "./components/TemplateHandler";
-import { useTemplateUpdateModal } from "@/store/templateUpdateModal";
-import UpdateTemplate from "../components/UpdateTemplate";
+import UpdateTemplate from "../components/Update/UpdateTemplate";
 import { useDeleteTemplate, useFetchTemplate } from "./hooks/useTemplate";
-import ComponentsSkeleton from "@/pages/Components/components/Skeleton";
-import toast from "react-hot-toast";
 import Error from "@/pages/Error/Error";
+import { useState } from "react";
+import TemplateSkeleton from "./components/TemplateSkeleton";
 
 const Template = () => {
   const params = useParams<{ id: string }>();
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+
   const { isPending: isFetching, isError, data, error } = useFetchTemplate(params.id!)
   const { isPending: isDeleting, mutate } = useDeleteTemplate()
 
-  const setIsOpen = useTemplateUpdateModal((store) => store.setOpen);
-
-  if (isFetching) return <ComponentsSkeleton />
+  if (isFetching) return <TemplateSkeleton />
 
   if (isError) {
-    toast.error(error.message);
     return <Error error={error} message={error.message} path="/templates" />
-  }
-
-  if (!data.data) {
-    toast.error("Unexpected error happend.");
-    return <Error error={error} message={`Id ${params.id} not found.`} path="/templates" />
   }
 
   return (
@@ -41,11 +34,13 @@ const Template = () => {
         actions={[
           {
             icon: <Edit className="w-4 h-4" />,
-            onClick: setIsOpen,
+            onClick: () => setIsOpen(true),
           },
         ]}
       />
-      <UpdateTemplate template_id={data.data.id} />
+      {isOpen && (
+        <UpdateTemplate isOpen={isOpen} setClose={() => setIsOpen(false)} template_id={data.data.id} />
+      )}
       <TemplateHandler template={data.data} />
     </PageContainer>
   );

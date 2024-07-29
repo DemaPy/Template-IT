@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { AuthError } from "@/services/Errors/AuthError"
 import { useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import toast from "react-hot-toast";
 
 type Props = {
     message: string
@@ -27,6 +28,7 @@ const Error = ({ error, message, path }: Props) => {
     const navigate = useNavigate()
     useEffect(() => {
         try {
+            toast.error(message);
             const errors = JSON.parse(localStorage.getItem("errors") || "[]")
             const err = new ErrorItem({ message: message })
             localStorage.setItem("errors", JSON.stringify([...errors, err]))

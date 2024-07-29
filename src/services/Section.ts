@@ -1,17 +1,17 @@
 import { BASE_URL } from "@/config";
-import { CreatePlaceholdersDTO } from "./types/Placeholder";
+import { CreatePlaceholders } from "./types/Placeholder";
 import {
-  CreateSectionDTO,
-  CreateSectionFromComponentDTO,
-  DeleteSectionDTO,
-  DuplicateSectionDTO,
-  UpdatePlaceholderDTO,
-  UpdateSectionDTO,
+  CreateSection,
+  CreateSectionFromComponent,
+  DeleteSection,
+  DuplicateSection,
+  UpdatePlaceholder,
+  UpdateSection,
 } from "./types/Section";
 import { handleResponseDB } from "@/utils/handleResponse";
 
 export class SectionServiceDB {
-  static async duplicate({ id }: DuplicateSectionDTO) {
+  static async duplicate({ id }: DuplicateSection) {
     try {
       const response = await fetch(BASE_URL + `/sections/${id}`, {
         method: "POST",
@@ -27,7 +27,7 @@ export class SectionServiceDB {
     }
   }
 
-  static async delete({ id }: DeleteSectionDTO) {
+  static async delete({ id }: DeleteSection) {
     try {
       const response = await fetch(BASE_URL + `/sections/${id}`, {
         method: "DELETE",
@@ -50,7 +50,7 @@ export class SectionServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const json = await response.json();
+      const json: ServerResponseSuccess<Section> = await response.json();
       handleResponseDB({ json, response });
       return json;
     } catch (error) {
@@ -77,7 +77,7 @@ export class SectionServiceDB {
     }
   }
 
-  static async createPlaceholders(placeholders: CreatePlaceholdersDTO) {
+  static async createPlaceholders(placeholders: CreatePlaceholders) {
     try {
       const response = await fetch(BASE_URL + `/section-palceholders/`, {
         method: "POST",
@@ -95,7 +95,7 @@ export class SectionServiceDB {
     }
   }
 
-  static async create(section: CreateSectionDTO) {
+  static async create(section: CreateSection) {
     try {
       const response = await fetch(BASE_URL + `/sections/`, {
         method: "POST",
@@ -113,7 +113,7 @@ export class SectionServiceDB {
     }
   }
 
-  static async createFromComponent(data: CreateSectionFromComponentDTO) {
+  static async createFromComponent(data: CreateSectionFromComponent) {
     try {
       const response = await fetch(BASE_URL + `/sections/component`, {
         method: "POST",
@@ -131,7 +131,7 @@ export class SectionServiceDB {
     }
   }
 
-  static async update(section: UpdateSectionDTO) {
+  static async update(section: UpdateSection) {
     try {
       const response = await fetch(BASE_URL + `/sections/`, {
         method: "PATCH",
@@ -148,7 +148,7 @@ export class SectionServiceDB {
       throw error;
     }
   }
-  static async updatePlaceholder(placeholder: UpdatePlaceholderDTO) {
+  static async updatePlaceholder(placeholder: UpdatePlaceholder) {
     try {
       const response = await fetch(BASE_URL + `/section-palceholders/`, {
         method: "PATCH",

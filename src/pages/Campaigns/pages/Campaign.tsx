@@ -3,35 +3,27 @@ import PageContainer from "@/components/PageContainer";
 import { Edit, Trash } from "lucide-react";
 import { useParams } from "react-router-dom";
 import CampaignTemplateHandler from "./components/CampaignTemplateHandler";
-import { useCampaignUpdateModal } from "@/store/campaignUpdateModal";
-import UpdateCampaign from "../components/UpdateCampaign";
+import UpdateCampaign from "../components/Update/UpdateCampaign";
 import { usePreview } from "@/store/preview";
 import { useDeleteCampaign, useFetchCampaign } from "./hooks/useCampaign";
-import ComponentsSkeleton from "@/pages/Components/components/Skeleton";
-import toast from "react-hot-toast";
 import Error from "@/pages/Error/Error";
 import PreviewPage from "./components/PreviewPage";
+import { useState } from "react";
+import CampaignSkeleton from "../components/CampaignSkeleton";
 
 const Campaign = () => {
-  const isOpen = usePreview(store => store.isOpen)
+  const [isOpen, setIsOpen] = useState(false)
+  const isPreviewOpen = usePreview(store => store.isOpen)
   const html = usePreview(store => store.html)
 
   const params = useParams<{ id: string }>();
   const { isPending: isFetching, isError, data, error } = useFetchCampaign(params.id!)
   const { isPending: isDeleting, mutate } = useDeleteCampaign()
 
-  const setOpen = useCampaignUpdateModal((state) => state.setOpen);
-
-  if (isFetching) return <ComponentsSkeleton />
+  if (isFetching) return <CampaignSkeleton />
 
   if (isError) {
-    toast.error(error.message);
     return <Error error={error} message={error.message} path="/campaigns" />
-  }
-
-  if (!data) {
-    toast.error("Unexpected error happend.");
-    return <Error error={error} message={`Id ${params.id} not found.`} path="/campaigns" />
   }
 
   return (
@@ -47,14 +39,16 @@ const Campaign = () => {
           actions={[
             {
               icon: <Edit className="w-4 h-4" />,
-              onClick: () => setOpen(),
+              onClick: () => setIsOpen(true),
             },
           ]}
         />
-        <UpdateCampaign campaign_id={data.data.id} />
+        {isOpen && (
+          <UpdateCampaign isOpen={isOpen} setClose={() => setIsOpen(false)} campaign_id={data.data.id} />
+        )}
         <CampaignTemplateHandler campaign={data.data} />
       </PageContainer>
-      {isOpen && (
+      {isPreviewOpen && (
         <PreviewPage campaign={data.data} html={html} />
       )}
     </>

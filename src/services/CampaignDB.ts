@@ -1,9 +1,13 @@
 import { BASE_URL } from "@/config";
-import { DeleteCampaignDTO, UpdateCampaignDTO } from "./types/Campaign";
+import {
+  CreateCampaign,
+  DeleteCampaign,
+  UpdateCampaign,
+} from "./types/Campaign";
 import { handleResponseDB } from "@/utils/handleResponse";
 
 export class CampaignServiceDB {
-  static async create(campaign: Omit<Campaign, "id">) {
+  static async create(campaign: CreateCampaign) {
     try {
       const response = await fetch(BASE_URL + "/campaigns", {
         method: "POST",
@@ -93,7 +97,7 @@ export class CampaignServiceDB {
     }
   }
 
-  static async delete(campaign_id: DeleteCampaignDTO) {
+  static async delete(campaign_id: DeleteCampaign) {
     try {
       const response = await fetch(BASE_URL + `/campaigns/${campaign_id.id}`, {
         method: "DELETE",
@@ -109,7 +113,7 @@ export class CampaignServiceDB {
     }
   }
 
-  static async update(campaign: UpdateCampaignDTO) {
+  static async update(campaign: UpdateCampaign) {
     try {
       const response = await fetch(BASE_URL + "/campaigns", {
         method: "PATCH",

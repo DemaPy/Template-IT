@@ -1,48 +1,48 @@
-import { CreatePlaceholdersDTO } from "../types/Placeholder";
+import { CreatePlaceholders } from "../types/Placeholder";
 import {
-  CreateSectionDTO,
-  CreateSectionFromComponentDTO,
-  DeleteSectionDTO,
-  DuplicateSectionDTO,
+  CreateSection,
+  CreateSectionFromComponent,
+  DeleteSection,
+  DuplicateSection,
   PlaceholderResponse,
-  UpdatePlaceholderDTO,
-  UpdateSectionDTO,
+  UpdatePlaceholder,
+  UpdateSection,
 } from "../types/Section";
 
 export interface SectionServiceInterface {
-  create(section: CreateSectionDTO): Promise<ServerResponseSuccess<Section>>;
+  create(section: CreateSection): Promise<ServerResponseSuccess<Section>>;
   getOne(section: Section["id"]): Promise<ServerResponseSuccess<Section>>;
   duplicate(
-    section_id: DuplicateSectionDTO
+    section_id: DuplicateSection
   ): Promise<ServerResponseSuccess<Section>>;
 
   createFromComponent(
-    section: CreateSectionFromComponentDTO
+    section: CreateSectionFromComponent
   ): Promise<ServerResponseSuccess<Section>>;
   createPlaceholders(
-    placeholders: CreatePlaceholdersDTO
+    placeholders: CreatePlaceholders
   ): PlaceholderResponse<Placeholder[]>;
 
   deletePlaceholder(id: Placeholder["id"]): PlaceholderResponse<Placeholder>;
 
-  delete(id: DeleteSectionDTO): Promise<ServerResponseSuccess<Section>>;
-  update(section: UpdateSectionDTO): Promise<ServerResponseSuccess<Section>>;
+  delete(id: DeleteSection): Promise<ServerResponseSuccess<Section>>;
+  update(section: UpdateSection): Promise<ServerResponseSuccess<Section>>;
   updatePlaceholder(
-    section: UpdatePlaceholderDTO
+    section: UpdatePlaceholder
   ): PlaceholderResponse<Placeholder>;
 }
 
 export interface SectionServiceInterfaceDB {
-  create(section: CreateSectionDTO): Promise<any>;
-  duplicate(section_id: DuplicateSectionDTO): Promise<any>;
+  create(section: CreateSection): Promise<any>;
+  duplicate(section_id: DuplicateSection): Promise<any>;
   getOne(section: Section["id"]): Promise<ServerResponseSuccess<Section>>;
 
-  createFromComponent(section: CreateSectionFromComponentDTO): Promise<any>;
-  createPlaceholders(placeholders: CreatePlaceholdersDTO): Promise<any>;
+  createFromComponent(section: CreateSectionFromComponent): Promise<any>;
+  createPlaceholders(placeholders: CreatePlaceholders): Promise<any>;
 
   deletePlaceholder(id: Placeholder["id"]): Promise<any>;
 
-  delete(id: DeleteSectionDTO): Promise<any>;
-  update(section: UpdateSectionDTO): Promise<any>;
-  updatePlaceholder(section: UpdatePlaceholderDTO): Promise<any>;
+  delete(id: DeleteSection): Promise<any>;
+  update(section: UpdateSection): Promise<any>;
+  updatePlaceholder(section: UpdatePlaceholder): Promise<any>;
 }

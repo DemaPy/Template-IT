@@ -1,6 +1,6 @@
 import { CAMPAIGNS_KEY } from "@/constance/query-key";
-import { CampaignService } from "@/services/DI/Campaign";
-import { CreateCampaignDTO, DeleteCampaignDTO, UpdateCampaignDTO } from "@/services/types/Campaign";
+import { CampaignServiceDB } from "@/services/CampaignDB";
+import { CreateCampaign, DeleteCampaign, UpdateCampaign } from "@/services/types/Campaign";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 export function useFetchCampaign(id: Campaign["id"]) {
     return useQuery({
         queryKey: [id],
-        queryFn: ({ queryKey }) => CampaignService.getOne(queryKey[0])
+        queryFn: ({ queryKey }) => CampaignServiceDB.getOne(queryKey[0])
     })
 }
 
@@ -17,7 +17,7 @@ export function useDeleteCampaign() {
     const navigate = useNavigate();
 
     return useMutation({
-        mutationFn: (id: DeleteCampaignDTO) => CampaignService.delete(id),
+        mutationFn: (id: DeleteCampaign) => CampaignServiceDB.delete(id),
         onSuccess: () => {
             toast.success("Campaign has been deleted");
             navigate("/campaigns")
@@ -33,14 +33,14 @@ export function useCreateCampaign() {
     const queryClient = useQueryClient()
     const navigate = useNavigate();
     return useMutation({
-        mutationFn: (campaign: CreateCampaignDTO) => {
+        mutationFn: (campaign: CreateCampaign) => {
             for (const key in campaign) {
-                const value = campaign[key as keyof CreateCampaignDTO]
+                const value = campaign[key as keyof CreateCampaign]
                 if (value.trim().length < 3) {
                     throw new Error(key.charAt(0).toUpperCase() + key.slice(1) + " too short.")
                 }
             }
-            return CampaignService.create(campaign)
+            return CampaignServiceDB.create(campaign)
         },
         onSuccess: (data) => {
             toast.success("Campaign has been created");
@@ -61,9 +61,9 @@ export function useCampaignUpdate({
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (campaign: UpdateCampaignDTO) => {
+        mutationFn: (campaign: UpdateCampaign) => {
             for (const key in campaign) {
-                const value = campaign[key as keyof UpdateCampaignDTO];
+                const value = campaign[key as keyof UpdateCampaign];
                 if (value.trim().length < 3) {
                     throw new Error(
                         key.charAt(0).toUpperCase() + key.slice(1) + " too short."
@@ -71,7 +71,7 @@ export function useCampaignUpdate({
                 }
             }
 
-            return CampaignService.update(campaign);
+            return CampaignServiceDB.update(campaign);
         },
         onSuccess: () => {
             toast.success("Campaign has been updated");
@@ -86,6 +86,6 @@ export function useCampaignUpdate({
 export function useFetchCampaigns() {
     return useQuery({
         queryKey: CAMPAIGNS_KEY,
-        queryFn: () => CampaignService.getAll()
+        queryFn: () => CampaignServiceDB.getAll()
     })
 }

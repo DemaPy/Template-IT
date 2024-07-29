@@ -3,14 +3,14 @@ import {
   SectionServiceInterfaceDB,
 } from "../Interfaces";
 import { SectionServiceDB } from "../Section";
-import { CreatePlaceholdersDTO } from "../types/Placeholder";
+import { CreatePlaceholders } from "../types/Placeholder";
 import {
-  CreateSectionDTO,
-  CreateSectionFromComponentDTO,
-  DeleteSectionDTO,
-  DuplicateSectionDTO,
-  UpdatePlaceholderDTO,
-  UpdateSectionDTO,
+  CreateSection,
+  CreateSectionFromComponent,
+  DeleteSection,
+  DuplicateSection,
+  UpdatePlaceholder,
+  UpdateSection,
 } from "../types/Section";
 
 class _SectionService implements SectionServiceInterface {
@@ -35,7 +35,7 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  duplicate = async (id: DuplicateSectionDTO) => {
+  duplicate = async (id: DuplicateSection) => {
     try {
       const result = await this.service.duplicate(id);
       return result;
@@ -51,7 +51,7 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  create = async (section: CreateSectionDTO) => {
+  create = async (section: CreateSection) => {
     try {
       const result = await this.service.create(section);
       return result;
@@ -67,7 +67,7 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  createFromComponent = async (section: CreateSectionFromComponentDTO) => {
+  createFromComponent = async (section: CreateSectionFromComponent) => {
     try {
       const result = await this.service.createFromComponent(section);
       return result;
@@ -83,7 +83,7 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  createPlaceholders = async (placeholders: CreatePlaceholdersDTO) => {
+  createPlaceholders = async (placeholders: CreatePlaceholders) => {
     try {
       const result = await this.service.createPlaceholders(placeholders);
       return result;
@@ -115,7 +115,7 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  delete = async (id: DeleteSectionDTO) => {
+  delete = async (id: DeleteSection) => {
     try {
       const result = await this.service.delete(id);
       return result;
@@ -131,7 +131,7 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  update = async (section: UpdateSectionDTO) => {
+  update = async (section: UpdateSection) => {
     try {
       const result = await this.service.update(section);
       return result;
@@ -147,7 +147,7 @@ class _SectionService implements SectionServiceInterface {
     }
   };
 
-  updatePlaceholder = async (placeholder: UpdatePlaceholderDTO) => {
+  updatePlaceholder = async (placeholder: UpdatePlaceholder) => {
     try {
       const result = await this.service.updatePlaceholder(placeholder);
       return result;

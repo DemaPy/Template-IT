@@ -1,8 +1,8 @@
 import { COMPONENTS_KEY } from "@/constance/query-key";
 import { ComponentService } from "@/services/DI/Component";
 import {
-  CreateComponentDTO,
-  UpdateComponentDTO,
+  CreateComponent,
+  UpdateComponent,
 } from "@/services/types/Component";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -36,9 +36,9 @@ export function useCreateComponent() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   return useMutation({
-    mutationFn: (component: CreateComponentDTO) => {
+    mutationFn: (component: CreateComponent) => {
       for (const key in component) {
-        const value = component[key as keyof CreateComponentDTO];
+        const value = component[key as keyof CreateComponent];
         if (Array.isArray(value)) continue
         if (value.trim().length < 3) {
           throw new Error(
@@ -67,9 +67,9 @@ export function useComponentUpdate({
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (component: UpdateComponentDTO) => {
+    mutationFn: (component: UpdateComponent) => {
       for (const key in component) {
-        const value = component[key as keyof UpdateComponentDTO];
+        const value = component[key as keyof UpdateComponent];
         if (Array.isArray(value)) continue
         if (value.trim().length < 3) {
           throw new Error(

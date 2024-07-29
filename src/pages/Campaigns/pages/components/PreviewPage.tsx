@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import NavbarBuilder from './NavbarBuilder'
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
+import { decode } from 'html-entities'
 
 type Props = {
     html: string
@@ -18,13 +20,26 @@ const PreviewPage = ({ html, campaign }: Props) => {
 
     return (
         <div className="fixed inset-0 bg-slate-50 z-50 rounded-md">
-            <div className="p-4 border-b-2">
-                <NavbarBuilder setDevice={(device: KeyDevices) => setDevice(device)} html={html} campaign={campaign} />
-            </div>
-            <div className='flex justify-center h-full'>
-            <iframe srcDoc={html} style={{ width: devices[device] }} className="fixed h-full overflow-y-auto pb-20">
-            </iframe>
-            </div>
+            <TransformWrapper
+                smooth={true}
+                minScale={0.7}
+                maxScale={1.3}
+                initialScale={1}>
+                <div className='p-4'>
+                <NavbarBuilder
+                    setDevice={(device: KeyDevices) => setDevice(device)}
+                    html={html}
+                    campaign={campaign}
+                />
+                </div>
+                <TransformComponent wrapperClass="!w-[8000px] absolute inset-0 left-1/2 -translate-x-1/2" contentClass="!h-[100vh] overflow-y-auto overflow-x-hidden flex-col items-center">
+                    <iframe
+                        style={{ width: devices[device] }}
+                        srcDoc={decode(html)}
+                        className="grow pointer-events-none"
+                    ></iframe>
+                </TransformComponent>
+            </TransformWrapper>
         </div>
     )
 }

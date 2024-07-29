@@ -1,4 +1,4 @@
-export type UpdateComponentDTO = {
+export type UpdateComponent = {
   id: Component["id"];
   title: Component["title"];
   content: Component["content"];
@@ -6,7 +6,7 @@ export type UpdateComponentDTO = {
   placeholdersToCreate: Placeholder[]
 };
 
-export type CreateComponentDTO = {
+export type CreateComponent = {
   title: Component["title"];
   content: Component["content"];
   placeholders: Placeholder[]

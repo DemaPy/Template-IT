@@ -48,15 +48,24 @@ const NavbarBuilder = ({ html, campaign, setDevice }: Props) => {
                 <Eye className='w-4 h-4' />
                 Preview
             </Button>
-            <Button onClick={() => setDevice("desktop")} className='flex gap-2 items-center' size={"sm"} variant={"outline"}>
+            <Button onClick={() => {
+                setDevice("desktop")
+                resetTransform()
+            }} className='flex gap-2 items-center' size={"sm"} variant={"outline"}>
                 <span title='1440px'>
                     <MonitorStop className='w-4 h-4' />
                 </span>
             </Button>
-            <Button onClick={() => setDevice("tablet")} className='flex gap-2 items-center' size={"sm"} variant={"outline"}>
+            <Button onClick={() => {
+                setDevice("tablet")
+                resetTransform()
+            }} className='flex gap-2 items-center' size={"sm"} variant={"outline"}>
                 <span title='920px'><Tablet className='w-4 h-4' /></span>
             </Button>
-            <Button onClick={() => setDevice("mobile")} className='flex gap-2 items-center' size={"sm"} variant={"outline"}>
+            <Button onClick={() => {
+                setDevice("mobile")
+                resetTransform()
+            }} className='flex gap-2 items-center' size={"sm"} variant={"outline"}>
                 <span title='400px'>
                     <TabletSmartphone className='w-4 h-4' />
                 </span>

@@ -3,8 +3,7 @@ import PageContainer from "@/components/PageContainer";
 import { Edit, Trash } from "lucide-react";
 import { useParams } from "react-router-dom";
 import ComponentHandler from "./components/ComponentHandler";
-import UpdateComponent from "../components/UpdateComponent";
-import toast from "react-hot-toast";
+import UpdateComponent from "../components/Update/UpdateComponent";
 import { useDeleteComponent, useFetchComponent } from "./hooks/useComponent";
 import ComponentsSkeleton from "../components/Skeleton";
 import Error from "@/pages/Error/Error";
@@ -21,13 +20,7 @@ const Component = () => {
   if (isFetching) return <ComponentsSkeleton />
 
   if (isError) {
-    toast.error(error.message);
     return <Error error={error} message={error.message} path="/components" />
-  }
-
-  if (!data) {
-    toast.error("Unexpected error happend.");
-    return <Error error={error} message={`Id ${params.id} not found.`} path="/components" />
   }
 
   return (

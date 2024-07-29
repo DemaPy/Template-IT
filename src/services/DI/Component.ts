@@ -1,7 +1,7 @@
 import { ComponentServiceDB } from "../ComponentDB";
-import { CreateComponentDTO, UpdateComponentDTO } from "../types/Component";
-import { CreatePlaceholdersDTO } from "../types/Placeholder";
-import { UpdatePlaceholderDTO } from "../types/Section";
+import { CreateComponent, UpdateComponent } from "../types/Component";
+import { CreatePlaceholders } from "../types/Placeholder";
+import { UpdatePlaceholder } from "../types/Section";
 
 class _ComponentService {
   service: any;
@@ -25,7 +25,7 @@ class _ComponentService {
     }
   };
 
-  create = async (component: CreateComponentDTO) => {
+  create = async (component: CreateComponent) => {
     try {
       const result = await this.service.create(component);
       return result;
@@ -41,7 +41,7 @@ class _ComponentService {
     }
   };
 
-  update = async (component: UpdateComponentDTO) => {
+  update = async (component: UpdateComponent) => {
     try {
       const result = await this.service.update(component);
       return result;
@@ -73,7 +73,7 @@ class _ComponentService {
     }
   };
 
-  createPlaceholders = async (placeholders: CreatePlaceholdersDTO) => {
+  createPlaceholders = async (placeholders: CreatePlaceholders) => {
     try {
       const result: ServerResponseSuccess<Component["id"]> =
         await this.service.createPlaceholders(placeholders);
@@ -123,7 +123,7 @@ class _ComponentService {
     }
   };
 
-  updatePlaceholder = async (section: UpdatePlaceholderDTO) => {
+  updatePlaceholder = async (section: UpdatePlaceholder) => {
     try {
       const result = await this.service.updatePlaceholder(section);
       return result;

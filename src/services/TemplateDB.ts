@@ -1,13 +1,13 @@
 import { BASE_URL } from "@/config";
 import {
-  CreateTemplateDTO,
-  DeleteTemplateDTO,
-  UpdateTemplateDTO,
+  CreateTemplate,
+  DeleteTemplate,
+  UpdateTemplate,
 } from "./types/Template";
 import { handleResponseDB } from "@/utils/handleResponse";
 
 export class TemplateServiceDB {
-  static async create(template: CreateTemplateDTO) {
+  static async create(template: CreateTemplate) {
     try {
       const response = await fetch(BASE_URL + "/templates", {
         method: "POST",
@@ -25,7 +25,7 @@ export class TemplateServiceDB {
     }
   }
 
-  static async delete({ id }: DeleteTemplateDTO) {
+  static async delete({ id }: DeleteTemplate) {
     try {
       const response = await fetch(BASE_URL + `/templates/${id}`, {
         method: "DELETE",
@@ -41,7 +41,7 @@ export class TemplateServiceDB {
     }
   }
 
-  static async update(data: UpdateTemplateDTO) {
+  static async update(data: UpdateTemplate) {
     try {
       const response = await fetch(BASE_URL + "/templates", {
         method: "PATCH",
@@ -66,7 +66,7 @@ export class TemplateServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const json = await response.json();
+      const json: ServerResponseSuccess<Template[]> = await response.json();
       handleResponseDB({ json, response });
       return json;
     } catch (error) {
@@ -81,7 +81,7 @@ export class TemplateServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const json = await response.json();
+      const json: ServerResponseSuccess<Template> = await response.json();
       handleResponseDB({ json, response });
       return json;
     } catch (error) {

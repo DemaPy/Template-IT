@@ -1,5 +1,5 @@
-import { SectionService } from "@/services/DI/Section";
-import { CreateSectionDTO, CreateSectionFromComponentDTO, DeleteSectionDTO, DuplicateSectionDTO, UpdateSectionDTO } from "@/services/types/Section";
+import { SectionServiceDB } from "@/services/Section";
+import { CreateSection, CreateSectionFromComponent, DeleteSection, DuplicateSection, UpdateSection } from "@/services/types/Section";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
@@ -12,7 +12,7 @@ const isValid = ({ value, key }: { value: string, key: string }) => {
 export function useFetchSection(id: Section["id"]) {
     return useQuery({
         queryKey: [id],
-        queryFn: ({ queryKey }) => SectionService.getOne(queryKey[0])
+        queryFn: () => SectionServiceDB.getOne(id)
     })
 }
 
@@ -20,13 +20,13 @@ export function useFetchSection(id: Section["id"]) {
 export function useCreateSection({ invalidate_key }: { invalidate_key: Template['id'] }) {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: (section: CreateSectionDTO) => {
+        mutationFn: (section: CreateSection) => {
             for (const key in section) {
-                const value = section[key as keyof CreateSectionDTO]
+                const value = section[key as keyof CreateSection]
                 if (Array.isArray(value)) continue
                 isValid({ key, value })
             }
-            return SectionService.create(section)
+            return SectionServiceDB.create(section)
         },
         onSuccess: () => {
             toast.success("Section has been created");
@@ -41,13 +41,13 @@ export function useCreateSection({ invalidate_key }: { invalidate_key: Template[
 export function useUpdateSection({ invalidate_key }: { invalidate_key: string }) {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: (section: UpdateSectionDTO) => {
+        mutationFn: (section: UpdateSection) => {
             for (const key in section) {
-                const value = section[key as keyof UpdateSectionDTO]
+                const value = section[key as keyof UpdateSection]
                 if (Array.isArray(value)) continue
                 isValid({ key, value })
             }
-            return SectionService.update(section)
+            return SectionServiceDB.update(section)
         },
         onSuccess: () => {
             toast.success("Section has been created");
@@ -63,12 +63,12 @@ export function useUpdateSection({ invalidate_key }: { invalidate_key: string })
 export function useCreateFromComponent({ invalidate_key }: { invalidate_key: string }) {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: (component: CreateSectionFromComponentDTO) => {
+        mutationFn: (component: CreateSectionFromComponent) => {
             for (const key in component) {
-                const value = component[key as keyof CreateSectionFromComponentDTO]
+                const value = component[key as keyof CreateSectionFromComponent]
                 isValid({ key, value })
             }
-            return SectionService.createFromComponent(component)
+            return SectionServiceDB.createFromComponent(component)
         },
         onSuccess: () => {
             toast.success("Section has been created");
@@ -84,7 +84,7 @@ export function useDeleteSection({ invalidate_key }: { invalidate_key: string })
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: (id: DeleteSectionDTO) => SectionService.delete(id),
+        mutationFn: (id: DeleteSection) => SectionServiceDB.delete(id),
         onSuccess: () => {
             toast.success("Section has been deleted");
             queryClient.invalidateQueries({ queryKey: [invalidate_key] })
@@ -99,7 +99,7 @@ export function useDuplicate({ invalidate_key }: { invalidate_key: string }) {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: (item: DuplicateSectionDTO) => SectionService.duplicate({ id: item.id }),
+        mutationFn: (item: DuplicateSection) => SectionServiceDB.duplicate({ id: item.id }),
         onSuccess: () => {
             toast.success("Section has been duplicated");
             queryClient.invalidateQueries({ queryKey: [invalidate_key] })
@@ -114,7 +114,7 @@ export function useDeleteSectionPlaceholder({ invalidate_key }: { invalidate_key
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: (id: Placeholder["id"]) => SectionService.deletePlaceholder(id),
+        mutationFn: (id: Placeholder["id"]) => SectionServiceDB.deletePlaceholder(id),
         onSuccess: () => {
             toast.success("Placeholder has been deleted");
             queryClient.invalidateQueries({ queryKey: [invalidate_key] })

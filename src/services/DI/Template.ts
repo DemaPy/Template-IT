@@ -1,9 +1,9 @@
 import { TemplateServiceDB } from "../TemplateDB";
 import {
-  CreateTemplateDTO,
-  DeleteTemplateDTO,
+  CreateTemplate,
+  DeleteTemplate,
   TemplateResponse,
-  UpdateTemplateDTO,
+  UpdateTemplate,
 } from "../types/Template";
 
 class _TemplateService {
@@ -12,7 +12,7 @@ class _TemplateService {
     this.service = service;
   }
 
-  delete = async (template_id: DeleteTemplateDTO) => {
+  delete = async (template_id: DeleteTemplate) => {
     try {
       const result = await this.service.delete(template_id);
       return result;
@@ -28,7 +28,7 @@ class _TemplateService {
     }
   };
 
-  create = async (template: CreateTemplateDTO) => {
+  create = async (template: CreateTemplate) => {
     try {
       const result = await this.service.create(template);
       return result;
@@ -44,7 +44,7 @@ class _TemplateService {
     }
   };
 
-  update = async (data: UpdateTemplateDTO) => {
+  update = async (data: UpdateTemplate) => {
     try {
       const result = await this.service.update(data);
       return result;

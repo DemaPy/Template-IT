@@ -1,9 +1,9 @@
 import { CampaignServiceDB } from "../CampaignDB";
 import { DataToReturn } from "@/pages/Campaigns/pages/components/Section";
 import {
-  CreateCampaignDTO,
-  DeleteCampaignDTO,
-  UpdateCampaignDTO,
+  CreateCampaign,
+  DeleteCampaign,
+  UpdateCampaign,
 } from "../types/Campaign";
 
 class _CampaignService {
@@ -12,7 +12,7 @@ class _CampaignService {
     this.service = service;
   }
 
-  delete = async (campaign_id: DeleteCampaignDTO) => {
+  delete = async (campaign_id: DeleteCampaign) => {
     try {
       const result = await this.service.delete(campaign_id);
       return result;
@@ -28,7 +28,7 @@ class _CampaignService {
     }
   };
 
-  create = async (campaign: CreateCampaignDTO) => {
+  create = async (campaign: CreateCampaign) => {
     try {
       const result = await this.service.create(campaign);
       return result;
@@ -44,7 +44,7 @@ class _CampaignService {
     }
   };
 
-  update = async (campaign: UpdateCampaignDTO) => {
+  update = async (campaign: UpdateCampaign) => {
     try {
       const result = await this.service.update(campaign);
       return result;

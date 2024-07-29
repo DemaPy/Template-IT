@@ -50,12 +50,18 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
         text += placeholder.fallback;
       } else {
         const campaign_data = campaign.data[section.id];
+
+
         // In case of section has different amounts of slugs
         if (!(slug in campaign_data[placeholder.id])) {
           text = placeholder.fallback;
+        } else {
+          if (campaign_data[placeholder.id][slug].length === 0) {
+            text = placeholder.fallback;
+          } else {
+            text = campaign_data[placeholder.id][slug];
+          }
         }
-
-        text = campaign_data[placeholder.id][slug];
       }
       node.insertAdjacentText("beforebegin", text);
       node.remove();
@@ -73,28 +79,25 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
   }
 
   return (
-    <div className="w-full h-full overflow-hidden flex flex-col gap-2 relative bg-slate-50 p-2">
-
-      <div className="grow">
-        <TransformWrapper
-          smooth={true}
-          minScale={0.5}
-          maxScale={1.5}
-          initialScale={1}>
-          <NavbarBuilder
-            setDevice={(device: KeyDevices) => setDevice(device)}
-            html={decode(html)}
-            campaign={campaign}
-          />
-          <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full !h-full">
-            <iframe
-              style={{ width: devices[device] }}
-              srcDoc={decode(html)}
-              className="h-full pointer-events-none"
-            ></iframe>
-          </TransformComponent>
-        </TransformWrapper>
-      </div>
+    <div className="overflow-hidden flex flex-col gap-2 relative bg-slate-50 p-2">
+      <TransformWrapper
+        smooth={true}
+        minScale={0.7}
+        maxScale={1.3}
+        initialScale={1}>
+        <NavbarBuilder
+          setDevice={(device: KeyDevices) => setDevice(device)}
+          html={decode(html)}
+          campaign={campaign}
+        />
+        <TransformComponent wrapperClass="!w-[900px] absolute inset-0 left-1/2 -translate-x-1/2" contentClass="!h-[100vh] overflow-y-auto overflow-x-hidden flex-col items-center">
+          <iframe
+            style={{ width: devices[device] }}
+            srcDoc={decode(html)}
+            className="grow pointer-events-none"
+          ></iframe>
+        </TransformComponent>
+      </TransformWrapper>
     </div >
   );
 };

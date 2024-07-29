@@ -8,21 +8,17 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from '@/components/ui/button'
-import { useComponentCreateModal } from '@/store/componentCreateModal'
 import { useState } from "react"
 import { useCreateComponent } from "../pages/hooks/useComponent"
-import { CreatePlaceholdersDTO } from "@/services/types/Placeholder"
+import { CreatePlaceholders } from "@/services/types/Placeholder"
 import Editor from "@/components/Editor/Editor"
 
 
-const CreateComponent = () => {
-    const isOpen = useComponentCreateModal(state => state.isOpen)
+const CreateComponent = ({ isOpen, setClose }: TCreateComponent) => {
 
-    const setClose = useComponentCreateModal(state => state.setClose)
-
-    const [title, setTitle] = useState("")
+    const [title, setTitle] = useState<string>("")
     const [content, setContent] = useState<string>("")
-    const [placeholders, setPlaceholders] = useState<CreatePlaceholdersDTO['placeholders']>([])
+    const [placeholders, setPlaceholders] = useState<CreatePlaceholders['placeholders']>([])
 
     const { isPending, mutate } = useCreateComponent()
 

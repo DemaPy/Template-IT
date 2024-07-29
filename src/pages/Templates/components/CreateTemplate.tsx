@@ -1,4 +1,3 @@
-import { useTemplateCreateModal } from '@/store/templateCreateModal'
 import {
     Dialog,
     DialogContent,
@@ -13,11 +12,8 @@ import { useState } from 'react'
 import { useCreateTemplate } from '../pages/hooks/useTemplate'
 
 
-const CreateTemplate = () => {
-    const isOpen = useTemplateCreateModal(state => state.isOpen)
-    const setClose = useTemplateCreateModal(state => state.setClose)
+const CreateTemplate = ({ isOpen, setClose }: TCreateTemplate) => {
     const [title, setTitle] = useState("")
-
     const { isPending, mutate } = useCreateTemplate()
 
     const handleCreate = () => {

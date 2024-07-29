@@ -1,12 +1,12 @@
 import { BASE_URL } from "@/config";
-import { CreateComponentDTO, UpdateComponentDTO } from "./types/Component";
-import { CreatePlaceholdersDTO } from "./types/Placeholder";
-import { UpdatePlaceholderDTO } from "./types/Section";
+import { CreateComponent, UpdateComponent } from "./types/Component";
+import { CreatePlaceholders } from "./types/Placeholder";
+import { UpdatePlaceholder } from "./types/Section";
 import { handleResponseDB } from "@/utils/handleResponse";
 
 export class ComponentServiceDB {
   static async create(
-    component: CreateComponentDTO
+    component: CreateComponent
   ): Promise<ServerResponseSuccess<Component> | ServerResponseError> {
     try {
       const response = await fetch(BASE_URL + "/components", {
@@ -46,7 +46,7 @@ export class ComponentServiceDB {
     }
   }
 
-  static async createPlaceholders(placeholders: CreatePlaceholdersDTO[]) {
+  static async createPlaceholders(placeholders: CreatePlaceholders[]) {
     try {
       const response = await fetch(BASE_URL + `/component-palceholders/`, {
         method: "POST",
@@ -102,7 +102,7 @@ export class ComponentServiceDB {
   }
 
   static async update(
-    component: UpdateComponentDTO
+    component: UpdateComponent
   ): Promise<ServerResponseSuccess<Component> | ServerResponseError> {
     try {
       const response = await fetch(BASE_URL + `/components/`, {
@@ -153,7 +153,7 @@ export class ComponentServiceDB {
       throw error;
     }
   }
-  static async updatePlaceholder(placeholder: UpdatePlaceholderDTO) {
+  static async updatePlaceholder(placeholder: UpdatePlaceholder) {
     try {
       const response = await fetch(BASE_URL + `/component-palceholders/`, {
         method: "PATCH",

@@ -65,7 +65,7 @@ const CampaignTemplateHandler = ({ campaign }: {
         inActiveSections={sortedInactiveSections}
       />
       {slug ? (
-        <div className='flex-grow-1 w-1/2'>
+        <div className='flex-grow-1 w-3/4'>
           <CampaignBuilder layout={layout} slug={slug} campaign={campaign} sortedSections={sortedSections} />
         </div>
       ) : (

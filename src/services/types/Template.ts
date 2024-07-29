@@ -1,14 +1,14 @@
 export type TemplateResponse<T> = Promise<ServerResponseSuccess<T>>;
 
-export type CreateTemplateDTO = {
+export type CreateTemplate = {
   title: Template["title"];
 };
 
-export type UpdateTemplateDTO = {
+export type UpdateTemplate = {
   id: Template["id"];
   title: Template["title"];
 };
 
-export type DeleteTemplateDTO = {
+export type DeleteTemplate = {
   id: Template["id"];
 };

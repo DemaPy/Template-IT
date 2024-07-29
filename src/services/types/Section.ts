@@ -2,7 +2,7 @@ import { AccessError } from "../Errors/AccessError";
 import { AuthError } from "../Errors/AuthError";
 import { ValidationError } from "../Errors/ValidationError";
 
-export type UpdateSectionDTO = {
+export type UpdateSection = {
   id: Section["id"];
   title: Section["title"];
   content: Section["content"];
@@ -11,29 +11,29 @@ export type UpdateSectionDTO = {
   placeholdersToCreate: Placeholder[]
 };
 
-export type UpdatePlaceholderDTO = {
+export type UpdatePlaceholder = {
   id: Placeholder["id"];
   title: Placeholder["title"];
   fallback: Placeholder["fallback"];
 };
 
-export type CreateSectionFromComponentDTO = {
+export type CreateSectionFromComponent = {
   templateId: Template["id"];
   componentId: Component["id"];
 };
 
-export type CreateSectionDTO = {
+export type CreateSection = {
   title: Section["title"];
   content: Section["content"];
   templateId: Template["id"];
   placeholders: Placeholder[];
 };
 
-export type DeleteSectionDTO = {
+export type DeleteSection = {
   id: Section["id"];
 };
 
-export type DuplicateSectionDTO = {
+export type DuplicateSection = {
   id: Section["id"];
 };
 
