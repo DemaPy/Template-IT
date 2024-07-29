@@ -27,8 +27,8 @@ const Sidebar = ({ sections, template_id }: Props) => {
   }
 
   return (
-    <div className='w-3/4 relative max-h-[80vh] overflow-y-auto'>
-      <div className='flex gap-2 items-center sticky top-0'>
+    <div className='lg:w-3/4 w-full relative max-h-[80vh] overflow-y-auto'>
+      <div className='flex lg:flex-row flex-col gap-2 items-center sticky top-0'>
         <CreateSection template_id={template_id} />
         <ComponentSelect isLoading={isPending} onSelect={onSelect} />
       </div>

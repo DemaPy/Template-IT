@@ -17,12 +17,24 @@ const Section = ({ item }: Props) => {
   const { mutate, isPending: isDeleting, isError: isDeletingError, error: deletingError } = useDeleteSection({ invalidate_key: item.templateId })
   const { mutate: duplicate, isPending: isDuplicating, isError: isDuplicatingError, error: duplicatingError } = useDuplicate({ invalidate_key: item.templateId })
 
-  const actions = [
+
+
+  const actions = item.placeholders.length > 0 ? [
     {
       isLoading: isDeleting,
       icon: isOpen ? <ChevronUpIcon className='w-4 h-4' /> : <ChevronDown className='w-4 h-4' />,
       onClick: () => setIsOpenTextArea(!isOpen)
     },
+    {
+      icon: <TrashIcon className='w-4 h-4 text-red-400' />,
+      onClick: () => mutate({ id: item.id }),
+      isLoading: isDeleting
+    },
+    {
+      icon: <CopyIcon className='w-4 h-4 text-blue-400' />,
+      onClick: () => duplicate({ id: item.id }),
+      isLoading: isDuplicating || isDeleting
+    }] : [
     {
       icon: <TrashIcon className='w-4 h-4 text-red-400' />,
       onClick: () => mutate({ id: item.id }),

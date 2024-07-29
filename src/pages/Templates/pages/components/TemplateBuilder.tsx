@@ -27,8 +27,8 @@ const TemplateBuilder = ({ sections }: Props) => {
     }
     
     return (
-        <div className="w-full flex flex-col gap-2 relative bg-slate-50 p-2">
-            <iframe srcDoc={decode(html)} className="h-full w-full">
+        <div className="w-full flex flex-col gap-2 relative bg-slate-50 p-2 grow">
+            <iframe srcDoc={decode(html)} className="h-full w-full grow">
             </iframe>
         </div>
     )

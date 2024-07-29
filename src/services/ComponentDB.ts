@@ -126,9 +126,8 @@ export class ComponentServiceDB {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const json = await response.json();
+      const json: ServerResponseSuccess<Component[]> = await response.json();
       handleResponseDB({ json, response });
-
       return json;
     } catch (error) {
       throw error;

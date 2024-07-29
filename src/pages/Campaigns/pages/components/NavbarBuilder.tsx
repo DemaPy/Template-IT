@@ -30,7 +30,7 @@ const NavbarBuilder = ({ html, campaign, setDevice }: Props) => {
     }
 
     return (
-        <div className='sticky flex gap-2 items-center left-0 top-0'>
+        <div className='sticky flex gap-2 items-center left-0 top-0 overflow-x-auto'>
             <Button onClick={() => setClose()} asChild size={"sm"} variant={"outline"}>
                 <Link className='text-sm font-semibold' target='_blank' to={`/templates/${campaign.templateId}`}>Go to template</Link>
             </Button>

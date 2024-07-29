@@ -26,7 +26,7 @@ const Templates = () => {
         title={"Templates"}
         action={{
           icon: <PlusCircle className="w-4 h-4 mr-2" />,
-          onClick: () => setIsOpen(false),
+          onClick: () => setIsOpen(true),
           title: "create",
         }}
       />

@@ -52,7 +52,7 @@ const CampaignTemplateHandler = ({ campaign }: {
   }, [layout, campaign])
 
   return (
-    <div className="flex gap-4 mt-6 flex-grow items-stretch">
+    <div className="flex lg:flex-row flex-col gap-4 mt-6 flex-grow items-stretch">
       <Sidebar
         isLayoutChanged={isLayoutChanged}
         setIsLayoutChanged={setIsLayoutChanged}
@@ -65,7 +65,7 @@ const CampaignTemplateHandler = ({ campaign }: {
         inActiveSections={sortedInactiveSections}
       />
       {slug ? (
-        <div className='flex-grow-1 w-3/4'>
+        <div className='flex-grow-1 md:w-1/2 lg:h-3/4 w-full'>
           <CampaignBuilder layout={layout} slug={slug} campaign={campaign} sortedSections={sortedSections} />
         </div>
       ) : (
