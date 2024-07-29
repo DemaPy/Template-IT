@@ -11,11 +11,11 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { handleResponse } from "@/utils/handleResponse"
 import { useLocation, useNavigate } from "react-router-dom"
-import { SectionService } from "@/services/DI/Section"
-import { ComponentService } from "@/services/DI/Component"
 import { usePlaceholderUpdateModal } from "@/store/placeholderUpdateModal"
+import { SectionServiceDB } from "@/services/Section"
+import { ComponentServiceDB } from "@/services/ComponentDB"
 
-const UpdatePlaceholder = ({ Service }: { Service: typeof SectionService | typeof ComponentService }) => {
+const UpdatePlaceholder = ({ Service }: { Service: typeof SectionServiceDB | typeof ComponentServiceDB }) => {
     const location = useLocation()
     const navigate = useNavigate()
     const [loading, setLoading] = useState<boolean>(false)

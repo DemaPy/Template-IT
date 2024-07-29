@@ -1,5 +1,5 @@
 import { COMPONENTS_KEY } from "@/constance/query-key";
-import { ComponentService } from "@/services/DI/Component";
+import { ComponentServiceDB } from "@/services/ComponentDB";
 import {
   CreateComponent,
   UpdateComponent,
@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 export function useFetchComponent(id: Component["id"]) {
   return useQuery({
     queryKey: [id],
-    queryFn: ({ queryKey }) => ComponentService.getOne(queryKey[0]),
+    queryFn: ({ queryKey }) => ComponentServiceDB.getOne(queryKey[0]),
   });
 }
 
@@ -20,7 +20,7 @@ export function useDeleteComponent() {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: (id: Component["id"]) => ComponentService.delete(id),
+    mutationFn: (id: Component["id"]) => ComponentServiceDB.delete(id),
     onSuccess: () => {
       toast.success("Component has been deleted");
       navigate("/components");
@@ -46,7 +46,7 @@ export function useCreateComponent() {
           );
         }
       }
-      return ComponentService.create(component);
+      return ComponentServiceDB.create(component);
     },
     onSuccess: (data) => {
       toast.success("Component has been created");
@@ -78,7 +78,7 @@ export function useComponentUpdate({
         }
       }
 
-      return ComponentService.update(component);
+      return ComponentServiceDB.update(component);
     },
     onSuccess: () => {
       toast.success("Component has been updated");
@@ -93,6 +93,6 @@ export function useComponentUpdate({
 export function useFetchComponents() {
   return useQuery({
     queryKey: COMPONENTS_KEY,
-    queryFn: () => ComponentService.getAll(),
+    queryFn: () => ComponentServiceDB.getAll(),
   });
 }

@@ -4,9 +4,9 @@ import { ChevronDown, ChevronUpIcon, ImportIcon } from 'lucide-react'
 import { useState } from 'react'
 import Placeholders from './Placeholders'
 import SectionData from './SectionData'
-import { CampaignService } from '@/services/DI/Campaign'
 import { decode } from 'html-entities'
 import ConnectDataWithPlaceholder from './ConnectDataWithPlaceholder'
+import { CampaignServiceDB } from '@/services/CampaignDB'
 
 export type DataToReturn = { id: string, title: string, data: Record<string, string> }[]
 
@@ -23,10 +23,10 @@ const Section = ({ campaign, item }: Props) => {
 
   const connectData = (data: Campaign['data']) => {
     if (!campaign.data[item.id]) return null
-    const result = CampaignService.convertPlaceholders(data, item.placeholders, item.id)
+    const result = CampaignServiceDB.convertPlaceholders(data, item.placeholders, item.id)
     return result
   }
-  
+
   return (
     <li className='w-full flex flex-col gap-4 border rounded-md p-2'>
       <Heading

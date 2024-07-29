@@ -1,4 +1,4 @@
-import { CampaignService } from "@/services/DI/Campaign";
+import { CampaignServiceDB } from "@/services/CampaignDB";
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import toast from "react-hot-toast";
 
@@ -21,7 +21,7 @@ export function useLayoutOrderUpdate({
             //     }
             // }
 
-            return CampaignService.updateLayoutsOrder(layout);
+            return CampaignServiceDB.updateLayoutsOrder(layout);
         },
         onSuccess: () => {
             toast.success("Campaign has been updated");

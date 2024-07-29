@@ -5,6 +5,7 @@ import {
   UpdateCampaign,
 } from "./types/Campaign";
 import { handleResponseDB } from "@/utils/handleResponse";
+import { DataToReturn } from "@/pages/Campaigns/pages/components/Section";
 
 export class CampaignServiceDB {
   static async create(campaign: CreateCampaign) {
@@ -25,7 +26,26 @@ export class CampaignServiceDB {
     }
   }
 
-  static async updateLayout(layout: Pick<Layout, "id" | "is_active">) {
+  static convertPlaceholders = (
+    data: Campaign["data"],
+    placeholders: Placeholder[] | null,
+    section_id: string
+  ) => {
+    if (!placeholders) return [];
+    const dataToReturn: DataToReturn = [];
+    for (const placeholder of placeholders || []) {
+      const placeholderData = data[section_id];
+      const newViedOfData = {
+        id: placeholder.id,
+        title: placeholder.title,
+        data: placeholderData[placeholder.id],
+      };
+      dataToReturn.push(newViedOfData);
+    }
+    return dataToReturn;
+  };
+
+  static async updateLayout(layout:  Partial<Layout>) {
     try {
       const response = await fetch(BASE_URL + "/layouts", {
         method: "PATCH",

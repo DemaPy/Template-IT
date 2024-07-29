@@ -1,4 +1,4 @@
-import { ComponentService } from "@/services/DI/Component";
+import { ComponentServiceDB } from "@/services/ComponentDB";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
@@ -10,7 +10,7 @@ export function useDeletePlaceholder({
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: Placeholder["id"]) =>
-      ComponentService.deletePlaceholder(id),
+      ComponentServiceDB.deletePlaceholder(id),
     onSuccess: () => {
       toast.success("Placeholder has been deleted");
       queryClient.invalidateQueries({ queryKey: [invalidate_key] });
@@ -37,7 +37,7 @@ export function useDeletePlaceholder({
 //         }
 //       }
 
-//       return ComponentService.createPlaceholders(placeholders);
+//       return ComponentServiceDB.createPlaceholders(placeholders);
 //     },
 //     onSuccess: (data) => {
 //       const component_id = data.data as Component["id"];

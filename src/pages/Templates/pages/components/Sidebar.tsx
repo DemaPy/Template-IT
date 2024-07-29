@@ -2,11 +2,11 @@ import ListView from '@/components/List'
 import Section from './Section/Section'
 import CreateSection from './Section/CreateSection'
 import ComponentSelect from '../../../../components/ComponentSelect'
-import { SectionService } from '@/services/DI/Section'
 import UpdatePlaceholder from '@/pages/Components/pages/components/UpdatePlaceholder'
 import { useCreateFromComponent } from '../hooks/useSection'
 import Error from '@/pages/Error/Error'
 import ComponentsSkeleton from '@/pages/Components/components/Skeleton'
+import { SectionServiceDB } from '@/services/Section'
 
 type Props = {
   sections: Section[] | null
@@ -34,7 +34,7 @@ const Sidebar = ({ sections, template_id }: Props) => {
         <CreateSection template_id={template_id} />
         <ComponentSelect isLoading={isPending} onSelect={onSelect} />
       </div>
-      <UpdatePlaceholder Service={SectionService} />
+      <UpdatePlaceholder Service={SectionServiceDB} />
       <div className='mt-4'>
         <ListView component={Section} items={sections} />
       </div>

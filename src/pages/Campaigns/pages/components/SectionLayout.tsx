@@ -5,8 +5,8 @@ import { useRef, useState } from "react";
 import { Switchh } from "@/components/Switch";
 import { Button } from "@/components/ui/button";
 import SectionSlugs from "./SectionSlugs";
-import { CampaignService } from "@/services/DI/Campaign";
 import { useDrag, useDrop } from "react-dnd";
+import { CampaignServiceDB } from "@/services/CampaignDB";
 
 type Props = {
   index: number;
@@ -90,7 +90,7 @@ const SectionLayout = ({
       item.index = hoverIndex;
     },
   });
-  const [_,drag] = useDrag({
+  const [_, drag] = useDrag({
     type: "LAYOUT",
     item: () => {
       return { id: id, index };
@@ -103,7 +103,7 @@ const SectionLayout = ({
 
   const handleLayoutIsActive = async () => {
     setIsLoading(true);
-    const response = await CampaignService.updateLayout({
+    const response = await CampaignServiceDB.updateLayout({
       id: id,
       is_active: !is_active,
     });
@@ -119,7 +119,7 @@ const SectionLayout = ({
   const handleSlugRenderConditionChange = async (slug: {
     [key: string]: boolean;
   }) => {
-    const response = await CampaignService.updateLayout({
+    const response = await CampaignServiceDB.updateLayout({
       id: id,
       renderOn: {
         ...renderOn,

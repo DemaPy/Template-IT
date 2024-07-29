@@ -5,9 +5,7 @@ import { UpdatePlaceholder } from "./types/Section";
 import { handleResponseDB } from "@/utils/handleResponse";
 
 export class ComponentServiceDB {
-  static async create(
-    component: CreateComponent
-  ): Promise<ServerResponseSuccess<Component> | ServerResponseError> {
+  static async create(component: CreateComponent) {
     try {
       const response = await fetch(BASE_URL + "/components", {
         method: "POST",
@@ -17,7 +15,7 @@ export class ComponentServiceDB {
         },
         body: JSON.stringify({ component: component }),
       });
-      const json = await response.json();
+      const json: ServerResponseSuccess<Component> = await response.json();
       handleResponseDB({ json, response });
       return json;
     } catch (error: any) {

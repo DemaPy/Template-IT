@@ -10,11 +10,11 @@ import { useState } from 'react'
 import CSVReader from "react-csv-reader"
 import { Label } from "@/components/ui/label"
 import MatchColumns from "./MatchColumns"
-import { CampaignService } from "@/services/DI/Campaign"
 import { handleResponse } from "@/utils/handleResponse"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useQueryClient } from "@tanstack/react-query"
 import toast from "react-hot-toast"
+import { CampaignServiceDB } from "@/services/CampaignDB"
 
 
 const ConnectDataWithPlaceholder = ({ setClose, isOpen, section, campaignId }: { setClose: () => void, isOpen: boolean, section: Section, campaignId: Campaign['id'] }) => {
@@ -37,7 +37,7 @@ const ConnectDataWithPlaceholder = ({ setClose, isOpen, section, campaignId }: {
       result[placeholder_id] = data
       data = {}
     }
-    const response = await CampaignService.savePlaceholderData({ campaignId: campaignId, data: { [section!.id]: result } })
+    const response = await CampaignServiceDB.savePlaceholderData({ campaignId: campaignId, data: { [section!.id]: result } })
     handleResponse<Campaign>(response, location, navigate)
     setClose()
     queryClient.invalidateQueries({ queryKey: [campaignId] })
