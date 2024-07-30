@@ -11,6 +11,7 @@ import { isUserChangedSomethingInPlaceholders, createPlaceholderNode } from "./u
 import { PlusCircle, X } from "lucide-react";
 import Title from "../Title";
 import { encode } from "html-entities";
+import PlaceholderModal from "./PlaceholderModal";
 
 const Editor = ({
   isLoading,
@@ -25,6 +26,8 @@ const Editor = ({
   const [position, setPosition] = useState<number | null>(null)
   const [title, setTitle] = useState("")
   const [fallback, setFallback] = useState("")
+
+  const [xy, setXY] = useState<{ x: number, y: number } | null>(null)
 
   const [_placeholders, setPlaceholders] = useState<CreatePlaceholders['placeholders']>([])
 
@@ -81,7 +84,6 @@ const Editor = ({
 
   // Handle iframe click
   // Set cursor position
-  // Set mode to editing
   useEffect(() => {
     if (!ref.current) return;
     const iframe = ref.current.contentDocument;
@@ -89,32 +91,48 @@ const Editor = ({
       toast.error("Document not found.")
       return
     }
-    const handleClick = (e: MouseEvent) => {
-      if (!e.ctrlKey) return
+    const handleClick = (e: MouseEvent | TouchEvent) => {
 
-      const isSpanPlaceholder = (e.target as HTMLElement).getAttribute("data-template-it_id");
-      if (isSpanPlaceholder) return;
+      if (e.ctrlKey || e.metaKey) {
+        const isSpanPlaceholder = (e.target as HTMLElement).getAttribute("data-template-it_id");
+        if (isSpanPlaceholder) return;
 
-      if (!ref.current) return;
-      const iframe = ref.current.contentDocument;
-      if (!iframe) {
-        toast.error("Document not found")
-        return
+        if (!ref.current) return;
+        const iframe = ref.current.contentDocument;
+        if (!iframe) {
+          toast.error("Document not found")
+          return
+        }
+        const selection = iframe.getSelection();
+        if (!selection) return
+        if (!selection.anchorNode) return
+        if (selection.anchorNode.nodeName === "BODY") {
+          toast.error("Please, select place.")
+          return
+        }
+
+        if (e instanceof MouseEvent) {
+          setPosition(selection.anchorOffset)
+          setXY({ x: e.clientX, y: e.clientY })
+        } else {
+          var touch = e.touches[0];
+          var x = touch.pageX;
+          var y = touch.pageY;
+          // or taking offset into consideration
+          // var x_2 = touch.pageX - iframe.body.offsetLeft;
+          // var y_2 = touch.pageY - iframe.body.offsetTop;
+          setXY({ x: x, y: y })
+        }
       }
-      const selection = iframe.getSelection();
-      if (!selection) return
-      if (!selection.anchorNode) return
-      if (selection.anchorNode.nodeName === "BODY") {
-        toast.error("Please, select place.")
-        return
-      }
-      setPosition(selection.anchorOffset)
     };
 
     iframe.addEventListener("click", handleClick);
+    iframe.addEventListener('touchstart', handleClick);
 
     return () => {
       iframe.removeEventListener("click", handleClick);
+      iframe.removeEventListener('touchstart', handleClick);
+
     };
   }, []);
 
@@ -203,8 +221,11 @@ const Editor = ({
     setPlaceholders([])
   }
 
+  const isModalActive = xy !== null
+  console.log({ isModalActive, xy });
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 relative">
       <iframe
         className='w-full min-h-64 bg-slate-50 rounded'
         ref={ref}
@@ -236,6 +257,9 @@ const Editor = ({
         <Title title={error} size="xxs" color="default" />
         <Button onClick={() => setError("")}><X className="w-4 h-4" /></Button>
       </div>)}
+      {isModalActive && (
+        <PlaceholderModal handler={() => setXY(null)} x={xy.x} y={xy.y} />
+      )}
     </div>
   )
 }
