@@ -62,7 +62,7 @@ function Login() {
                 <CardHeader className="space-y-1">
                     <CardTitle className="text-2xl">Login account</CardTitle>
                     <CardDescription>
-                        Enter your email below to login into account
+                        Enter your email and password below to login into account
                     </CardDescription>
                 </CardHeader>
                 <form onSubmit={handleSubmit(({ email, password }) => mutate({ email, password }))}>

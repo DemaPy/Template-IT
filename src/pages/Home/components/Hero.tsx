@@ -17,7 +17,7 @@ const Hero = () => {
         } />
         <div className='mt-12 flex gap-2'>
           <Button asChild variant={"ghost"}>
-            <Link to={'/login'}>Register</Link>
+            <Link to={'/register'}>Register</Link>
           </Button>
           <Button className='bg-slate-700' asChild>
             <Link to={'/login'}>Login</Link>

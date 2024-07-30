@@ -1,5 +1,5 @@
 import { BASE_URL } from "@/config";
-import { ValidationError } from "./Errors/ValidationError";
+import { handleResponseDB } from "@/utils/handleResponse";
 
 export class Auth {
   static registration = async (data: {
@@ -19,20 +19,10 @@ export class Auth {
         body: JSON.stringify(data),
       });
       const json = await response.json();
-      if (!response.ok) {
-        const error: ServerResponseValidationError = {
-          message: json.message,
-          status: "error",
-          errors: json.errors,
-        };
-        throw error;
-      }
+      handleResponseDB({ json, response });
       return json;
     } catch (err) {
-      return {
-        status: "error",
-        message: "Unknown error happend",
-      };
+      throw err;
     }
   };
 
@@ -59,16 +49,7 @@ export class Auth {
         body: JSON.stringify(data),
       });
       const json = await response.json();
-      if (!response.ok) {
-        if ("errors" in json) {
-          throw new ValidationError({
-            message: json.message,
-            errors: json.errors,
-          });
-        }
-
-        throw new Error(json.message);
-      }
+      handleResponseDB({ json, response });
       return json as ServerResponseSuccess<{
         data: {
           token: string;

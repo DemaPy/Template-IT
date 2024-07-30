@@ -12,12 +12,13 @@ import Component from "@/pages/Components/pages/Component";
 import Login from "@/pages/Login/Login";
 import Error from "@/pages/Error/Error";
 import Access from "@/pages/Access/Access";
+import Register from "@/pages/Register/Register";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <WithNavBar />,
-    errorElement: <Error error={null} message="Router error happend" path="/"/>,
+    errorElement: <Error error={null} message="Router error happend" path="/" />,
     children: [
       {
         index: true,
@@ -58,10 +59,13 @@ const router = createBrowserRouter([
       },
     ],
   },
-
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
 ]);
 

@@ -6,7 +6,8 @@ import { Switchh } from "@/components/Switch";
 import { Button } from "@/components/ui/button";
 import SectionSlugs from "./SectionSlugs";
 import { useDrag, useDrop } from "react-dnd";
-import { CampaignServiceDB } from "@/services/CampaignDB";
+import { useLayoutUpdate } from "../hooks/useLayout";
+import Error from "@/pages/Error/Error";
 
 type Props = {
   index: number;
@@ -18,6 +19,7 @@ type Props = {
   renderOn: Layout["renderOn"];
   sectionId: Layout["sectionId"];
   isLayoutChanged: boolean;
+  campaignId: Layout['campaignId']
 };
 
 interface DragItem {
@@ -34,12 +36,12 @@ const SectionLayout = ({
   index,
   is_active,
   renderOn,
+  campaignId
 }: Props) => {
+  const { mutate, isError, error, isPending } = useLayoutUpdate({ invalidate_key: campaignId })
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
   const [{ handlerId }, drop] = useDrop<
     DragItem,
     void,
@@ -101,39 +103,9 @@ const SectionLayout = ({
   });
   drag(drop(ref));
 
-  const handleLayoutIsActive = async () => {
-    setIsLoading(true);
-    const response = await CampaignServiceDB.updateLayout({
-      id: id,
-      is_active: !is_active,
-    });
-    if (response.status === "error") {
-      alert(response.message);
-      setIsLoading(false);
-      return;
-    } else {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSlugRenderConditionChange = async (slug: {
-    [key: string]: boolean;
-  }) => {
-    const response = await CampaignServiceDB.updateLayout({
-      id: id,
-      renderOn: {
-        ...renderOn,
-        ...slug,
-      },
-    });
-    if (response.status === "error") {
-      alert(response.message);
-      setIsLoading(false);
-      return;
-    } else {
-      setIsLoading(false);
-    }
-  };
+  if (isError) {
+    return <Error error={error} message={error.message} path={`/campaigns/${campaignId}`} />
+  }
 
   return (
     <>
@@ -162,16 +134,27 @@ const SectionLayout = ({
           <Title size="xs" title={section.title} />
         </div>
         <Switchh
-          isDisabled={isLoading || isLayoutChanged}
+          isDisabled={isPending || isLayoutChanged}
           text={is_active ? "On" : "Off"}
           isActive={is_active}
-          onChange={() => handleLayoutIsActive()}
+          onChange={() => mutate({
+            id: id,
+            is_active: !is_active,
+          })}
         />
       </div>
       {isOpen && renderOn && (
         <SectionSlugs
-          isLoading={isLoading}
-          onChange={handleSlugRenderConditionChange}
+          isLoading={isPending}
+          onChange={(slug: {
+            [key: string]: boolean;
+          }) => mutate({
+            id: id,
+            renderOn: {
+              ...renderOn,
+              ...slug,
+            },
+          })}
           slugs={renderOn}
         />
       )}

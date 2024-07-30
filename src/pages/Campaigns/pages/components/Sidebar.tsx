@@ -1,16 +1,13 @@
-import ListView from '@/components/List'
-import Section from './Section'
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import CampaignLayout from './CampaignLayout'
-import Title from '@/components/Title'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
 import { useLayoutOrderUpdate } from '../hooks/useLayout'
+import SectionsTab from './SectionsTab'
+import LayoutTab from "./LayoutTab"
 
 type Props = {
   isLayoutChanged: boolean
@@ -74,27 +71,22 @@ const Sidebar = ({ isLayoutChanged, setIsLayoutChanged, setSelectedSlug, layout,
           }
         </TabsList>
         <TabsContent value="sections">
-          <div className='flex flex-col gap-4'>
-            <Title size='sm' title={"Connect data with placeholders"} />
-            <ListView campaign={campaign} component={Section} items={sortedSections} />
-          </div>
+          <SectionsTab campaign={campaign} sortedSections={sortedSections} />
         </TabsContent>
         <TabsContent value="layout">
-          <div className="flex flex-col gap-4">
-            <div className='flex justify-between items-center'>
-              <Title size='sm' title={"Swap layout sections"} />
-              {isLayoutChanged && (
-                <Button disabled={isPending} onClick={() => {
-                  mutate(layout)
-                  setIsLayoutChanged(false)
-                }} variant={"secondary"} size={"sm"}>Save layout</Button>
-              )}
-            </div>
-            <CampaignLayout isLayoutChanged={isLayoutChanged} moveCard={moveCard} layout={layout} sections={inActiveSections} />
-          </div>
+          <LayoutTab
+            layout={layout}
+            moveCard={moveCard}
+            isPending={isPending}
+            inActiveSections={inActiveSections}
+            isLayoutChanged={isLayoutChanged}
+            onLayoutSave={() => {
+              mutate(layout)
+              setIsLayoutChanged(false)
+            }}
+          />
         </TabsContent>
       </Tabs>
-
     </div>
   )
 }

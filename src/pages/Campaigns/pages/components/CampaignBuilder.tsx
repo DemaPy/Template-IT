@@ -94,7 +94,7 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
           <iframe
             style={{ width: devices[device] }}
             srcDoc={decode(html)}
-            className="grow pointer-events-none"
+            className="grow"
           ></iframe>
         </TransformComponent>
       </TransformWrapper>

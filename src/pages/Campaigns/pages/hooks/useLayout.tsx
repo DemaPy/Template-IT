@@ -24,7 +24,28 @@ export function useLayoutOrderUpdate({
             return CampaignServiceDB.updateLayoutsOrder(layout);
         },
         onSuccess: () => {
-            toast.success("Campaign has been updated");
+            toast.success("Layout has been updated");
+            queryClient.invalidateQueries({ queryKey: [invalidate_key] });
+        },
+        onError: (data) => {
+            toast.error(data.message);
+        },
+    });
+}
+
+export function useLayoutUpdate({
+    invalidate_key,
+}: {
+    invalidate_key: Campaign["id"];
+}) {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (layout: Partial<Layout>) => {
+            return CampaignServiceDB.updateLayout(layout);
+        },
+        onSuccess: () => {
+            toast.success("Layout has been updated");
             queryClient.invalidateQueries({ queryKey: [invalidate_key] });
         },
         onError: (data) => {
