@@ -4,13 +4,9 @@ import { Label } from '../ui/label'
 import { Button } from '../ui/button'
 import { useEffect, useRef } from 'react'
 
-type TPlaceholderModal = {
-    x: number,
-    y: number,
-    handler: () => void
-}
 
-const PlaceholderModal = ({ x, y, handler }: TPlaceholderModal) => {
+
+const PlaceholderModal = ({ x, y, onClose, onSubmit }: TPlaceholderModal) => {
     const ref = useRef<HTMLDivElement | null>(null)
 
     const xPosition = x + "px"
@@ -24,7 +20,7 @@ const PlaceholderModal = ({ x, y, handler }: TPlaceholderModal) => {
         const handleCloseModal = (ev: MouseEvent | TouchEvent) => {
             const target = ev.target as HTMLDivElement
             if (ref.current === target) {
-                handler()
+                onClose()
             }
         }
 
@@ -35,23 +31,20 @@ const PlaceholderModal = ({ x, y, handler }: TPlaceholderModal) => {
             ref.current.removeEventListener("click", handleCloseModal)
             ref.current.removeEventListener('touchstart', handleCloseModal);
         }
-    }, [handler])
+    }, [onClose])
 
     return (
-        <div ref={ref} className='fixed inset-0 backdrop-filter backdrop-blur-sm z-50'>
-            <div className='rounded-md bg-white absolute shadow-md p-4 space-y-2' style={{ left: xPosition, top: yPosition }}>
-                <PlaceholderForm />
+        <>
+            <div ref={ref} className='fixed inset-0 backdrop-blur-sm z-50' />
+            <div className='rounded-md bg-white absolute shadow-md p-4 space-y-2 z-[60]' style={{ left: xPosition, top: yPosition }}>
+                <PlaceholderForm onSubmit={onSubmit} />
             </div>
-        </div>
+        </>
     )
 }
 
-type FormValues = {
-    title: string,
-    fallback: string
-}
-function PlaceholderForm() {
-    const { handleSubmit, register, formState: { } } = useForm<FormValues>({
+function PlaceholderForm({ onSubmit }: { onSubmit: TPlaceholderModal['onSubmit'] }) {
+    const { handleSubmit, register, formState: { } } = useForm<PlaceholderOnSubmit>({
         defaultValues: {
             fallback: "",
             title: ""
@@ -59,7 +52,7 @@ function PlaceholderForm() {
     })
 
     return (
-        <form onSubmit={handleSubmit(({ fallback, title }) => console.log({ fallback, title }))} className='space-y-2'>
+        <form onSubmit={handleSubmit(({ fallback, title }) => onSubmit({ fallback, title }))} className='space-y-2'>
             <div className='space-y-1'>
                 <Label htmlFor='title'>Title</Label>
                 <Input id='title' type='text' {...register("title", {

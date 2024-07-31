@@ -2,16 +2,15 @@ import { CreatePlaceholders } from "@/services/types/Placeholder";
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import toast from "react-hot-toast";
 
 import { v4 as uuidv4 } from 'uuid';
 import { isUserChangedSomethingInPlaceholders, createPlaceholderNode } from "./utils";
-import { PlusCircle, X } from "lucide-react";
+import { X } from "lucide-react";
 import Title from "../Title";
 import { encode } from "html-entities";
 import PlaceholderModal from "./PlaceholderModal";
+
 
 const Editor = ({
   isLoading,
@@ -24,10 +23,7 @@ const Editor = ({
   const ref = useRef<HTMLIFrameElement>(null);
 
   const [position, setPosition] = useState<number | null>(null)
-  const [title, setTitle] = useState("")
-  const [fallback, setFallback] = useState("")
-
-  const [xy, setXY] = useState<{ x: number, y: number } | null>(null)
+  const [xy, setXY] = useState<{ x: number, y: number }>({ x: 0, y: 0 })
 
   const [_placeholders, setPlaceholders] = useState<CreatePlaceholders['placeholders']>([])
 
@@ -91,58 +87,68 @@ const Editor = ({
       toast.error("Document not found.")
       return
     }
-    const handleClick = (e: MouseEvent | TouchEvent) => {
+    const handleClick = (e: MouseEvent) => {
+      const isSpanPlaceholder = (e.target as HTMLElement).getAttribute("data-template-it_id");
+      if (isSpanPlaceholder) return;
 
-      if (e.ctrlKey || e.metaKey) {
-        const isSpanPlaceholder = (e.target as HTMLElement).getAttribute("data-template-it_id");
-        if (isSpanPlaceholder) return;
-
-        if (!ref.current) return;
-        const iframe = ref.current.contentDocument;
-        if (!iframe) {
-          toast.error("Document not found")
-          return
-        }
-        const selection = iframe.getSelection();
-        if (!selection) return
-        if (!selection.anchorNode) return
-        if (selection.anchorNode.nodeName === "BODY") {
-          toast.error("Please, select place.")
-          return
-        }
-
-        if (e instanceof MouseEvent) {
-          setPosition(selection.anchorOffset)
-          setXY({ x: e.clientX, y: e.clientY })
-        } else {
-          var touch = e.touches[0];
-          var x = touch.pageX;
-          var y = touch.pageY;
-          // or taking offset into consideration
-          // var x_2 = touch.pageX - iframe.body.offsetLeft;
-          // var y_2 = touch.pageY - iframe.body.offsetTop;
-          setXY({ x: x, y: y })
-        }
+      if (!ref.current) return;
+      const iframe = ref.current.contentDocument;
+      if (!iframe) {
+        toast.error("Document not found")
+        return
       }
+      const selection = iframe.getSelection();
+      if (!selection) return
+      if (!selection.anchorNode) return
+      if (selection.anchorNode.nodeName === "BODY") {
+        toast.error("Please, select place.")
+        return
+      }
+
+      setPosition(selection.anchorOffset)
+      setXY({ x: e.clientX, y: e.clientY })
+    };
+
+    const handleTouch = (e: TouchEvent) => {
+      const isSpanPlaceholder = (e.target as HTMLElement).getAttribute("data-template-it_id");
+      if (isSpanPlaceholder) return;
+
+      if (!ref.current) return;
+      const iframe = ref.current.contentDocument;
+      if (!iframe) {
+        toast.error("Document not found")
+        return
+      }
+      const selection = iframe.getSelection();
+      if (!selection) return
+      if (!selection.anchorNode) return
+      if (selection.anchorNode.nodeName === "BODY") {
+        toast.error("Please, select place.")
+        return
+      }
+
+      var touch = e.touches[0];
+      var x = touch.pageX;
+      var y = touch.pageY;
+      // or taking offset into consideration
+      // var x_2 = touch.pageX - iframe.body.offsetLeft;
+      // var y_2 = touch.pageY - iframe.body.offsetTop;
+      setPosition(selection.anchorOffset)
+      setXY({ x: x, y: y })
     };
 
     iframe.addEventListener("click", handleClick);
-    iframe.addEventListener('touchstart', handleClick);
+    iframe.addEventListener('touchstart', handleTouch);
 
     return () => {
       iframe.removeEventListener("click", handleClick);
-      iframe.removeEventListener('touchstart', handleClick);
+      iframe.removeEventListener('touchstart', handleTouch);
 
     };
-  }, []);
+  }, [content]);
 
   // Insert placeholder to cursor position
-  const handleAddPlaceholder = () => {
-    if (fallback.trim().length < 3 || title.trim().length < 3) {
-      setError("Minimum length 3 symbols.")
-      return
-    }
-
+  const handleAddPlaceholder = ({ title, fallback }: { title: string, fallback: string }) => {
     if (!ref.current) return;
     const iframe = ref.current.contentDocument;
     if (!iframe) {
@@ -176,12 +182,6 @@ const Editor = ({
       }
     }));
     setPlaceholders(prev => ([...prev, { id: id, title, fallback }]))
-    handleReset()
-  }
-
-  const handleReset = () => {
-    setTitle("");
-    setFallback("");
     setPosition(null)
   }
 
@@ -217,12 +217,9 @@ const Editor = ({
     }
     const body = iframe.body;
     body.innerHTML = content;
-    handleReset()
+    setPosition(null)
     setPlaceholders([])
   }
-
-  const isModalActive = xy !== null
-  console.log({ isModalActive, xy });
 
   return (
     <div className="space-y-4 relative">
@@ -232,33 +229,16 @@ const Editor = ({
         src=""
         frameBorder="0"
       ></iframe>
-      {position !== null && (
-        <div className='p-4 bg-slate-50 rounded space-y-2'>
-          <Label className='flex flex-col gap-2'>
-            Title
-            <div className='flex items-stretch gap-2'>
-              <Input ref={inputRef} value={title} onChange={(ev) => setTitle(ev.target.value)} />
-              <Button variant={"outline"} onClick={handleAddPlaceholder}><PlusCircle className='w-4 h-4 mr-2' />Add</Button>
-            </div>
-          </Label>
-          <Label className='flex flex-col gap-2'>
-            Fallback
-            <Input value={fallback} onChange={(ev) => setFallback(ev.target.value)} />
-          </Label>
-
-        </div>
-      )}
       <div className='flex gap-2'>
         <Button disabled={isLoading} onClick={handleCancel} className='w-full' variant={"ghost"} size={"sm"}>cancel</Button>
         <Button disabled={isLoading} onClick={handleSave} className='w-full' variant={"outline"} size={"sm"}>save</Button>
       </div>
-      <Title title="Hold Ctr or Cmd and Click to start" size="xxs" color="neutral" />
       {error && (<div>
         <Title title={error} size="xxs" color="default" />
         <Button onClick={() => setError("")}><X className="w-4 h-4" /></Button>
       </div>)}
-      {isModalActive && (
-        <PlaceholderModal handler={() => setXY(null)} x={xy.x} y={xy.y} />
+      {position !== null && (
+        <PlaceholderModal onSubmit={handleAddPlaceholder} onClose={() => setPosition(null)} x={xy.x} y={xy.y} />
       )}
     </div>
   )
