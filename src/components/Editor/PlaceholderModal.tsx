@@ -17,10 +17,14 @@ const PlaceholderModal = ({ x, y, onClose, onSubmit }: TPlaceholderModal) => {
 
         if (!ref.current) return
 
+        let touchFirst = false
         const handleCloseModal = (ev: MouseEvent | TouchEvent) => {
             const target = ev.target as HTMLDivElement
             if (ref.current === target) {
-                onClose()
+                if (touchFirst) {
+                    onClose()
+                }
+                touchFirst = true
             }
         }
 

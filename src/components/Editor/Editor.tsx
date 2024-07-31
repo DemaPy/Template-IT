@@ -11,7 +11,6 @@ import Title from "../Title";
 import { encode } from "html-entities";
 import PlaceholderModal from "./PlaceholderModal";
 
-
 const Editor = ({
   isLoading,
   content,
@@ -100,10 +99,7 @@ const Editor = ({
       const selection = iframe.getSelection();
       if (!selection) return
       if (!selection.anchorNode) return
-      if (selection.anchorNode.nodeName === "BODY") {
-        toast.error("Please, select place.")
-        return
-      }
+      if (selection.anchorNode.nodeName === "BODY") return
 
       setPosition(selection.anchorOffset)
       setXY({ x: e.clientX, y: e.clientY })
@@ -122,10 +118,7 @@ const Editor = ({
       const selection = iframe.getSelection();
       if (!selection) return
       if (!selection.anchorNode) return
-      if (selection.anchorNode.nodeName === "BODY") {
-        toast.error("Please, select place.")
-        return
-      }
+      if (selection.anchorNode.nodeName === "BODY") return
 
       var touch = e.touches[0];
       var x = touch.pageX;
@@ -137,11 +130,11 @@ const Editor = ({
       setXY({ x: x, y: y })
     };
 
-    iframe.addEventListener("click", handleClick);
+    iframe.addEventListener("dblclick", handleClick);
     iframe.addEventListener('touchstart', handleTouch);
 
     return () => {
-      iframe.removeEventListener("click", handleClick);
+      iframe.removeEventListener("dblclick", handleClick);
       iframe.removeEventListener('touchstart', handleTouch);
 
     };
@@ -237,6 +230,10 @@ const Editor = ({
         <Title title={error} size="xxs" color="default" />
         <Button onClick={() => setError("")}><X className="w-4 h-4" /></Button>
       </div>)}
+      <div>
+        <Title title={"Start adding text, and then click enywhere to start."} size="xxs" color="default" />
+        <Title title={"When you are done, click save above or cancel to revert."} size="xxs" color="default" />
+      </div>
       {position !== null && (
         <PlaceholderModal onSubmit={handleAddPlaceholder} onClose={() => setPosition(null)} x={xy.x} y={xy.y} />
       )}
