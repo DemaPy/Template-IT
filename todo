@@ -3,3 +3,9 @@
 3. Add, edit value for placeholders data in campaing page.
 4. Add available slugs for sections without data
 5. install https://www.npmjs.com/package/react-zoom-pan-pinch
+
+Bug
+Added data partial data for campaign section
+![alt text](image.png)
+
+Create components with preinstalled data.

@@ -51,7 +51,10 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
       } else {
         const campaign_data = campaign.data[section.id];
 
-
+        if (!(placeholder.id in campaign_data)) {
+          text = placeholder.fallback;
+          continue
+        }
         // In case of section has different amounts of slugs
         if (!(slug in campaign_data[placeholder.id])) {
           text = placeholder.fallback;
