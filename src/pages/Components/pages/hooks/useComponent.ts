@@ -38,6 +38,7 @@ export function useCreateComponent() {
       for (const key in component) {
         const value = component[key as keyof CreateComponent];
         if (Array.isArray(value)) continue;
+        if (typeof value === "object") continue;
         if (value.trim().length < 3) {
           throw new Error(
             key.charAt(0).toUpperCase() + key.slice(1) + " too short."

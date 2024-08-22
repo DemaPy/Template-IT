@@ -9,3 +9,24 @@ Added data partial data for campaign section
 ![alt text](image.png)
 
 Create components with preinstalled data.
+
+[NEW FEATURE]
+    REPLACE PLACEHOLDERS WITH MUSTACHE JS
+
+    [REFACTORING]
+    -components
+    -sections
+    -server
+
+    [TODO]
+    -variable should have type (url|text)
+
+[NEW FEATURE]
+Share campaign for other user in order to fulfill campaign with new data.
+
+    [THOUGHTS]
+    -route should be public in order to allow others fulfill template
+    -user will have access for default view (fallbacks preview)
+
+    [TODO]
+    -only selected fields should be visible to other users

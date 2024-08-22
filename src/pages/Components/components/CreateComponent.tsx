@@ -10,26 +10,20 @@ import { Label } from "@/components/ui/label"
 import { Button } from '@/components/ui/button'
 import { useState } from "react"
 import { useCreateComponent } from "../pages/hooks/useComponent"
-import { CreatePlaceholders } from "@/services/types/Placeholder"
-import Editor from "@/components/Editor/Editor"
+import MustacheEditor from "@/components/MustacheEditor/MustacheEditor"
+import { ParsedTemplate } from "@/components/MustacheEditor/types"
 
 
 const CreateComponent = ({ isOpen, setClose }: TCreateComponent) => {
 
     const [title, setTitle] = useState<string>("")
-    const [content, setContent] = useState<string>("")
-    const [placeholders, setPlaceholders] = useState<CreatePlaceholders['placeholders']>([])
+    const [template, setTemplate] = useState<ParsedTemplate>({ placeholders: [], template: "", tokens: [] })
 
     const { isPending, mutate } = useCreateComponent()
 
-    const handleEditorSubmit = (data: EditorOnSubmitProps) => {
-        setContent(data.content)
-        setPlaceholders(data.placeholdersToCreate)
-    }
-
     return (
         <Dialog open={isOpen} onOpenChange={setClose}>
-            <DialogContent>
+            <DialogContent className="w-[1000px]">
                 <DialogHeader>
                     <DialogTitle>Create component</DialogTitle>
                 </DialogHeader>
@@ -44,26 +38,39 @@ const CreateComponent = ({ isOpen, setClose }: TCreateComponent) => {
                             onChange={ev => setTitle(ev.target.value)}
                             className="col-span-4"
                         />
-                        <div className="col-span-4 resize-y max-h-[500px] min-h-[300px]">
-                            <Label htmlFor="content" className="text-left">
-                                Content
-                            </Label>
-                            <Editor
-                                content={content}
-                                placeholders={[]}
-                                isLoading={isPending}
-                                isContentEditable={true}
-                                onSubmit={handleEditorSubmit}
-                            />
+                        <div className="col-span-4 flex gap-2">
+                            <div className="w-full">
+                                <Label
+                                    className="text-left">
+                                    Content
+                                </Label>
+                                <MustacheEditor setContent={(template) => setTemplate(template)} />
+                            </div>
+                            <div className="w-1/2">
+                                <Label
+                                    className="text-left">
+                                    Placeholders
+                                </Label>
+                                <div className="flex flex-col gap-2">
+                                    {template.placeholders.map(item => <p className="capitalize text-sm">{item.title}</p>)}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <DialogFooter>
                     <Button disabled={isPending} onClick={() => {
-                        mutate({
-                            content: content,
+                        // mutate({
+                        //     placeholders: template.placeholders,
+                        //     tokens: template.tokens,
+                        //     content: template.template,
+                        //     title: title,
+                        // })
+                        console.log({
+                            placeholders: template.placeholders,
+                            tokens: template.tokens,
+                            content: template.template,
                             title: title,
-                            placeholders: placeholders
                         })
                         setClose()
                     }}>Save changes</Button>
