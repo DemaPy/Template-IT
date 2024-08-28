@@ -5,4 +5,5 @@ export interface DialogProps extends PropsWithChildren {
   onCancel: () => void;
   title: string;
   description?: ReactNode;
+  isLoading?: boolean
 }

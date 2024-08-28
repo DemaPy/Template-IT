@@ -2,11 +2,16 @@ import { TemplateCardActionsProps } from "./types";
 import { Share, Trash } from "lucide-react";
 import Dialog from "@/components/Dialog/Dialog";
 import Tooltip from "@/components/Tooltip/Tooltip";
+import { useDeleteTemplate } from "../../pages/hooks/useTemplate";
 
-const TemplateCardActions = ({ title }: TemplateCardActionsProps) => {
+const TemplateCardActions = ({ id, title }: TemplateCardActionsProps) => {
+  const { isPending: isDeleting, mutate } = useDeleteTemplate();
+
   const onShare = () => {};
 
-  const onDelete = () => {};
+  const onDelete = () => {
+    mutate({ id });
+  };
 
   return (
     <div className="flex items-center gap-4">
@@ -25,6 +30,7 @@ const TemplateCardActions = ({ title }: TemplateCardActionsProps) => {
         description="We'll delete from any shared template links, too. People who already added from a share link will not be affected."
         onCancel={() => console.info("Cancel")}
         onSubmit={onDelete}
+        isLoading={isDeleting}
       >
         <Tooltip description="Delete template">
           <Trash className="w-4 h-4" />

@@ -8,10 +8,17 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-const Dialog = ({ onCancel, onSubmit, children, title, description }: DialogProps) => {
+const Dialog = ({
+  onCancel,
+  onSubmit,
+  children,
+  title,
+  description,
+  isLoading,
+}: DialogProps) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger>{children}</AlertDialogTrigger>
@@ -21,7 +28,9 @@ const Dialog = ({ onCancel, onSubmit, children, title, description }: DialogProp
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isLoading} onClick={onCancel}>
+            Cancel
+          </AlertDialogCancel>
           <AlertDialogAction onClick={onSubmit}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

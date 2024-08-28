@@ -6,11 +6,12 @@ const TemplateCardHeader = ({
   register,
   errors,
   title,
+  id,
 }: TemplateCardHeaderProps) => {
   return (
     <div className="flex items-center justify-between gap-2">
       <TemplateCardTitle register={register} errors={errors} />
-      <TemplateCardActions title={title} />
+      <TemplateCardActions id={id} title={title} />
     </div>
   );
 };
