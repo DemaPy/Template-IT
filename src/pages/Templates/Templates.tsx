@@ -1,23 +1,26 @@
-import PageContainer from "../../components/PageContainer";
 import { PlusCircle } from "lucide-react";
-import CreateTemplate from "./components/CreateTemplate";
-import GridView from "../../components/GridView";
-import TemplateCard from "./components/TemplateCard";
-import Heading from "../../components/Heading";
 import { useFetchTemplates } from "./pages/hooks/useTemplate";
-import ComponentsSkeleton from "../Components/components/ComponentsSkeleton";
 import Error from "../Error/Error";
 import { useState } from "react";
+import ComponentsSkeleton from "../Components/components/ComponentsSkeleton";
+import {
+  CreateTemplate,
+  GridView,
+  Heading,
+  PageContainer,
+  PageItemsWrapper,
+  TemplateCard,
+} from "@/components";
 
 const Templates = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const { data, isError, error, isPending } = useFetchTemplates()
+  const { data, isError, error, isPending } = useFetchTemplates();
 
-  if (isPending) return <ComponentsSkeleton />
+  if (isPending) return <ComponentsSkeleton />;
 
   if (isError) {
-    return <Error error={error} message={error.message} path="/" />
+    return <Error error={error} message={error.message} path="/" />;
   }
 
   return (
@@ -33,7 +36,9 @@ const Templates = () => {
       {isOpen && (
         <CreateTemplate isOpen={isOpen} setClose={() => setIsOpen(false)} />
       )}
-      <GridView items={data.data} component={TemplateCard} />
+      <PageItemsWrapper>
+        <GridView items={data.data} component={TemplateCard} />
+      </PageItemsWrapper>
     </PageContainer>
   );
 };
