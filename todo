@@ -8,4 +8,6 @@ Bug
 Added data partial data for campaign section
 ![alt text](image.png)
 
-Create components with preinstalled data.
+Todo:
+Create component with preinstalled CSV data.
+Create component types.
