@@ -23,7 +23,7 @@ const Nav = () => {
             {isLogged && (
                 <ol className="flex items-center gap-2">
                     {
-                        ROUTES.map(item => <NavItem route={item} />)
+                        ROUTES.map(item => <NavItem key={item.path} route={item} />)
                     }
                     <Button onClick={handleLogout} variant={"outline"} size={"sm"}>Logout</Button>
                 </ol>

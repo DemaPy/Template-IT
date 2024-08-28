@@ -1,23 +1,22 @@
 import PageContainer from "../../components/PageContainer";
 import { PlusCircle } from "lucide-react";
-import Heading from "@/components/Heading";
-import GridView from "../../components/GridView";
 import ComponentCard from "./components/ComponentCard";
 import CreateComponent from "./components/CreateComponent";
 import ComponentsSkeleton from "./components/ComponentsSkeleton";
 import { useFetchComponents } from "./pages/hooks/useComponent";
 import Error from "../Error/Error";
 import { useState } from "react";
+import { GridView, Heading, PageItemsWrapper } from "@/components";
 
 const Components = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
-  const { data, isPending, isError, error } = useFetchComponents()
+  const { data, isPending, isError, error } = useFetchComponents();
 
-  if (isPending) return <ComponentsSkeleton />
+  if (isPending) return <ComponentsSkeleton />;
 
   if (isError) {
-    return <Error error={error} message={error.message} path="/" />
+    return <Error error={error} message={error.message} path="/" />;
   }
 
   return (
@@ -33,7 +32,9 @@ const Components = () => {
       {isOpen && (
         <CreateComponent isOpen={isOpen} setClose={() => setIsOpen(false)} />
       )}
-      <GridView items={data.data} component={ComponentCard} />
+      <PageItemsWrapper>
+        <GridView items={data.data} component={ComponentCard} />
+      </PageItemsWrapper>
     </PageContainer>
   );
 };
