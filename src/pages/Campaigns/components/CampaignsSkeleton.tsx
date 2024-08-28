@@ -1,7 +1,7 @@
 import { PageContainer } from "@/components";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const TemplatesSkeleton = () => {
+const CampaignsSkeleton = () => {
   return (
     <PageContainer>
       <div className="grid xl:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-4">
@@ -13,4 +13,4 @@ const TemplatesSkeleton = () => {
   );
 };
 
-export default TemplatesSkeleton;
+export default CampaignsSkeleton;

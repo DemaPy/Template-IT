@@ -2,7 +2,6 @@ import { PlusCircle } from "lucide-react";
 import { useFetchTemplates } from "./pages/hooks/useTemplate";
 import Error from "../Error/Error";
 import { useState } from "react";
-import ComponentsSkeleton from "../Components/components/ComponentsSkeleton";
 import {
   CreateTemplate,
   GridView,
@@ -11,13 +10,14 @@ import {
   PageItemsWrapper,
   TemplateCard,
 } from "@/components";
+import TemplatesSkeleton from "./components/TemplateSkeleton";
 
 const Templates = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const { data, isError, error, isPending } = useFetchTemplates();
 
-  if (isPending) return <ComponentsSkeleton />;
+  if (isPending) return <TemplatesSkeleton />;
 
   if (isError) {
     return <Error error={error} message={error.message} path="/" />;
