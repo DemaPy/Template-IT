@@ -5,14 +5,16 @@ import { ParsedTemplate } from './types'
 
 type MustacheEditorProps = {
     setContent: (template: ParsedTemplate) => void
+    value: string
 }
 
-const MustacheEditor = ({ setContent }: MustacheEditorProps) => {
+const MustacheEditor = ({ value, setContent }: MustacheEditorProps) => {
     const [error, setError] = useState("")
     const handleChange = (ev: ChangeEvent<HTMLTextAreaElement>) => {
         const template = ev.target.value
         try {
             const parsedTemplate = extractFields({ template })
+            
             // @ts-ignore
             setContent(parsedTemplate)
             setError("")
@@ -26,7 +28,7 @@ const MustacheEditor = ({ setContent }: MustacheEditorProps) => {
 
     return (
         <>
-            <Textarea rows={20} className='resize-none' onChange={handleChange}></Textarea>
+            <Textarea value={value} rows={20} className='resize-none' onChange={handleChange}></Textarea>
             {
                 error && (
                     <p className="text-sm mt-2 text-red-300 text-muted-foreground">
