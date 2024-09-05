@@ -12,7 +12,7 @@ import { FetchTemplateToUpdate } from "./FetchTemplateToUpdate"
 
 const UpdateTemplate = ({ isOpen, setClose, template_id }: TUpdateTemplate) => {
 
-    const { isPending, mutate } = useTemplateUpdate({ invalidate_key: template_id })
+    const { isPending, mutate } = useTemplateUpdate({ invalidate_key: [template_id] })
 
     const [title, setTitle] = useState("")
 

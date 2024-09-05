@@ -1,29 +1,35 @@
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { TemplateCardContentProps } from "./types";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+import TemplateBuilder from "../../pages/components/TemplateBuilder";
+
 
 const TemplateCardContent = ({
-  register,
-  errors,
+  sections
 }: TemplateCardContentProps) => {
+
   return (
     <div className="flex flex-col gap-1">
-      <Label htmlFor="content">Content</Label>
-      <Textarea
-        className="max-h-[620px] min-h-[280px]"
-        {...register("sections", {
-          required: "Enter sections",
-          minLength: {
-            value: 20,
-            message: "Sections too short.",
-          },
-        })}
-      />
-      {"sections" in errors && (
-        <p className="text-sm font-semibold text-red-300">
-          {errors.sections?.message || "Some error happend"}
-        </p>
-      )}
+      <Tabs defaultValue="preview">
+        <div className="flex justify-between items-center">
+          <Label htmlFor="content">Content</Label>
+          <TabsList>
+            <TabsTrigger value="preview">Preview</TabsTrigger>
+            <TabsTrigger value="placeholders">Placeholders</TabsTrigger>
+          </TabsList>
+        </div>
+        <TabsContent value="preview">
+          <TemplateBuilder sections={sections} />
+        </TabsContent>
+        <TabsContent value="placeholders">
+          <div dangerouslySetInnerHTML={{ __html: sections.map(item => item.content).join("") }} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

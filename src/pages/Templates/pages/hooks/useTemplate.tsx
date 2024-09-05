@@ -1,7 +1,7 @@
 import { TEMPLATES_KEY } from "@/constance/query-key";
 import { TemplateServiceDB } from "@/services/TemplateDB";
 import { CreateTemplate, DeleteTemplate, UpdateTemplate } from "@/services/types/Template";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { QueryKey, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -56,7 +56,7 @@ export function useCreateTemplate() {
 export function useTemplateUpdate({
     invalidate_key,
 }: {
-    invalidate_key: Template["id"];
+    invalidate_key: QueryKey;
 }) {
     const queryClient = useQueryClient();
 
@@ -75,7 +75,7 @@ export function useTemplateUpdate({
         },
         onSuccess: () => {
             toast.success("Template has been updated");
-            queryClient.invalidateQueries({ queryKey: [invalidate_key] });
+            queryClient.invalidateQueries({ queryKey: invalidate_key });
         },
         onError: (data) => {
             toast.error(data.message);

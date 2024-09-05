@@ -1,17 +1,14 @@
-import TemplateCardActions from "./TemplateCardActions";
-import TemplateCardTitle from "./TemplateCardTitle";
-import { TemplateCardHeaderProps } from "./types";
+import React, { PropsWithChildren } from "react";
 
 const TemplateCardHeader = ({
-  register,
-  errors,
-  title,
-  id,
-}: TemplateCardHeaderProps) => {
+
+  children
+}: PropsWithChildren) => {
   return (
     <div className="flex items-center justify-between gap-2">
-      <TemplateCardTitle register={register} errors={errors} />
-      <TemplateCardActions id={id} title={title} />
+      {
+        React.Children.map(children, (child: React.ReactNode) => <>{child}</>)
+      }
     </div>
   );
 };
