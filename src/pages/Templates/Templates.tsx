@@ -4,13 +4,13 @@ import Error from "../Error/Error";
 import { useState } from "react";
 import {
   CreateTemplate,
-  GridView,
   Heading,
   PageContainer,
   PageItemsWrapper,
-  TemplateCard,
 } from "@/components";
 import TemplatesSkeleton from "./components/TemplateSkeleton";
+import ListView from "@/components/List";
+import TemplateCard from "./components/TemplateCard/TemplateCard";
 
 const Templates = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -37,7 +37,7 @@ const Templates = () => {
         <CreateTemplate isOpen={isOpen} setClose={() => setIsOpen(false)} />
       )}
       <PageItemsWrapper>
-        <GridView items={data.data} component={TemplateCard} />
+        <ListView items={data.data} component={TemplateCard} />
       </PageItemsWrapper>
     </PageContainer>
   );

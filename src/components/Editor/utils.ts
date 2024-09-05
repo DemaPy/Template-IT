@@ -4,7 +4,6 @@ export function createPlaceholderNode({
   clickEventHandler,
 }: PlaceholderNodeProps) {
   const span = document.createElement("span");
-  span.contentEditable = "true";
   span.textContent = title;
   span.style.cssText =
     "cursor: pointer; padding: 0.2rem 0.4rem; border-radius: 0.2rem; background: #095cec63; font-size: 14px; box-shadow: 0px 0px 5px #00000060";

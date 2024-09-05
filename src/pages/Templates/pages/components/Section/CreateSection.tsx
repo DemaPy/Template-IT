@@ -40,7 +40,7 @@ const CreateSection = ({ template_id }: TCreateSection) => {
 
     return (
         <>
-            <Button variant={"ghost"} className='bg-slate-50 rounded-sm sticky top-0 flex justify-between w-full' onClick={() => setIsOpen(true)}>Create section <PlusCircle className="w-4 h-4" /></Button>
+            <Button variant={"ghost"} className='bg-white rounded-md border sticky top-0 flex justify-between w-full font-normal' onClick={() => setIsOpen(true)}>Create section <PlusCircle className="w-4 h-4" /></Button>
             {
                 isOpen && (
                     <Dialog open={isOpen} onOpenChange={setClose}>

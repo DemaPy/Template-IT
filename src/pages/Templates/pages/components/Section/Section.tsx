@@ -55,7 +55,7 @@ const Section = ({ item }: Props) => {
   }
 
   return (
-    <li className='w-full flex flex-col gap-4 border rounded-md p-4'>
+    <li className='w-full flex flex-col gap-4 border rounded-md p-4 bg-white'>
       {
         isEditOpen && (
           <UpdateSection isOpen={isEditOpen} setClose={() => setIsEditOpen(false)} section_id={item.id} template_id={item.templateId} />
