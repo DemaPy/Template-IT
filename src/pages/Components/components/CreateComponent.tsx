@@ -19,12 +19,18 @@ import { useCreateComponent } from "../pages/hooks/useComponent"
 import MustacheEditor from "@/components/MustacheEditor/MustacheEditor"
 import { ParsedTemplate } from "@/components/MustacheEditor/types"
 import Placehodlers from "./Placehodlers"
+import { extractFields } from "@/components/MustacheEditor/utils/extractFields"
+import { ShowValidationError } from "@/components"
 
 
 const CreateComponent = ({ isOpen, setClose }: TCreateComponent) => {
 
+    const [error, setErrorContent] = useState("")
+    const [errorTitle, setErrorTitle] = useState("")
+    const [tab, setTab] = useState<string>("content")
     const [title, setTitle] = useState<string>("")
-    const [template, setTemplate] = useState<ParsedTemplate>({ placeholders: [], template: "", tokens: [] })
+    const [template, setTemplate] = useState<string>("")
+    const [placeholders, setPlaceholders] = useState<Placeholder[]>([])
 
     const { isPending, mutate } = useCreateComponent()
 
@@ -42,21 +48,40 @@ const CreateComponent = ({ isOpen, setClose }: TCreateComponent) => {
                         <Input
                             id="name"
                             value={title}
-                            onChange={ev => setTitle(ev.target.value)}
+                            onChange={ev => {
+                                setTitle(ev.target.value)
+                                setErrorTitle("")
+                            }}
                         />
+                        <ShowValidationError error={errorTitle} />
                     </div>
                     <div className="col-span-4">
-                        <Tabs defaultValue="content">
+                        <Tabs value={tab} onValueChange={(tab) => {
+                            if (!tab) return
+                            try {
+                                const parsedTemplate = extractFields({ template })
+                                setErrorContent("")
+                                setPlaceholders((parsedTemplate as ParsedTemplate).placeholders)
+                                setTab(tab)
+                                // TODO: set position cursor at problematic position tag
+                            } catch (error) {
+                                if (error instanceof Error) {
+                                    setErrorContent(error.message)
+                                    setTab("content")
+                                }
+                            }
+                        }}>
                             <TabsList>
                                 <TabsTrigger value="content">Content</TabsTrigger>
                                 <TabsTrigger value="placeholders">Placeholders</TabsTrigger>
                             </TabsList>
                             <TabsContent value="content">
-                                <MustacheEditor value={template.template} setContent={(template) => setTemplate(template)} />
+                                <MustacheEditor value={template} setContent={(template) => setTemplate(template)} />
+                                <ShowValidationError error={error} />
                             </TabsContent>
                             <TabsContent value="placeholders">
                                 <div className="flex flex-col gap-2">
-                                    <Placehodlers placehodlers={template.placeholders} />
+                                    <Placehodlers placeholders={placeholders} setPlaceholders={data => setPlaceholders(data)} />
                                 </div>
                             </TabsContent>
                         </Tabs>
@@ -64,16 +89,18 @@ const CreateComponent = ({ isOpen, setClose }: TCreateComponent) => {
                 </div>
                 <DialogFooter>
                     <Button disabled={isPending} onClick={() => {
-                        // mutate({
-                        //     placeholders: template.placeholders,
-                        //     tokens: template.tokens,
-                        //     content: template.template,
-                        //     title: title,
-                        // })
-                        console.log({
-                            placeholders: template.placeholders,
-                            tokens: template.tokens,
-                            content: template.template,
+
+                        if (!placeholders.length) {
+                            setErrorContent("Fulfill all placeholders.")
+                            return
+                        }
+
+                        if (title.trim().length < 3) {
+                            setErrorTitle("Title too short.")
+                        }
+                        mutate({
+                            placeholders,
+                            content: template,
                             title: title,
                         })
                         setClose()

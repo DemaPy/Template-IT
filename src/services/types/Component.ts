@@ -9,7 +9,5 @@ export type UpdateComponent = {
 export type CreateComponent = {
   title: Component["title"];
   content: Component["content"];
-  tokens: Mustache.TemplateSpans;
-  objectTokens: Record<string, string>;
   placeholders: Placeholder[];
 };

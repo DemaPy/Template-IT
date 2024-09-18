@@ -15,7 +15,6 @@ export const extractFields = ({
         id: uuidv4(),
         title: item[1],
         fallback: "",
-        type: "text" as PlaceholderTypes,
       };
     });
     return {
