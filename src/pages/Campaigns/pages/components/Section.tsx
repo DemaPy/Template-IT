@@ -28,7 +28,7 @@ const Section = ({ campaign, item }: Props) => {
   }
 
   return (
-    <li className='w-full flex flex-col gap-4 border rounded-md p-2'>
+    <li className='w-full flex flex-col gap-4 border rounded-md p-2 bg-white'>
       <Heading
         title={item.title}
         size='xs'

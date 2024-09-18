@@ -44,7 +44,7 @@ const CreateCampaign = ({ isOpen, setClose }: TCreateCampaign) => {
             <Label htmlFor="template_id" className="text-left">
               Template
             </Label>
-            <TemplateSelect isLoading={isPending} onSelect={(id) => setTemplateId(id)} />
+            <TemplateSelect template_id={template_id} isLoading={isPending} onSelect={(id) => setTemplateId(id)} />
           </div>
         </div>
         <DialogFooter>

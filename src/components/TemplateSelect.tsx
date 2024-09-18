@@ -1,24 +1,22 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { useState } from 'react'
 import { TemplatesToSelect } from './TemplatesToSelect'
 
 
 type TTemplateSelect = {
     isLoading: boolean
+    template_id: string
     onSelect: (value: Component['id']) => void
 }
 
-const TemplateSelect = ({ isLoading, onSelect }: TTemplateSelect) => {
-    const [templateid, setTemplate] = useState<Template["id"]>("")
+const TemplateSelect = ({ template_id, isLoading, onSelect }: TTemplateSelect) => {
 
     return (
         <Select
-            value={templateid}
+            value={template_id}
             disabled={isLoading}
             onValueChange={id => {
                 if (id === "default") return
                 onSelect(id)
-                setTemplate("default")
             }}
         >
             <SelectTrigger className="col-span-4">
