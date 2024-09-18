@@ -34,6 +34,8 @@ const CreateComponent = ({ isOpen, setClose }: TCreateComponent) => {
 
     const { isPending, mutate } = useCreateComponent()
 
+    console.log(placeholders);
+    
     return (
         <Dialog open={isOpen} onOpenChange={setClose}>
             <DialogContent className="w-[1000px]">
@@ -80,7 +82,7 @@ const CreateComponent = ({ isOpen, setClose }: TCreateComponent) => {
                                 <ShowValidationError error={error} />
                             </TabsContent>
                             <TabsContent value="placeholders">
-                                <div className="flex flex-col gap-2">
+                                <div className="flex flex-col gap-2 min-h-[420px] overflow-y-auto">
                                     <Placehodlers placeholders={placeholders} setPlaceholders={data => setPlaceholders(data)} />
                                 </div>
                             </TabsContent>

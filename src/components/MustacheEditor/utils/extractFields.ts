@@ -14,7 +14,7 @@ export const extractFields = ({
       return {
         id: uuidv4(),
         title: item[1],
-        fallback: "",
+        fallback: ""
       };
     });
     return {

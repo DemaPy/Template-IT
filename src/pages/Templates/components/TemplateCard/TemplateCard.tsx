@@ -30,9 +30,6 @@ const TemplateCard = ({ item }: TemplateCardProps) => {
 
   const isChangedTitle = item.title !== title
 
-  console.log(item.title, title);
-  
-
   const onSubmit = ({ title }: { title: Template['title'] }) => {
     mutate({ title: title, id: item.id })
   };

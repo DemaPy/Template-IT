@@ -51,7 +51,7 @@ export function useUpdateSection({ invalidate_key }: { invalidate_key: string })
             return SectionServiceDB.update(section)
         },
         onSuccess: () => {
-            toast.success("Section has been created");
+            toast.success("Section has been updated");
             queryClient.invalidateQueries({ queryKey: [invalidate_key] })
         },
         onError: (data) => {

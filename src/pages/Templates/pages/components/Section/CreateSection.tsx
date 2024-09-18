@@ -95,7 +95,7 @@ const CreateSection = ({ template_id }: TCreateSection) => {
                                                 <ShowValidationError error={errorContent} />
                                             </TabsContent>
                                             <TabsContent value="placeholders">
-                                                <div className="flex flex-col gap-2">
+                                                <div className="flex flex-col gap-2 min-h-[420px] overflow-y-auto">
                                                     <Placehodlers placeholders={placeholders} setPlaceholders={data => setPlaceholders(data)} />
                                                 </div>
                                             </TabsContent>

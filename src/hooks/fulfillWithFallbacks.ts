@@ -2,7 +2,7 @@ import { decode } from "html-entities";
 import mustache from "mustache";
 
 type Props = {
-  sections: Section[];
+  sections: Section[] | Component[]
 };
 
 const fulfillWithFallbacks = ({ sections }: Props) => {

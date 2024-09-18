@@ -11,7 +11,7 @@ const Component = ({ item }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <li className='w-full flex flex-col gap-4 border rounded-md p-4'>
+    <li className='w-full flex flex-col gap-4 border rounded-md p-2 bg-white'>
       <Heading title={item.title} size='xs' action={{
         icon: isOpen ? <ChevronUpIcon className='w-4 h-4' /> : <ChevronDown className='w-4 h-4' />,
         onClick: () => setIsOpen(!isOpen)
