@@ -4,7 +4,7 @@ import ComponentCard from "./components/ComponentCard";
 import CreateComponent from "./components/CreateComponent";
 import ComponentsSkeleton from "./components/ComponentsSkeleton";
 import { useFetchComponents } from "./pages/hooks/useComponent";
-import Error from "../Error/Error";
+import { ErrorPage } from "../Error/Error";
 import { useState } from "react";
 import { GridView, Heading, PageItemsWrapper } from "@/components";
 
@@ -16,7 +16,7 @@ const Components = () => {
   if (isPending) return <ComponentsSkeleton />;
 
   if (isError) {
-    return <Error error={error} message={error.message} path="/" />;
+    return <ErrorPage error={error} message={error.message} path="/" />;
   }
 
   return (

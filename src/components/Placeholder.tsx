@@ -3,7 +3,7 @@ import { TrashIcon } from "lucide-react"
 import { useDeleteSectionPlaceholder } from "../pages/Templates/pages/hooks/useSection"
 import UpdatePlaceholder from "@/components/UpdatePlaceholder/UpdatePlaceholder"
 import { useDeleteComponentPlaceholder } from "@/pages/Components/pages/hooks/useComponent"
-import Error from "@/pages/Error/Error"
+import {ErrorPage} from "@/pages/Error/Error"
 
 type Props = {
     item: Placeholder
@@ -33,11 +33,11 @@ function DeletePlaceholder({ placeholder_id, service, invalidate_key }: TDeleteP
     const isPending = service === "component" ? isComponentPlaceholderPending : isSectionPlaceholderPending
 
     if (isComponentPlaceholderError) {
-        return <Error error={deleteComponentPlaceholderError} message={deleteComponentPlaceholderError.message} path={`/components/`} />
+        return <ErrorPage error={deleteComponentPlaceholderError} message={deleteComponentPlaceholderError.message} path={`/components/`} />
     }
 
     if (isSectionPlaceholderError) {
-        return <Error error={deleteSectionPlaceholderError} message={deleteSectionPlaceholderError.message} path={`/templates/`} />
+        return <ErrorPage error={deleteSectionPlaceholderError} message={deleteSectionPlaceholderError.message} path={`/templates/`} />
     }
 
     return (

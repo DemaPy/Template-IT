@@ -1,4 +1,4 @@
-import Error from "@/pages/Error/Error"
+import {ErrorPage} from "@/pages/Error/Error"
 import { SelectItem } from "./ui/select"
 import { useFetchTemplates } from "@/pages/Templates/pages/hooks/useTemplate";
 import ComponentsSkeleton from "@/pages/Components/components/ComponentsSkeleton";
@@ -9,7 +9,7 @@ export function TemplatesToSelect() {
     if (isPending) return <ComponentsSkeleton />
 
     if (isError) {
-        return <Error error={error} message={error.message} path="/" />
+        return <ErrorPage error={error} message={error.message} path="/" />
     }
 
     return (

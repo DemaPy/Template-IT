@@ -4,7 +4,7 @@ import Placeholders from '../../../../../components/Placeholders'
 import { useState } from 'react'
 import { useDeleteSection, useDuplicate } from '../../hooks/useSection'
 import UpdateSection from './Update/UpdateSection'
-import Error from '@/pages/Error/Error'
+import { ErrorPage } from '@/pages/Error/Error'
 
 type Props = {
   item: Section
@@ -47,11 +47,11 @@ const Section = ({ item }: Props) => {
     }]
 
   if (isDeletingError) {
-    return <Error error={deletingError} message={deletingError.message} path={`/templates/${item.templateId}`} />
+    return <ErrorPage error={deletingError} message={deletingError.message} path={`/templates/${item.templateId}`} />
   }
 
   if (isDuplicatingError) {
-    return <Error error={duplicatingError} message={duplicatingError.message} path={`/templates/${item.templateId}`} />
+    return <ErrorPage error={duplicatingError} message={duplicatingError.message} path={`/templates/${item.templateId}`} />
   }
 
   return (

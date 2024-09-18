@@ -6,7 +6,7 @@ import ComponentHandler from "./components/ComponentHandler";
 import UpdateComponent from "../components/Update/UpdateComponent";
 import { useDeleteComponent, useFetchComponent } from "./hooks/useComponent";
 import ComponentsSkeleton from "../components/ComponentsSkeleton";
-import Error from "@/pages/Error/Error";
+import {ErrorPage} from "@/pages/Error/Error";
 import { useState } from "react";
 
 const Component = () => {
@@ -20,7 +20,7 @@ const Component = () => {
   if (isFetching) return <ComponentsSkeleton />
 
   if (isError) {
-    return <Error error={error} message={error.message} path="/components" />
+    return <ErrorPage error={error} message={error.message} path="/components" />
   }
 
   return (

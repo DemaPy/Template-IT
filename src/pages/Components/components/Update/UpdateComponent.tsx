@@ -7,7 +7,7 @@ import {
 import { useState } from 'react'
 import { useComponentUpdate } from "../../pages/hooks/useComponent"
 import ComponentsSkeleton from "../ComponentsSkeleton"
-import Error from "@/pages/Error/Error"
+import {ErrorPage} from "@/pages/Error/Error"
 import { CreatePlaceholders } from "@/services/types/Placeholder"
 import { FetchComponentToUpdate } from "./FetchComponentToUpdate"
 
@@ -22,7 +22,7 @@ const UpdateComponent = ({ component_id, isOpen, setClose }: TUpdateComponent) =
     if (isPending) return <ComponentsSkeleton />
 
     if (isError) {
-        return <Error error={error} message={error.message} path="/components" />
+        return <ErrorPage error={error} message={error.message} path="/components" />
     }
 
     const handleEditorSubmit = (data: EditorOnSubmitProps) => {

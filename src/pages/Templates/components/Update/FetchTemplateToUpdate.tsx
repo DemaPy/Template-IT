@@ -1,4 +1,4 @@
-import Error from "@/pages/Error/Error"
+import {ErrorPage} from "@/pages/Error/Error"
 import { useFetchTemplate } from "../../pages/hooks/useTemplate"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -10,7 +10,7 @@ export function FetchTemplateToUpdate({ template_id, setTitle }: TFetchTemplateT
     if (isFetching) return <ComponentsSkeleton />
 
     if (isError) {
-        return <Error error={error} message={error.message} path="/templates" />
+        return <ErrorPage error={error} message={error.message} path="/templates" />
     }
 
     return (

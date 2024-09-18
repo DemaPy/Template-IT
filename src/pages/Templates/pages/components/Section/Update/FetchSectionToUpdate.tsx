@@ -1,4 +1,4 @@
-import Error from "@/pages/Error/Error"
+import {ErrorPage} from "@/pages/Error/Error"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useFetchSection } from "../../../hooks/useSection"
@@ -13,7 +13,7 @@ export function FetchSectionToUpdate({ section_id, setTitle, handleEditorSubmit,
     if (isPending) return <ComponentsSkeleton />
 
     if (isError) {
-        return <Error error={error} message={error.message} path="/templates" />
+        return <ErrorPage error={error} message={error.message} path="/templates" />
     }
 
     return (

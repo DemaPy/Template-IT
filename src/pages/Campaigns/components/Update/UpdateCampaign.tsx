@@ -8,7 +8,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { useCampaignUpdate } from "../../pages/hooks/useCampaign"
 import { useState } from "react"
-import Error from "@/pages/Error/Error"
+import {ErrorPage} from "@/pages/Error/Error"
 import { FetchCampaignToUpdate } from "./FetchCampaignToUpdate"
 
 const UpdateCampaign = ({ isOpen, setClose, campaign_id }: TUpdateCampaign) => {
@@ -18,7 +18,7 @@ const UpdateCampaign = ({ isOpen, setClose, campaign_id }: TUpdateCampaign) => {
     const [title, setTitle] = useState("")
 
     if (isError) {
-        return <Error error={error} message={error.message} path="/campaigns" />
+        return <ErrorPage error={error} message={error.message} path="/campaigns" />
     }
 
     return (

@@ -24,7 +24,7 @@ class ErrorItem {
     }
 }
 
-const Error = ({ error, message, path }: Props) => {
+export const ErrorPage = ({ error, message, path }: Props) => {
     const navigate = useNavigate()
     useEffect(() => {
         try {
@@ -51,5 +51,3 @@ const Error = ({ error, message, path }: Props) => {
         </PageContainer>
     )
 }
-
-export default Error

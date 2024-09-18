@@ -97,6 +97,7 @@ const CreateComponent = ({ isOpen, setClose }: TCreateComponent) => {
 
                         if (title.trim().length < 3) {
                             setErrorTitle("Title too short.")
+                            return
                         }
                         mutate({
                             placeholders,

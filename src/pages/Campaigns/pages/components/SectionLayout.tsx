@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import SectionSlugs from "./SectionSlugs";
 import { useDrag, useDrop } from "react-dnd";
 import { useLayoutUpdate } from "../hooks/useLayout";
-import Error from "@/pages/Error/Error";
+import {ErrorPage} from "@/pages/Error/Error";
 
 type Props = {
   index: number;
@@ -104,7 +104,7 @@ const SectionLayout = ({
   drag(drop(ref));
 
   if (isError) {
-    return <Error error={error} message={error.message} path={`/campaigns/${campaignId}`} />
+    return <ErrorPage error={error} message={error.message} path={`/campaigns/${campaignId}`} />
   }
 
   return (

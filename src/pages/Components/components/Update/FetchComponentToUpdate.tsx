@@ -1,4 +1,4 @@
-import Error from "@/pages/Error/Error"
+import {ErrorPage} from "@/pages/Error/Error"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useFetchComponent } from "../../pages/hooks/useComponent"
@@ -13,7 +13,7 @@ export function FetchComponentToUpdate({ component_id, setTitle, title, handleEd
     if (isPending) return <ComponentsSkeleton />
 
     if (isError) {
-        return <Error error={error} message={error.message} path="/components" />
+        return <ErrorPage error={error} message={error.message} path="/components" />
     }
 
     return (

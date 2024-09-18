@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dialog"
 import { useState } from 'react'
 import { useUpdateSection } from "../../../hooks/useSection"
-import Error from "@/pages/Error/Error"
+import {ErrorPage} from "@/pages/Error/Error"
 import { CreatePlaceholders } from "@/services/types/Placeholder"
 import { FetchSectionToUpdate } from "./FetchSectionToUpdate"
 import ComponentsSkeleton from "@/pages/Components/components/ComponentsSkeleton"
@@ -22,7 +22,7 @@ const UpdateSection = ({ section_id, template_id, isOpen, setClose }: TUpdateSec
     if (isPending) return <ComponentsSkeleton />
 
     if (isError) {
-        return <Error error={error} message={error.message} path={`/templates/${template_id}`} />
+        return <ErrorPage error={error} message={error.message} path={`/templates/${template_id}`} />
     }
 
     const handleEditorSubmit = (data: EditorOnSubmitProps) => {

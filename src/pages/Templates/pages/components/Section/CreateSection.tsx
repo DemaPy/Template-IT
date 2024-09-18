@@ -6,20 +6,34 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@/components/ui/tabs"
 import { useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useCreateSection } from '../../hooks/useSection'
-import Error from '@/pages/Error/Error'
-import Editor from '@/components/Editor/Editor'
+import { ErrorPage } from '@/pages/Error/Error'
 import { CreatePlaceholders } from '@/services/types/Placeholder'
 import ComponentsSkeleton from '@/pages/Components/components/ComponentsSkeleton'
+import MustacheEditor from '@/components/MustacheEditor/MustacheEditor'
+import { ShowValidationError } from '@/components'
+import Placehodlers from '@/pages/Components/components/Placehodlers'
+import { extractFields } from '@/components/MustacheEditor/utils/extractFields'
+import { ParsedTemplate } from '@/components/MustacheEditor/types'
 
 const CreateSection = ({ template_id }: TCreateSection) => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
     const { isPending, isError, error, mutate } = useCreateSection({ invalidate_key: template_id })
+
+    const [errorContent, setErrorContent] = useState("")
+    const [errorTitle, setErrorTitle] = useState("")
+    const [tab, setTab] = useState<string>("content")
 
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
@@ -28,12 +42,7 @@ const CreateSection = ({ template_id }: TCreateSection) => {
     if (isPending) return <ComponentsSkeleton />
 
     if (isError) {
-        return <Error error={error} message={error.message} path={`/templates/${template_id}`} />
-    }
-
-    const handleEditorSubmit = (data: EditorOnSubmitProps) => {
-        setContent(data.content)
-        setPlaceholders(data.placeholdersToCreate)
+        return <ErrorPage error={error} message={error.message} path={`/templates/${template_id}`} />
     }
 
     const setClose = () => setIsOpen(false)
@@ -60,23 +69,53 @@ const CreateSection = ({ template_id }: TCreateSection) => {
                                         onChange={ev => setTitle(ev.target.value)}
                                         className="col-span-4"
                                     />
-                                    <div className="col-span-4 resize-y max-h-[500px] min-h-[300px]">
-                                        <Label htmlFor="content" className="text-left">
-                                            Content
-                                        </Label>
-                                        <Editor
-                                            content={content}
-                                            placeholders={[]}
-                                            isLoading={isPending}
-                                            isContentEditable={true}
-                                            onSubmit={handleEditorSubmit}
-                                        />
+                                    <ShowValidationError error={errorTitle} />
+                                    <div className="col-span-4">
+                                        <Tabs value={tab} onValueChange={(tab) => {
+                                            if (!tab) return
+                                            try {
+                                                const parsedTemplate = extractFields({ template: content })
+                                                setErrorContent("")
+                                                setPlaceholders((parsedTemplate as ParsedTemplate).placeholders)
+                                                setTab(tab)
+                                                // TODO: set position cursor at problematic position tag
+                                            } catch (error) {
+                                                if (error instanceof Error) {
+                                                    setErrorContent(error.message)
+                                                    setTab("content")
+                                                }
+                                            }
+                                        }}>
+                                            <TabsList>
+                                                <TabsTrigger value="content">Content</TabsTrigger>
+                                                <TabsTrigger value="placeholders">Placeholders</TabsTrigger>
+                                            </TabsList>
+                                            <TabsContent value="content">
+                                                <MustacheEditor value={content} setContent={(template) => setContent(template)} />
+                                                <ShowValidationError error={errorContent} />
+                                            </TabsContent>
+                                            <TabsContent value="placeholders">
+                                                <div className="flex flex-col gap-2">
+                                                    <Placehodlers placeholders={placeholders} setPlaceholders={data => setPlaceholders(data)} />
+                                                </div>
+                                            </TabsContent>
+                                        </Tabs>
                                     </div>
                                 </div>
                             </div>
                             <DialogFooter>
                                 <Button disabled={isPending} onClick={() => {
-                                    mutate(({ templateId: template_id, content, title: title, placeholders }))
+
+                                    if (!placeholders.length) {
+                                        setErrorContent("Fulfill all placeholders.")
+                                        return
+                                    }
+
+                                    if (title.trim().length < 3) {
+                                        setErrorTitle("Title too short.")
+                                        return
+                                    }
+                                    mutate({ templateId: template_id, content, title: title, placeholders })
                                     setClose()
                                 }}>Save changes</Button>
                             </DialogFooter>

@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import Error from "@/pages/Error/Error"
+import {ErrorPage} from "@/pages/Error/Error"
 import { useUpdateComponentPlaceholder } from "../../pages/Components/pages/hooks/useComponent"
 import { useUpdateSectionPlaceholder } from "@/pages/Templates/pages/hooks/useSection"
 import { Edit2 } from "lucide-react"
@@ -29,11 +29,11 @@ const UpdatePlaceholder = ({ service, placeholder_id, fallback, title, invalidat
     const isPending = service === "component" ? isComponentPlaceholderPending : isSectionPlaceholderPending
 
     if (isComponentPlaceholderError) {
-        return <Error error={updateComponentPlaceholderError} message={updateComponentPlaceholderError.message} path={`/components/`} />
+        return <ErrorPage error={updateComponentPlaceholderError} message={updateComponentPlaceholderError.message} path={`/components/`} />
     }
 
     if (isSectionPlaceholderError) {
-        return <Error error={updateSectionPlaceholderError} message={updateSectionPlaceholderError.message} path={`/templates/`} />
+        return <ErrorPage error={updateSectionPlaceholderError} message={updateSectionPlaceholderError.message} path={`/templates/`} />
     }
 
     return (

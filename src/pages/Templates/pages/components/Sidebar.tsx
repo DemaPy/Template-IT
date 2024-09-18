@@ -3,7 +3,7 @@ import Section from './Section/Section'
 import CreateSection from './Section/CreateSection'
 import ComponentSelect from '../../../../components/ComponentSelect'
 import { useCreateFromComponent } from '../hooks/useSection'
-import Error from '@/pages/Error/Error'
+import { ErrorPage } from '@/pages/Error/Error'
 import ComponentsSkeleton from '@/pages/Components/components/ComponentsSkeleton'
 
 type Props = {
@@ -17,7 +17,7 @@ const Sidebar = ({ sections, template_id }: Props) => {
   if (isPending) return <ComponentsSkeleton />
 
   if (isError) {
-    return <Error error={error} message={error.message} path="/" />
+    return <ErrorPage error={error} message={error.message} path="/" />
   }
   const onSelect = (value: Component['id']) => {
     mutate({
