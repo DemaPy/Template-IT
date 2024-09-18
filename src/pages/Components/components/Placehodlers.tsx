@@ -4,9 +4,20 @@ import { Label } from "@/components/ui/label";
 type Props = {
   placeholders: Placeholder[];
   setPlaceholders: (placeholders: Placeholder[]) => void;
+  setErrorFallback: (err: string) => void;
 };
-const Placehodlers = ({ placeholders, setPlaceholders }: Props) => {
+const Placehodlers = ({
+  setErrorFallback,
+  placeholders,
+  setPlaceholders,
+}: Props) => {
   const updatePlacehodler = ({ id, fallback }: Placeholder) => {
+    if (fallback.length < 3) {
+      setErrorFallback("Fallback too short.");
+    } else {
+      setErrorFallback("");
+    }
+
     setPlaceholders(
       placeholders.map((item: Placeholder) => {
         if (item.id === id) {
@@ -22,11 +33,11 @@ const Placehodlers = ({ placeholders, setPlaceholders }: Props) => {
 
   return (
     <>
-      {placeholders.map((item) => (
+      {placeholders.map((placeholder) => (
         <Placeholder
           onUpdate={updatePlacehodler}
-          placeholder={item}
-          key={item.id}
+          placeholder={placeholder}
+          key={placeholder.id}
         />
       ))}
     </>
@@ -58,7 +69,9 @@ function Placeholder({
       <div className="grow">
         <Label>Fallback</Label>
         <Input
-          onChange={(ev) => onUpdate({ fallback: ev.target.value, title, id })}
+          onChange={(ev) => {
+            onUpdate({ fallback: ev.target.value, title, id });
+          }}
           value={placeholder.fallback}
           placeholder="add fallback value"
         />
