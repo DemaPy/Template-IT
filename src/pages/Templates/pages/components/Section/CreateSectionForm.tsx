@@ -51,6 +51,7 @@ export const CreateSectionForm = ({
   const [placeholders, setPlaceholders] = useState<
     CreatePlaceholders["placeholders"]
   >([]);
+
   return (
     <>
       <Dialog open={isOpen} onOpenChange={setClose}>
@@ -106,7 +107,7 @@ export const CreateSectionForm = ({
                     <ShowValidationError error={errorContent} />
                   </TabsContent>
                   <TabsContent value="placeholders">
-                    <div className="flex flex-col gap-2 min-h-[420px] overflow-y-auto">
+                    <div className="flex flex-col gap-2 max-h-[420px] h-full overflow-y-auto">
                       <Placehodlers
                         setErrorFallback={setErrorFallback}
                         placeholders={placeholders}
@@ -123,10 +124,12 @@ export const CreateSectionForm = ({
             <Button
               disabled={isPending}
               onClick={() => {
-                if (fallbackError.length > 0) {
-                  return;
+                for (const placeholder of placeholders) {
+                  if (placeholder.fallback.length < 3) {
+                    setErrorFallback("Fallback value too short.");
+                    return;
+                  }
                 }
-                console.log(placeholders);
 
                 if (!placeholders.length) {
                   setErrorContent("Fulfill all placeholders.");
@@ -137,13 +140,13 @@ export const CreateSectionForm = ({
                   setErrorTitle("Title too short.");
                   return;
                 }
-                //   mutate({
-                //     templateId: template_id,
-                //     content,
-                //     title: title,
-                //     placeholders,
-                //   });
-                //   setClose();
+                  mutate({
+                    templateId: template_id,
+                    content,
+                    title: title,
+                    placeholders,
+                  });
+                  setClose();
               }}
             >
               Save changes

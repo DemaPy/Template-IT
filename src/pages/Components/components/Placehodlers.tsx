@@ -17,7 +17,8 @@ const Placehodlers = ({
     } else {
       setErrorFallback("");
     }
-
+    console.log(1);
+    
     setPlaceholders(
       placeholders.map((item: Placeholder) => {
         if (item.id === id) {

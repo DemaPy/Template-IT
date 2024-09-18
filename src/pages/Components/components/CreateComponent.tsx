@@ -82,8 +82,8 @@ const CreateComponent = ({ isOpen, setClose }: TCreateComponent) => {
                                 <ShowValidationError error={error} />
                             </TabsContent>
                             <TabsContent value="placeholders">
-                                <div className="flex flex-col gap-2 min-h-[420px] overflow-y-auto">
-                                    <Placehodlers placeholders={placeholders} setPlaceholders={data => setPlaceholders(data)} />
+                                <div className="flex flex-col gap-2 max-h-[420px] h-full overflow-y-auto">
+                                    <Placehodlers setErrorFallback={() => {}} placeholders={placeholders} setPlaceholders={data => setPlaceholders(data)} />
                                 </div>
                             </TabsContent>
                         </Tabs>
