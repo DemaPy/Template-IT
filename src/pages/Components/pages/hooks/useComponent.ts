@@ -96,25 +96,6 @@ export function useFetchComponents() {
   });
 }
 
-export function useDeleteComponentPlaceholder({
-  invalidate_key,
-}: {
-  invalidate_key: string;
-}) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (id: Placeholder["id"]) =>
-      ComponentServiceDB.deletePlaceholder(id),
-    onSuccess: () => {
-      toast.success("Placeholder has been deleted");
-      queryClient.invalidateQueries({ queryKey: [invalidate_key] });
-    },
-    onError: (data) => {
-      toast.error(data.message);
-    },
-  });
-}
-
 export function useUpdateComponentPlaceholder({
   invalidate_key,
 }: {
