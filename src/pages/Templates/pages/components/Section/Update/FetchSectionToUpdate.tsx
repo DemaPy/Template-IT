@@ -7,6 +7,7 @@ import SectionUpdateSkeleton from "./SectionSkeleton";
 export function FetchSectionToUpdate({
   section_id,
   template_id,
+  setClose
 }: TFetchSectionToUpdate) {
   const { isPending, data, isError, error } = useFetchSection(section_id);
 
@@ -18,5 +19,5 @@ export function FetchSectionToUpdate({
     );
   }
 
-  return <UpdateForm section={data.data} template_id={template_id} />;
+  return <UpdateForm setClose={setClose} section={data.data} template_id={template_id} />;
 }

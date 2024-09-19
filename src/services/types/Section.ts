@@ -7,7 +7,7 @@ export type UpdateSection = {
   title: Section["title"];
   content: Section["content"];
   templateId: Template["id"];
-  placeholders: Placeholder[]
+  placeholders: PlaceholderToCreate[]
 };
 
 export type CreateSectionFromComponent = {
@@ -19,7 +19,7 @@ export type CreateSection = {
   title: Section["title"];
   content: Section["content"];
   templateId: Template["id"];
-  placeholders: Placeholder[];
+  placeholders: PlaceholderToCreate[];
 };
 
 export type DeleteSection = {

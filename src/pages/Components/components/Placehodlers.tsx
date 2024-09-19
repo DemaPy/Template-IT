@@ -2,8 +2,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 type Props = {
-  placeholders: Placeholder[];
-  setPlaceholders: (placeholders: Placeholder[]) => void;
+  placeholders: PlaceholderToCreate[];
+  setPlaceholders: (placeholders: PlaceholderToCreate[]) => void;
   setErrorFallback: (err: string) => void;
 };
 const Placehodlers = ({
@@ -11,17 +11,16 @@ const Placehodlers = ({
   placeholders,
   setPlaceholders,
 }: Props) => {
-  const updatePlacehodler = ({ id, fallback }: Placeholder) => {
+  const updatePlacehodler = ({ title, fallback }: PlaceholderToCreate) => {
     if (fallback.length < 3) {
       setErrorFallback("Fallback too short.");
     } else {
       setErrorFallback("");
     }
-    console.log(1);
-    
+
     setPlaceholders(
-      placeholders.map((item: Placeholder) => {
-        if (item.id === id) {
+      placeholders.map((item: PlaceholderToCreate) => {
+        if (item.title.toLowerCase() === title.toLowerCase()) {
           return {
             ...item,
             fallback: fallback,
@@ -38,7 +37,7 @@ const Placehodlers = ({
         <Placeholder
           onUpdate={updatePlacehodler}
           placeholder={placeholder}
-          key={placeholder.id}
+          key={placeholder.title}
         />
       ))}
     </>
@@ -49,10 +48,10 @@ function Placeholder({
   placeholder,
   onUpdate,
 }: {
-  onUpdate: (value: Placeholder) => void;
-  placeholder: Placeholder;
+  onUpdate: (value: PlaceholderToCreate) => void;
+  placeholder: PlaceholderToCreate;
 }) {
-  const { title, id, fallback } = placeholder;
+  const { title, fallback } = placeholder;
 
   return (
     <div className="flex items-stretch justify-between gap-2">
@@ -61,7 +60,7 @@ function Placeholder({
         <Input
           disabled
           onChange={(ev) =>
-            onUpdate({ fallback: fallback, title: ev.target.value, id })
+            onUpdate({ fallback: fallback, title: ev.target.value })
           }
           value={title}
           placeholder="title"
@@ -71,7 +70,7 @@ function Placeholder({
         <Label>Fallback</Label>
         <Input
           onChange={(ev) => {
-            onUpdate({ fallback: ev.target.value, title, id });
+            onUpdate({ fallback: ev.target.value, title });
           }}
           value={placeholder.fallback}
           placeholder="add fallback value"

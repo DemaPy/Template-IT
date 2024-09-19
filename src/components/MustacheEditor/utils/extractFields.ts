@@ -1,6 +1,5 @@
 import Mustache from "mustache";
 import { ParsedTemplate } from "../types";
-import { v4 as uuidv4 } from "uuid";
 
 export const extractFields = ({
   template,
@@ -12,9 +11,8 @@ export const extractFields = ({
     const nameTokens = allTokens.filter((item) => item[0] === "name");
     const placeholders = nameTokens.map((item) => {
       return {
-        id: uuidv4(),
         title: item[1],
-        fallback: ""
+        fallback: "",
       };
     });
     return {

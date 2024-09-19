@@ -21,6 +21,7 @@ const UpdateSection = ({
         </DialogHeader>
         <div className="grid gap-4">
           <FetchSectionToUpdate
+            setClose={setClose}
             section_id={section_id}
             template_id={template_id}
           />

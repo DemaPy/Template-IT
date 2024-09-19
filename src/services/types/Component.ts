@@ -2,8 +2,7 @@ export type UpdateComponent = {
   id: Component["id"];
   title: Component["title"];
   content: Component["content"];
-  placeholdersToDelete: Placeholder[];
-  placeholdersToCreate: Placeholder[];
+  placeholders: PlaceholderToCreate[];
 };
 
 export type CreateComponent = {

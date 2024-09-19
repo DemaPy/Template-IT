@@ -3,40 +3,41 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { UpdateFormProps } from "../../../types/UpdateSection";
 import { extractFields } from "@/components/MustacheEditor/utils/extractFields";
 import MustacheEditor from "@/components/MustacheEditor/MustacheEditor";
 import Placehodlers from "@/pages/Components/components/Placehodlers";
 import { Button } from "@/components/ui/button";
-import { useUpdateSection } from "../../../hooks/useSection";
 import { ErrorPage } from "@/pages/Error/Error";
-import SectionSkeleton from "./SectionSkeleton";
 import { DialogFooter } from "@/components/ui/dialog";
+import { useComponentUpdate } from "../../pages/hooks/useComponent";
+import ComponentUpdateSkeleton from "./ComponentSkeleton";
 
-const UpdateForm = ({ section, template_id, setClose }: UpdateFormProps) => {
-  const [title, setTitle] = useState(section.title);
-  const [content, setContent] = useState(section.content);
+const UpdateForm = ({ component, setClose }: UpdateFormProps) => {
+  const [title, setTitle] = useState(component.title);
+  const [content, setContent] = useState(component.content);
   const [tab, setTab] = useState<string>("content");
   const [placeholders, setPlaceholders] = useState<PlaceholderToCreate[]>(
-    section.placeholders
+    component.placeholders
   );
+
+  
 
   const [errorContent, setErrorContent] = useState("");
   const [errorTitle, setErrorTitle] = useState("");
   const [fallbackError, setErrorFallback] = useState("");
 
-  const { isPending, mutate, isError, error } = useUpdateSection({
-    invalidate_key: template_id,
+  const { isPending, mutate, isError, error } = useComponentUpdate({
+    invalidate_key: component.id,
   });
 
-  if (isPending) return <SectionSkeleton />;
+  if (isPending) return <ComponentUpdateSkeleton />;
 
   if (isError) {
     return (
       <ErrorPage
         error={error}
         message={error.message}
-        path={`/templates/${template_id}`}
+        path={`/components/`}
       />
     );
   }
@@ -124,10 +125,9 @@ const UpdateForm = ({ section, template_id, setClose }: UpdateFormProps) => {
                 return;
               }
               mutate({
-                id: section.id,
+                id: component.id,
                 content: content,
                 title: title,
-                templateId: template_id,
                 placeholders,
               });
               setClose();

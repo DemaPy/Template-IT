@@ -1,5 +1,10 @@
+type PlaceholderToCreate = {
+  title: string;
+  fallback: string;
+};
+
 type Placeholder = {
-  id: string;
+  id: string
   title: string;
   fallback: string;
 };
