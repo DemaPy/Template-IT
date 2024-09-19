@@ -1,5 +1,5 @@
 import { BASE_URL } from "@/config";
-import { CreatePlaceholders, UpdatePlaceholder } from "./types/Placeholder";
+import { UpdatePlaceholder } from "./types/Placeholder";
 import {
   CreateSection,
   CreateSectionFromComponent,
