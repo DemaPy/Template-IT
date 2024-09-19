@@ -57,43 +57,6 @@ export class SectionServiceDB {
     }
   }
 
-  static async deletePlaceholder(placeholder_id: Placeholder["id"]) {
-    try {
-      const response = await fetch(
-        BASE_URL + `/section-palceholders/${placeholder_id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }
-      );
-      const json = await response.json();
-      handleResponseDB({ json, response });
-      return json;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async createPlaceholders(placeholders: CreatePlaceholders) {
-    try {
-      const response = await fetch(BASE_URL + `/section-palceholders/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        body: JSON.stringify({ placeholder: placeholders }),
-      });
-      const json = await response.json();
-      handleResponseDB({ json, response });
-      return json;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   static async create(section: CreateSection) {
     try {
       const response = await fetch(BASE_URL + `/sections/`, {

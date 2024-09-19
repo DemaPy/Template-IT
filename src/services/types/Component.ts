@@ -8,5 +8,5 @@ export type UpdateComponent = {
 export type CreateComponent = {
   title: Component["title"];
   content: Component["content"];
-  placeholders: Placeholder[];
+  placeholders: PlaceholderToCreate[];
 };

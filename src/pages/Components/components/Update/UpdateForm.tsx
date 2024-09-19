@@ -20,8 +20,6 @@ const UpdateForm = ({ component, setClose }: UpdateFormProps) => {
     component.placeholders
   );
 
-  
-
   const [errorContent, setErrorContent] = useState("");
   const [errorTitle, setErrorTitle] = useState("");
   const [fallbackError, setErrorFallback] = useState("");
@@ -34,11 +32,7 @@ const UpdateForm = ({ component, setClose }: UpdateFormProps) => {
 
   if (isError) {
     return (
-      <ErrorPage
-        error={error}
-        message={error.message}
-        path={`/components/`}
-      />
+      <ErrorPage error={error} message={error.message} path={`/components/`} />
     );
   }
 
@@ -113,11 +107,6 @@ const UpdateForm = ({ component, setClose }: UpdateFormProps) => {
                   setErrorFallback("Fallback value too short.");
                   return;
                 }
-              }
-
-              if (!placeholders.length) {
-                setErrorContent("Fulfill all placeholders.");
-                return;
               }
 
               if (title.trim().length < 3) {

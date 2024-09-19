@@ -114,10 +114,6 @@ const UpdateForm = ({ section, template_id, setClose }: UpdateFormProps) => {
                 }
               }
 
-              if (!placeholders.length) {
-                setErrorContent("Fulfill all placeholders.");
-                return;
-              }
 
               if (title.trim().length < 3) {
                 setErrorTitle("Title too short.");
