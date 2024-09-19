@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useCreateCampaign } from "../../pages/hooks/useCampaign";
 import { useState } from "react";
-import Error from "@/pages/Error/Error";
+import {ErrorPage} from "@/pages/Error/Error";
 import TemplateSelect from "@/components/TemplateSelect";
 
 const CreateCampaign = ({ isOpen, setClose }: TCreateCampaign) => {
@@ -20,7 +20,7 @@ const CreateCampaign = ({ isOpen, setClose }: TCreateCampaign) => {
   const { isPending, isError, error, mutate } = useCreateCampaign();
 
   if (isError) {
-    return <Error error={error} message={error.message} path="/campaigns" />;
+    return <ErrorPage error={error} message={error.message} path="/campaigns" />;
   }
 
   return (
@@ -44,7 +44,7 @@ const CreateCampaign = ({ isOpen, setClose }: TCreateCampaign) => {
             <Label htmlFor="template_id" className="text-left">
               Template
             </Label>
-            <TemplateSelect isLoading={isPending} onSelect={(id) => setTemplateId(id)} />
+            <TemplateSelect template_id={template_id} isLoading={isPending} onSelect={(id) => setTemplateId(id)} />
           </div>
         </div>
         <DialogFooter>

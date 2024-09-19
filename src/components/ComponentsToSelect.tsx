@@ -1,5 +1,5 @@
 import { useFetchComponents } from "@/pages/Components/pages/hooks/useComponent"
-import Error from "@/pages/Error/Error"
+import {ErrorPage} from "@/pages/Error/Error"
 import { SelectItem } from "./ui/select"
 import ComponentsSkeleton from "@/pages/Components/components/ComponentsSkeleton"
 
@@ -9,7 +9,7 @@ export function ComponentsToSelect() {
     if (isPending) return <ComponentsSkeleton />
 
     if (isError) {
-        return <Error error={error} message={error.message} path="/" />
+        return <ErrorPage error={error} message={error.message} path="/" />
     }
 
     return (

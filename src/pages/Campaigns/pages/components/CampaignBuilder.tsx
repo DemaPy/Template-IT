@@ -1,5 +1,6 @@
 import NavbarBuilder from "./NavbarBuilder";
 import { decode } from "html-entities";
+import mustache from "mustache";
 import { useState } from "react";
 
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -25,8 +26,6 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
 
   let html = "";
   for (const section of sortedSections) {
-    const decode_html = section.content;
-    const doc = new DOMParser().parseFromString(decode_html, "text/html");
     const section_layout = layout.find(
       (item) => item.sectionId === section.id
     )!;
@@ -38,39 +37,40 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
         continue;
       }
     }
+    const all_placehodlers = section.placeholders.reduce((acc, item) => {
 
-    for (const placeholder of section.placeholders) {
-      const node = doc.querySelector(
-        `[data-template-it_id='${placeholder.id}']`
-      );
-      if (!node) continue;
-
-      let text = "";
       if (!(section.id in campaign.data)) {
-        text += placeholder.fallback;
+        acc[item.title] = item.fallback
       } else {
         const campaign_data = campaign.data[section.id];
 
-        if (!(placeholder.id in campaign_data)) {
-          text = placeholder.fallback;
-          continue
+        if (!(item.id in campaign_data)) {
+          acc[item.title] = item.fallback
         }
         // In case of section has different amounts of slugs
-        if (!(slug in campaign_data[placeholder.id])) {
-          text = placeholder.fallback;
+        if (!(slug in campaign_data[item.id])) {
+          acc[item.title] = item.fallback
         } else {
-          if (campaign_data[placeholder.id][slug].length === 0) {
-            text = placeholder.fallback;
+          if (campaign_data[item.id][slug].length === 0) {
+            acc[item.title] = item.fallback
           } else {
-            text = campaign_data[placeholder.id][slug];
+            acc[item.title] = campaign_data[item.id][slug]
           }
         }
       }
-      node.insertAdjacentText("beforebegin", text);
-      node.remove();
-    }
 
-    html += doc.body.innerHTML;
+      return acc;
+    }, {} as Record<string, string>);
+
+    try {
+      console.log(all_placehodlers);
+
+      const template = mustache.render(section.content, all_placehodlers);
+
+      html += template;
+    } catch (error) {
+      console.warn(error)
+    }
   }
 
   if (!campaign.data) {

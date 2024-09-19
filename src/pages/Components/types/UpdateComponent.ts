@@ -4,18 +4,12 @@ type TUpdateComponent = {
   component_id: Component["id"];
 };
 
+type UpdateFormProps = {
+  component: Component;
+  setClose: () => void;
+};
+
 type TFetchComponentToUpdate = {
-  component_id: Component["id"];
-
-  setTitle: (value: Component["title"]) => void;
-  title: Component["title"];
-
-  handleEditorSubmit: (value: EditorOnSubmitProps) => void;
-  handleSubmit: ({
-    old_title,
-    old_content,
-  }: {
-    old_title: Component["title"];
-    old_content: Component["content"];
-  }) => void;
+  componet_id: Component["id"];
+  setClose: () => void;
 };

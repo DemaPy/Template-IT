@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import TemplateHandler from "./components/TemplateHandler";
 import UpdateTemplate from "../components/Update/UpdateTemplate";
 import { useDeleteTemplate, useFetchTemplate } from "./hooks/useTemplate";
-import Error from "@/pages/Error/Error";
+import {ErrorPage} from "@/pages/Error/Error";
 import { useState } from "react";
 import TemplateSkeleton from "./components/TemplateSkeleton";
 
@@ -19,7 +19,7 @@ const Template = () => {
   if (isFetching) return <TemplateSkeleton />
 
   if (isError) {
-    return <Error error={error} message={error.message} path="/templates" />
+    return <ErrorPage error={error} message={error.message} path="/templates" />
   }
 
   return (

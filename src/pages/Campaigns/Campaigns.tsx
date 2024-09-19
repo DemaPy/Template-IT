@@ -2,7 +2,7 @@ import { PlusCircle } from "lucide-react";
 import CreateCampaign from "./components/Create/CreateCampaign";
 import CampaignCard from "./components/CampaignCard";
 import { useFetchCampaigns } from "./pages/hooks/useCampaign";
-import Error from "../Error/Error";
+import {ErrorPage} from "../Error/Error";
 import { useState } from "react";
 import {
   GridView,
@@ -20,7 +20,7 @@ const Campaigns = () => {
   if (isPending) return <CampaignsSkeleton />;
 
   if (isError) {
-    return <Error error={error} message={error.message} path="/" />;
+    return <ErrorPage error={error} message={error.message} path="/" />;
   }
 
   return (

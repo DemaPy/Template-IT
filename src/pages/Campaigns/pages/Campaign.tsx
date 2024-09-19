@@ -6,7 +6,7 @@ import CampaignTemplateHandler from "./components/CampaignTemplateHandler";
 import UpdateCampaign from "../components/Update/UpdateCampaign";
 import { usePreview } from "@/store/preview";
 import { useDeleteCampaign, useFetchCampaign } from "./hooks/useCampaign";
-import Error from "@/pages/Error/Error";
+import {ErrorPage} from "@/pages/Error/Error";
 import PreviewPage from "./components/PreviewPage";
 import { useState } from "react";
 import CampaignSkeleton from "../components/CampaignSkeleton";
@@ -23,7 +23,7 @@ const Campaign = () => {
   if (isFetching) return <CampaignSkeleton />
 
   if (isError) {
-    return <Error error={error} message={error.message} path="/campaigns" />
+    return <ErrorPage error={error} message={error.message} path="/campaigns" />
   }
 
   return (

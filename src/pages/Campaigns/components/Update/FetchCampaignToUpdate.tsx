@@ -1,4 +1,4 @@
-import Error from "@/pages/Error/Error"
+import {ErrorPage} from "@/pages/Error/Error"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useFetchCampaign } from "../../pages/hooks/useCampaign"
@@ -10,7 +10,7 @@ export function FetchCampaignToUpdate({ campaign_id, setTitle }: TFetchCampaignT
     if (isFetching) return <ComponentsSkeleton />
 
     if (isError) {
-        return <Error error={error} message={error.message} path="/campaigns" />
+        return <ErrorPage error={error} message={error.message} path="/campaigns" />
     }
 
     return (

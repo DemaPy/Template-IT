@@ -22,27 +22,6 @@ export class ComponentServiceDB {
     }
   }
 
-  static async deletePlaceholder(placeholder_id: Placeholder["id"]) {
-    try {
-      const response = await fetch(
-        BASE_URL + `/component-palceholders/${placeholder_id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }
-      );
-      const json = await response.json();
-      handleResponseDB({ json, response });
-
-      return json;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   static async createPlaceholders(placeholders: CreatePlaceholders) {
     try {
       const response = await fetch(BASE_URL + `/component-palceholders/`, {

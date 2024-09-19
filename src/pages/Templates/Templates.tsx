@@ -1,6 +1,6 @@
 import { PlusCircle } from "lucide-react";
 import { useFetchTemplates } from "./pages/hooks/useTemplate";
-import Error from "../Error/Error";
+import { ErrorPage } from "../Error/Error";
 import { useState } from "react";
 import {
   CreateTemplate,
@@ -20,7 +20,7 @@ const Templates = () => {
   if (isPending) return <TemplatesSkeleton />;
 
   if (isError) {
-    return <Error error={error} message={error.message} path="/" />;
+    return <ErrorPage error={error} message={error.message} path="/" />;
   }
 
   return (
