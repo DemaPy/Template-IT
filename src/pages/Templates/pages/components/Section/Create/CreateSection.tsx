@@ -5,6 +5,7 @@ import {
   CreateContentForm,
   PayloadProps,
 } from "@/components/MustacheEditor/CreateContentForm";
+import DOMPurify from "dompurify";
 
 export const CreateSection = ({ template_id }: CreateSectionFormProps) => {
   const { isPending, mutate } = useCreateSection({
@@ -12,9 +13,12 @@ export const CreateSection = ({ template_id }: CreateSectionFormProps) => {
   });
 
   const handleCreate = (payload: PayloadProps) => {
+    const clean = DOMPurify.sanitize(payload.content);
+    const clearBrs = clean.replace(/\n/g, "")
     mutate({
       ...payload,
       templateId: template_id,
+      content: clearBrs,
     });
   };
 

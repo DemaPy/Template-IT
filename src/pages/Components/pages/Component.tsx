@@ -1,50 +1,41 @@
-import Heading from "@/components/Heading";
 import PageContainer from "@/components/PageContainer";
-import { Edit, Trash } from "lucide-react";
 import { useParams } from "react-router-dom";
 import ComponentHandler from "./components/ComponentHandler";
 import UpdateComponent from "../components/Update/UpdateComponent";
-import { useDeleteComponent, useFetchComponent } from "./hooks/useComponent";
+import { useFetchComponent } from "./hooks/useComponent";
 import ComponentsSkeleton from "../components/ComponentsSkeleton";
-import {ErrorPage} from "@/pages/Error/Error";
-import { useState } from "react";
+import { ErrorPage } from "@/pages/Error/Error";
+import Flex from "@/components/Layout/Flex";
+import Title from "@/components/Title";
+import { Delete } from "../components/Delete/Delete";
 
 const Component = () => {
-  const [isEditOpen, setIsEditOpen] = useState(false)
-
   const params = useParams<{ id: string }>();
 
-  const { isPending: isFetching, data, isError, error } = useFetchComponent(params.id!)
-  const { isPending: isDeleting, mutate } = useDeleteComponent()
+  const {
+    isPending: isFetching,
+    data,
+    isError,
+    error,
+  } = useFetchComponent(params.id!);
 
-  if (isFetching) return <ComponentsSkeleton />
+  if (isFetching) return <ComponentsSkeleton />;
 
   if (isError) {
-    return <ErrorPage error={error} message={error.message} path="/components" />
+    return (
+      <ErrorPage error={error} message={error.message} path="/components" />
+    );
   }
 
   return (
     <PageContainer>
-      <Heading
-        title={data.data.title}
-        action={{
-          isLoading: isDeleting,
-          icon: <Trash className="w-4 h-4 text-red-400" />,
-          onClick: () => mutate(params.id!),
-        }}
-        actions={[
-          {
-            isLoading: isDeleting,
-            icon: <Edit className="w-4 h-4" />,
-            onClick: () => setIsEditOpen(true),
-          },
-        ]}
-      />
-      {
-        isEditOpen && (
-          <UpdateComponent isOpen={isEditOpen} setClose={() => setIsEditOpen(false)} component_id={data.data.id} />
-        )
-      }
+      <Flex direction="row" align="center" justify="between">
+        <Title title={data.data.title} size="md" />
+        <Flex direction="row" align="center" justify="between">
+          <UpdateComponent component_id={data.data.id} />
+          <Delete component_id={data.data.id} />
+        </Flex>
+      </Flex>
       <ComponentHandler component={data.data} />
     </PageContainer>
   );
