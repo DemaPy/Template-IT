@@ -1,13 +1,13 @@
 import Title from "@/components/Title";
 import type { Identifier, XYCoord } from "dnd-core";
 import { ChevronDown, ChevronUp, GripVertical } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Switchh } from "@/components/Switch";
 import { Button } from "@/components/ui/button";
 import SectionSlugs from "./SectionSlugs";
 import { useDrag, useDrop } from "react-dnd";
 import { useLayoutUpdate } from "../hooks/useLayout";
-import {ErrorPage} from "@/pages/Error/Error";
+import { ErrorPage } from "@/pages/Error/Error";
 
 type Props = {
   index: number;
@@ -19,7 +19,7 @@ type Props = {
   renderOn: Layout["renderOn"];
   sectionId: Layout["sectionId"];
   isLayoutChanged: boolean;
-  campaignId: Layout['campaignId']
+  campaignId: Layout["campaignId"];
 };
 
 interface DragItem {
@@ -28,7 +28,7 @@ interface DragItem {
   type: "LAYOUT";
 }
 
-const SectionLayout = ({
+export const SectionLayout = ({
   isLayoutChanged,
   section,
   moveCard,
@@ -36,9 +36,11 @@ const SectionLayout = ({
   index,
   is_active,
   renderOn,
-  campaignId
+  campaignId,
 }: Props) => {
-  const { mutate, isError, error, isPending } = useLayoutUpdate({ invalidate_key: campaignId })
+  const { mutate, isPending } = useLayoutUpdate({
+    invalidate_key: campaignId,
+  });
   const ref = useRef<HTMLDivElement | null>(null);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -103,10 +105,6 @@ const SectionLayout = ({
   });
   drag(drop(ref));
 
-  if (isError) {
-    return <ErrorPage error={error} message={error.message} path={`/campaigns/${campaignId}`} />
-  }
-
   return (
     <>
       <div
@@ -137,29 +135,29 @@ const SectionLayout = ({
           isDisabled={isPending || isLayoutChanged}
           text={is_active ? "On" : "Off"}
           isActive={is_active}
-          onChange={() => mutate({
-            id: id,
-            is_active: !is_active,
-          })}
+          onChange={() =>
+            mutate({
+              id: id,
+              is_active: !is_active,
+            })
+          }
         />
       </div>
       {isOpen && renderOn && (
         <SectionSlugs
           isLoading={isPending}
-          onChange={(slug: {
-            [key: string]: boolean;
-          }) => mutate({
-            id: id,
-            renderOn: {
-              ...renderOn,
-              ...slug,
-            },
-          })}
+          onChange={(slug: { [key: string]: boolean }) =>
+            mutate({
+              id: id,
+              renderOn: {
+                ...renderOn,
+                ...slug,
+              },
+            })
+          }
           slugs={renderOn}
         />
       )}
     </>
   );
 };
-
-export default SectionLayout;

@@ -1,44 +1,66 @@
 import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog"
-import { Button } from '@/components/ui/button'
-import { useCampaignUpdate } from "../../pages/hooks/useCampaign"
-import { useState } from "react"
-import {ErrorPage} from "@/pages/Error/Error"
-import { FetchCampaignToUpdate } from "./FetchCampaignToUpdate"
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { useCampaignUpdate } from "../../pages/hooks/useCampaign";
+import { useState } from "react";
+import { FetchCampaign } from "./FetchCampaignToUpdate";
+import InputSkeleton from "@/components/Skeletons/InputSkeleton";
+import Update from "@/components/Update";
+import type { UpdateCampaignProps } from "../../types/UpdateCampaign";
 
-const UpdateCampaign = ({ isOpen, setClose, campaign_id }: TUpdateCampaign) => {
+const UpdateCampaign = ({
+  isOpen,
+  setClose,
+  campaign_id,
+}: UpdateCampaignProps) => {
+  const [title, setTitle] = useState("");
+  const { isPending, mutate } = useCampaignUpdate({
+    invalidate_key: campaign_id,
+  });
 
-    const { isPending, mutate, isError, error } = useCampaignUpdate({ invalidate_key: campaign_id })
+  return (
+    <Dialog open={isOpen} onOpenChange={setClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Update campaign</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <FetchCampaign campaign_id={campaign_id} skeleton={<InputSkeleton />}>
+            {(data) => (
+              <Update
+                fields={[
+                  {
+                    title: "Title",
+                    defaultValue: data.title,
+                    name: "name",
+                    onChange: (title) => setTitle(title),
+                  },
+                ]}
+              />
+            )}
+          </FetchCampaign>
+        </div>
+        <DialogFooter>
+          <Button
+            disabled={isPending}
+            onClick={() =>
+              mutate({
+                title: title,
+                id: campaign_id,
+              })
+            }
+          >
+            Save changes
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
-    const [title, setTitle] = useState("")
-
-    if (isError) {
-        return <ErrorPage error={error} message={error.message} path="/campaigns" />
-    }
-
-    return (
-        <Dialog open={isOpen} onOpenChange={setClose}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Update campaign</DialogTitle>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <FetchCampaignToUpdate campaign_id={campaign_id} setTitle={(value) => setTitle(value)} />
-                </div>
-                <DialogFooter>
-                    <Button disabled={isPending} onClick={() => mutate({
-                        title: title,
-                        id: campaign_id,
-                    })}>Save changes</Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-    )
-}
-
-export default UpdateCampaign
+export default UpdateCampaign;

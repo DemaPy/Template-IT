@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SectionUpdateSkeletonCreate from "./SectionUpdateSkeletonCreate";
 import MustacheEditor from "@/components/MustacheEditor/MustacheEditor";
 import { ShowValidationError } from "@/components";
@@ -17,8 +17,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useCreateSection } from "../../hooks/useSection";
 import { Button } from "@/components/ui/button";
-import { ErrorPage } from "@/pages/Error/Error";
 import { CreatePlaceholders } from "@/services/types/Placeholder";
+import toast from "react-hot-toast";
 
 export const CreateSectionForm = ({
   isOpen,
@@ -28,18 +28,6 @@ export const CreateSectionForm = ({
   const { isPending, isError, error, mutate } = useCreateSection({
     invalidate_key: template_id,
   });
-
-  if (isPending) return <SectionUpdateSkeletonCreate />;
-
-  if (isError) {
-    return (
-      <ErrorPage
-        error={error}
-        message={error.message}
-        path={`/templates/${template_id}`}
-      />
-    );
-  }
 
   const [errorContent, setErrorContent] = useState("");
   const [fallbackError, setErrorFallback] = useState("");
@@ -51,6 +39,16 @@ export const CreateSectionForm = ({
   const [placeholders, setPlaceholders] = useState<
     CreatePlaceholders["placeholders"]
   >([]);
+
+  if (isPending) return <SectionUpdateSkeletonCreate />;
+
+  useEffect(() => {
+    if (isError) {
+      const message =
+        errorTitle || (error as Error).message || errorContent || fallbackError;
+      toast.error(message);
+    }
+  }, [isError, errorTitle, errorContent, fallbackError, error]);
 
   return (
     <>
@@ -140,13 +138,13 @@ export const CreateSectionForm = ({
                   setErrorTitle("Title too short.");
                   return;
                 }
-                  mutate({
-                    templateId: template_id,
-                    content,
-                    title: title,
-                    placeholders,
-                  });
-                  setClose();
+                mutate({
+                  templateId: template_id,
+                  content,
+                  title: title,
+                  placeholders,
+                });
+                setClose();
               }}
             >
               Save changes

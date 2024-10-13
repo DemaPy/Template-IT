@@ -1,8 +1,6 @@
 import { PlusCircle } from "lucide-react";
 import CreateCampaign from "./components/Create/CreateCampaign";
 import CampaignCard from "./components/CampaignCard";
-import { useFetchCampaigns } from "./pages/hooks/useCampaign";
-import {ErrorPage} from "../Error/Error";
 import { useState } from "react";
 import {
   GridView,
@@ -11,17 +9,10 @@ import {
   PageItemsWrapper,
 } from "@/components";
 import CampaignsSkeleton from "./components/CampaignsSkeleton";
+import { FetchCampaigns } from "./components/FetchCampaigns";
 
 const Campaigns = () => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const { data, isError, error, isPending } = useFetchCampaigns();
-
-  if (isPending) return <CampaignsSkeleton />;
-
-  if (isError) {
-    return <ErrorPage error={error} message={error.message} path="/" />;
-  }
 
   return (
     <PageContainer>
@@ -36,9 +27,13 @@ const Campaigns = () => {
       {isOpen && (
         <CreateCampaign isOpen={isOpen} setClose={() => setIsOpen(false)} />
       )}
-      <PageItemsWrapper>
-        <GridView items={data.data} component={CampaignCard} />
-      </PageItemsWrapper>
+      <FetchCampaigns skeleton={<CampaignsSkeleton />}>
+        {(data) => (
+          <PageItemsWrapper>
+            <GridView items={data} component={CampaignCard} />
+          </PageItemsWrapper>
+        )}
+      </FetchCampaigns>
     </PageContainer>
   );
 };

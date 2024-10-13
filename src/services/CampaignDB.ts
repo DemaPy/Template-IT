@@ -45,7 +45,7 @@ export class CampaignServiceDB {
     return dataToReturn;
   };
 
-  static async updateLayout(layout:  Partial<Layout>) {
+  static async updateLayout(layout: Partial<Layout>) {
     try {
       const response = await fetch(BASE_URL + "/layouts", {
         method: "PATCH",
@@ -133,7 +133,7 @@ export class CampaignServiceDB {
     }
   }
 
-  static async update(campaign: UpdateCampaign) {
+  static async update(campaign: UpdateCampaign): Promise<void> {
     try {
       const response = await fetch(BASE_URL + "/campaigns", {
         method: "PATCH",
@@ -145,13 +145,12 @@ export class CampaignServiceDB {
       });
       const json = await response.json();
       handleResponseDB({ json, response });
-      return json;
     } catch (error) {
       throw error;
     }
   }
 
-  static async getAll() {
+  static async getAll(): Promise<ServerResponseSuccess<Campaign[]>> {
     try {
       const response = await fetch(BASE_URL + "/campaigns", {
         headers: {
@@ -166,7 +165,9 @@ export class CampaignServiceDB {
     }
   }
 
-  static async getOne(id: Campaign["id"]) {
+  static async getOne(
+    id: Campaign["id"]
+  ): Promise<ServerResponseSuccess<Campaign>> {
     try {
       const response = await fetch(BASE_URL + `/campaigns/${id}`, {
         headers: {

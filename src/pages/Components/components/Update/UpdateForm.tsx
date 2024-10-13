@@ -2,15 +2,15 @@ import { ShowValidationError } from "@/components";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { extractFields } from "@/components/MustacheEditor/utils/extractFields";
 import MustacheEditor from "@/components/MustacheEditor/MustacheEditor";
 import Placehodlers from "@/pages/Components/components/Placehodlers";
 import { Button } from "@/components/ui/button";
-import { ErrorPage } from "@/pages/Error/Error";
 import { DialogFooter } from "@/components/ui/dialog";
 import { useComponentUpdate } from "../../pages/hooks/useComponent";
 import ComponentUpdateSkeleton from "./ComponentSkeleton";
+import toast from "react-hot-toast";
 
 const UpdateForm = ({ component, setClose }: UpdateFormProps) => {
   const [title, setTitle] = useState(component.title);
@@ -28,13 +28,13 @@ const UpdateForm = ({ component, setClose }: UpdateFormProps) => {
     invalidate_key: component.id,
   });
 
-  if (isPending) return <ComponentUpdateSkeleton />;
+  useEffect(() => {
+    if (isError) {
+      toast.error((error as Error).message);
+    }
+  }, [isError, error]);
 
-  if (isError) {
-    return (
-      <ErrorPage error={error} message={error.message} path={`/components/`} />
-    );
-  }
+  if (isPending) return <ComponentUpdateSkeleton />;
 
   return (
     <div className="grid grid-cols-4 items-center gap-4">

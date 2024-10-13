@@ -2,18 +2,18 @@ import { ShowValidationError } from "@/components";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UpdateFormProps } from "../../../types/UpdateSection";
 import { extractFields } from "@/components/MustacheEditor/utils/extractFields";
 import MustacheEditor from "@/components/MustacheEditor/MustacheEditor";
 import Placehodlers from "@/pages/Components/components/Placehodlers";
 import { Button } from "@/components/ui/button";
 import { useUpdateSection } from "../../../hooks/useSection";
-import { ErrorPage } from "@/pages/Error/Error";
 import SectionSkeleton from "./SectionSkeleton";
 import { DialogFooter } from "@/components/ui/dialog";
+import toast from "react-hot-toast";
 
-const UpdateForm = ({ section, template_id, setClose }: UpdateFormProps) => {
+const UpdateForm = ({ section, template_id }: UpdateFormProps) => {
   const [title, setTitle] = useState(section.title);
   const [content, setContent] = useState(section.content);
   const [tab, setTab] = useState<string>("content");
@@ -29,17 +29,13 @@ const UpdateForm = ({ section, template_id, setClose }: UpdateFormProps) => {
     invalidate_key: template_id,
   });
 
-  if (isPending) return <SectionSkeleton />;
+  useEffect(() => {
+    if (isError) {
+      toast.error((error as Error).message);
+    }
+  }, [isError, error]);
 
-  if (isError) {
-    return (
-      <ErrorPage
-        error={error}
-        message={error.message}
-        path={`/templates/${template_id}`}
-      />
-    );
-  }
+  if (isPending) return <SectionSkeleton />;
 
   return (
     <div className="grid grid-cols-4 items-center gap-4">
@@ -114,7 +110,6 @@ const UpdateForm = ({ section, template_id, setClose }: UpdateFormProps) => {
                 }
               }
 
-
               if (title.trim().length < 3) {
                 setErrorTitle("Title too short.");
                 return;
@@ -126,7 +121,6 @@ const UpdateForm = ({ section, template_id, setClose }: UpdateFormProps) => {
                 templateId: template_id,
                 placeholders,
               });
-              setClose();
             }}
           >
             Save changes

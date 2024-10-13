@@ -54,6 +54,7 @@ const ConnectDataWithPlaceholder = ({ setClose, isOpen, section, campaignId }: {
     }
 
     if (!isSlugExist) {
+      // TODO
       toast.error("Slug required")
       return
     }
