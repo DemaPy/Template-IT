@@ -1,32 +1,18 @@
-import { PlusCircle } from "lucide-react";
-import { useState } from "react";
-import {
-  CreateTemplate,
-  Heading,
-  PageContainer,
-  PageItemsWrapper,
-} from "@/components";
+import { CreateTemplate, PageContainer, PageItemsWrapper } from "@/components";
 import ListView from "@/components/List";
 import TemplateCard from "./components/TemplateCard/TemplateCard";
 import { FetchTemplates } from "./components/ListTempaltes/FetchTemplates";
 import { TemplatesSkeleton } from "./components/TemplateSkeleton";
+import Title from "@/components/Title";
+import Flex from "@/components/Layout/Flex";
 
 const Templates = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
   return (
     <PageContainer>
-      <Heading
-        title={"Templates"}
-        action={{
-          icon: <PlusCircle className="w-4 h-4 mr-2" />,
-          onClick: () => setIsOpen(true),
-          title: "create",
-        }}
-      />
-      {isOpen && (
-        <CreateTemplate isOpen={isOpen} setClose={() => setIsOpen(false)} />
-      )}
+      <Flex direction="row" align="center" justify="between">
+        <Title title={"Templates"} size="md" />
+        <CreateTemplate />
+      </Flex>
       <FetchTemplates skeleton={<TemplatesSkeleton />}>
         {(data) => (
           <PageItemsWrapper>
