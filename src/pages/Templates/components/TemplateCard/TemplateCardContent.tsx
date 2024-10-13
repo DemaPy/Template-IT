@@ -16,7 +16,7 @@ const TemplateCardContent = ({
   return (
     <div className="flex flex-col gap-1">
       <Tabs defaultValue="preview">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-end">
           <Label htmlFor="content">Content</Label>
           <TabsList>
             <TabsTrigger value="preview">Preview</TabsTrigger>
