@@ -1,6 +1,4 @@
 import { PlusCircle } from "lucide-react";
-import { useFetchTemplates } from "./pages/hooks/useTemplate";
-import { ErrorPage } from "../Error/Error";
 import { useState } from "react";
 import {
   CreateTemplate,
@@ -8,20 +6,12 @@ import {
   PageContainer,
   PageItemsWrapper,
 } from "@/components";
-import TemplatesSkeleton from "./components/TemplateSkeleton";
 import ListView from "@/components/List";
 import TemplateCard from "./components/TemplateCard/TemplateCard";
+import { FetchTemplates } from "./components/ListTempaltes/FetchTemplates";
 
 const Templates = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const { data, isError, error, isPending } = useFetchTemplates();
-
-  if (isPending) return <TemplatesSkeleton />;
-
-  if (isError) {
-    return <ErrorPage error={error} message={error.message} path="/" />;
-  }
 
   return (
     <PageContainer>
@@ -36,9 +26,13 @@ const Templates = () => {
       {isOpen && (
         <CreateTemplate isOpen={isOpen} setClose={() => setIsOpen(false)} />
       )}
-      <PageItemsWrapper>
-        <ListView items={data.data} component={TemplateCard} />
-      </PageItemsWrapper>
+      <FetchTemplates>
+        {(data) => (
+          <PageItemsWrapper>
+            <ListView items={data.data} component={TemplateCard} />
+          </PageItemsWrapper>
+        )}
+      </FetchTemplates>
     </PageContainer>
   );
 };
