@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
+import DOMPurify from "dompurify";
 
 const UpdateForm = ({ section, template_id }: UpdateFormProps) => {
   const [err, setErr] = useState("");
@@ -60,10 +61,11 @@ const UpdateForm = ({ section, template_id }: UpdateFormProps) => {
   const handleCreate = () => {
     if (!validateTemplate()) return;
     if (!validatePlaceholders()) return;
+    const clean = DOMPurify.sanitize(content);
     mutate({
       title,
       templateId: template_id,
-      content,
+      content: clean,
       placeholders,
       id: section.id,
     });
@@ -108,7 +110,7 @@ const UpdateForm = ({ section, template_id }: UpdateFormProps) => {
         </div>
         <DialogFooter>
           <Button disabled={isPending} onClick={handleCreate}>
-            Create
+            Update
           </Button>
         </DialogFooter>
       </DialogContent>

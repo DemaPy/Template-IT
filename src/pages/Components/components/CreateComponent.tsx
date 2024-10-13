@@ -4,12 +4,18 @@ import {
   PayloadProps,
 } from "@/components/MustacheEditor/CreateContentForm";
 import ComponentUpdateSkeletonCreate from "./ComponentCreateSkeleton";
+import DOMPurify from "dompurify";
 
 const CreateComponent = () => {
   const { isPending, mutate } = useCreateComponent();
 
   const handleCreate = (payload: PayloadProps) => {
-    mutate(payload);
+    const clean = DOMPurify.sanitize(payload.content);
+    const clearBrs = clean.replace(/\n/g, "")
+    mutate({
+      ...payload,
+      content: clearBrs,
+    });
   };
 
   if (isPending) return <ComponentUpdateSkeletonCreate />;

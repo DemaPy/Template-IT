@@ -18,7 +18,8 @@ export function useDeleteComponent() {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: (id: Component["id"]) => ComponentServiceDB.delete(id),
+    mutationFn: ({ id }: { id: Component["id"] }) =>
+      ComponentServiceDB.delete(id),
     onSuccess: () => {
       toast.success("Component has been deleted");
       navigate("/components");

@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import Mustache from "mustache";
 import { FormTitle } from "./FormTitle";
 import { FormContent } from "./FormContent";
+import { CirclePlus } from "lucide-react";
 
 export type PayloadProps = {
   title: string;
@@ -82,7 +83,9 @@ export const CreateContentForm = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"outline"}>Create</Button>
+        <Button variant={"default"} size={"sm"}>
+          <CirclePlus className="w-4 h-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
