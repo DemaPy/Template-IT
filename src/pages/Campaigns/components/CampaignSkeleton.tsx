@@ -14,7 +14,7 @@ const CampaignSkeleton = () => {
                 </div>
             </div>
             {/* BODY SKELETON */}
-            <div className='flex gap-4 items-stretch'>
+            <div data-testid="campaign-loading" className='flex gap-4 items-stretch'>
                 <div className='w-1/2 flex flex-col gap-4'>
                     <div className='flex items-center gap-2'>
                         <Skeleton className='w-full gap-4 border rounded-md p-4 h-10' />

@@ -11,7 +11,7 @@ const NavItem = ({ route }: NavItemProps) => {
     const computeClassName = location.pathname.includes(route.path) ? defaultClass + " " + activeClass : defaultClass
     return (
         <Link to={route.path} className={computeClassName}>
-            {route.title}
+            <span data-testid={route.title}>{route.title}</span>
         </Link>
     )
 }

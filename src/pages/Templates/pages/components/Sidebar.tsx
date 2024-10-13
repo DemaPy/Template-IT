@@ -12,7 +12,10 @@ type Props = {
 
 const Sidebar = ({ sections, template_id }: Props) => {
   return (
-    <div className="lg:w-3/4 w-full relative max-h-[80vh] overflow-y-auto">
+    <div
+      data-test-id="template-sidebar"
+      className="lg:w-3/4 w-full relative max-h-[80vh] overflow-y-auto"
+    >
       <div className="flex lg:flex-row flex-col gap-2 items-center sticky top-0">
         <CreateSection template_id={template_id} />
         <FetchComponents skeleton={<SelectSkeleton />}>

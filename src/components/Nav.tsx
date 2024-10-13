@@ -5,7 +5,7 @@ import { ROUTES } from "@/constance/routes";
 import NavItem from "./NavItem";
 
 
-const Nav = () => {
+export const Nav = () => {
     const navigate = useNavigate()
     const { isLogged, setIsLoggedOut } = useAuth()
 
@@ -38,5 +38,3 @@ const Nav = () => {
         </nav >
     );
 };
-
-export default Nav;

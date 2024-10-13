@@ -8,7 +8,7 @@ type Props = {
 const Sidebar = ({ components }: Props) => {
 
   return (
-    <div className='lg:w-3/4 w-full relative max-h-[80vh] overflow-y-auto'>
+    <div data-test-id="component-sidebar" className='lg:w-3/4 w-full relative max-h-[80vh] overflow-y-auto'>
       <ListView component={Component} items={components} />
     </div>
   )

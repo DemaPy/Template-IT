@@ -6,15 +6,14 @@ import Component from "../../pages/Components/pages/Component";
 afterEach(cleanup);
 
 describe("A truthy statement", () => {
-  it("should be equal to 2", () => {
-    expect(1 + 1).toEqual(2);
-  });
   it("should render Components component", () => {
     render(<Components />);
     expect(screen.getByText("Components")).toBeInTheDocument()
   });
+
   it("should render Component component", () => {
-    render(<Component />);
-    screen.debug();
+    const result = render(<Component />);
+    const testId = result.container.querySelector('data-test-id')
+    expect(testId).toBe("component-sidebar")
   });
 });

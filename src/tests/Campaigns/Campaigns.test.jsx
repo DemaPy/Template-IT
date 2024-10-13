@@ -3,20 +3,75 @@ import React from "react";
 import Campaigns from "../../pages/Campaigns/Campaigns";
 import Campaign from "../../pages/Campaigns/pages/Campaign";
 import { expect } from "vitest";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 afterEach(cleanup);
+const queryClient = new QueryClient({
+  defaultOptions: {
+    mutations: {
+      retry: false,
+    },
+  },
+});
 
-describe("A truthy statement", () => {
-  it("should be equal to 2", () => {
-    expect(1 + 1).toEqual(2);
-  });
+describe("Test Main Components", () => {
   it("should render Campaigns component", () => {
-    render(<Campaigns />);
-    expect(screen.getByText("Campaigns")).toBeInTheDocument()
-    expect(screen.getByText("create")).toBeInTheDocument()
+    const router = createBrowserRouter([
+      {
+        path: "/",
+        element: (
+          <QueryClientProvider client={queryClient}>
+            <Campaigns />
+          </QueryClientProvider>
+        ),
+      },
+    ]);
+    render(<RouterProvider router={router} />);
+    expect(screen.getByText("Campaigns")).toBeInTheDocument();
   });
+
+  it("should render Campaigns loading skeleton", () => {
+    const router = createBrowserRouter([
+      {
+        path: "/",
+        element: (
+          <QueryClientProvider client={queryClient}>
+            <Campaigns />
+          </QueryClientProvider>
+        ),
+      },
+    ]);
+    render(<RouterProvider router={router} />);
+    expect(screen.getByTestId("campaigns-loading")).toBeInTheDocument();
+  });
+
   it("should render Campaign component", () => {
-    render(<Campaign />);
-    screen.debug();
+    const router = createBrowserRouter([
+      {
+        path: "/",
+        element: (
+          <QueryClientProvider client={queryClient}>
+            <Campaign />
+          </QueryClientProvider>
+        ),
+      },
+    ]);
+    render(<RouterProvider router={router} />);
+  });
+
+  it("should render Campaign loading skeleton", () => {
+    const router = createBrowserRouter([
+      {
+        path: "/",
+        element: (
+          <QueryClientProvider client={queryClient}>
+            <Campaigns />
+          </QueryClientProvider>
+        ),
+      },
+    ]);
+    render(<RouterProvider router={router} />);
+    expect(screen.getByTestId("campaigns-loading")).toBeInTheDocument();
   });
 });

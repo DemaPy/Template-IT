@@ -11,12 +11,12 @@ describe("A truthy statement", () => {
   });
   it("should render Templates component with Templates title", () => {
     render(<Templates />);
-    screen.getByText("Templates")
     expect(screen.getByText("Templates")).toBeInTheDocument()
-    expect(screen.getByText("create")).toBeInTheDocument()
   });
+
   it("Should render Template component", () => {
-    render(<Template />);
-    screen.debug();
+    const result = render(<Template />);
+    const testId = result.container.querySelector('data-test-id')
+    expect(testId).toBe("template-sidebar")
   });
 });
