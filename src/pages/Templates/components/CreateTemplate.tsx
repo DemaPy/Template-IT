@@ -6,12 +6,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useCreateTemplate } from "../pages/hooks/useTemplate";
 import { CirclePlus } from "lucide-react";
+import { FormTitle } from "@/components/MustacheEditor/FormTitle";
 
 const CreateTemplate = () => {
   const [title, setTitle] = useState("");
@@ -26,7 +25,7 @@ const CreateTemplate = () => {
     <Dialog>
       <DialogTrigger asChild>
         <Button>
-            <CirclePlus className="w-4 h-4" />
+          <CirclePlus className="w-4 h-4" />
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -34,17 +33,7 @@ const CreateTemplate = () => {
           <DialogTitle>Create template</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-left">
-              Name
-            </Label>
-            <Input
-              id="name"
-              value={title}
-              onChange={(ev) => setTitle(ev.target.value)}
-              className="col-span-4"
-            />
-          </div>
+          <FormTitle setTitle={(title) => setTitle(title)} title={title} />
         </div>
         <DialogFooter>
           <Button disabled={isPending} onClick={handleCreate}>

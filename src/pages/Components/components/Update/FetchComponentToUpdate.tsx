@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 
 export function FetchComponentToUpdate({
   componet_id,
-  setClose,
 }: TFetchComponentToUpdate) {
   const { isPending, data, isError, error } = useFetchComponent(componet_id);
 
@@ -19,5 +18,5 @@ export function FetchComponentToUpdate({
   if (isPending) return <ComponentUpdateSkeleton />;
   if (isError) return null;
 
-  return <UpdateForm setClose={setClose} component={data.data} />;
+  return <UpdateForm component={data.data} />;
 }

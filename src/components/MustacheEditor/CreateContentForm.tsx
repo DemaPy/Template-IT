@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -7,28 +8,33 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { CreatePlaceholders } from "@/services/types/Placeholder";
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
 import Mustache from "mustache";
-import ComponentUpdateSkeleton from "./ComponentSkeleton";
-import { Edit } from "lucide-react";
-import { FormTitle } from "@/components/MustacheEditor/FormTitle";
-import { FormContent } from "@/components/MustacheEditor/FormContent";
-import { useComponentUpdate } from "../../pages/hooks/useComponent";
-import DOMPurify from "dompurify";
+import { FormTitle } from "./FormTitle";
+import { FormContent } from "./FormContent";
+import { CirclePlus } from "lucide-react";
 
-const UpdateForm = ({ component }: UpdateFormProps) => {
+export type PayloadProps = {
+  title: string;
+  content: string;
+  placeholders: CreatePlaceholders["placeholders"];
+};
+
+export const CreateContentForm = ({
+  onSubmit,
+  isPending,
+}: {
+  isPending: boolean;
+  onSubmit: (payload: PayloadProps) => void;
+}) => {
   const [err, setErr] = useState("");
 
-  const [title, setTitle] = useState(component.title);
-  const [content, setContent] = useState(component.content);
-  const [placeholders, setPlaceholders] = useState<PlaceholderToCreate[]>(
-    component.placeholders
-  );
-
-  const { isPending, mutate, isError, error } = useComponentUpdate({
-    invalidate_key: component.id,
-  });
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [placeholders, setPlaceholders] = useState<
+    CreatePlaceholders["placeholders"]
+  >([]);
 
   const validateTemplate = () => {
     let isValid = true;
@@ -60,23 +66,13 @@ const UpdateForm = ({ component }: UpdateFormProps) => {
   const handleCreate = () => {
     if (!validateTemplate()) return;
     if (!validatePlaceholders()) return;
-    const clean = DOMPurify.sanitize(content, {
-      ADD_TAGS: ["style"],
-      FORCE_BODY: true,
-    });
-    mutate({
-      title,
-      content: clean,
+    const payload = {
+      content,
+      title: title,
       placeholders,
-      id: component.id,
-    });
+    };
+    onSubmit(payload);
   };
-
-  useEffect(() => {
-    if (isError) {
-      toast.error((error as Error).message);
-    }
-  }, [isError, error]);
 
   useEffect(() => {
     if (err) {
@@ -84,13 +80,11 @@ const UpdateForm = ({ component }: UpdateFormProps) => {
     }
   }, [err]);
 
-  if (isPending) return <ComponentUpdateSkeleton />;
-
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size={"sm"} variant={"default"}>
-          <Edit className="w-4 h-4 text-yellow-400" />
+        <Button variant={"default"} size={"sm"}>
+          <CirclePlus className="w-4 h-4" />
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -111,12 +105,10 @@ const UpdateForm = ({ component }: UpdateFormProps) => {
         </div>
         <DialogFooter>
           <Button disabled={isPending} onClick={handleCreate}>
-            Update
+            Create
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
-
-export default UpdateForm;

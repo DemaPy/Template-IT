@@ -4,6 +4,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,17 +14,21 @@ import { useState } from "react";
 import TemplateSelect from "@/components/TemplateSelect";
 import { FetchTemplates } from "@/pages/Templates/components/ListTempaltes/FetchTemplates";
 import { SelectSkeleton } from "@/components/Skeletons/SelectSkeleton";
+import { PlusCircle } from "lucide-react";
 
-const CreateCampaign = ({ isOpen, setClose }: TCreateCampaign) => {
+const CreateCampaign = () => {
   const [title, setTitle] = useState("");
   const [template_id, setTemplateId] = useState<string>("");
 
-  const { isPending, isError, mutate } = useCreateCampaign();
-
-  if (isError) return null;
+  const { isPending, mutate } = useCreateCampaign();
 
   return (
-    <Dialog open={isOpen} onOpenChange={setClose}>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button>
+          <PlusCircle className="w-4 h-4" />
+        </Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create campaign</DialogTitle>

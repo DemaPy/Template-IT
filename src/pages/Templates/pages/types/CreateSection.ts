@@ -1,9 +1,3 @@
-type TCreateSection = {
-  template_id: Template["id"];
-};
-
-type CreateSectionFormProps = {
-  isOpen: boolean;
-  setClose: () => void;
+export type CreateSectionFormProps = {
   template_id: string;
 };

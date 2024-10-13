@@ -14,7 +14,7 @@ const fulfillWithFallbacks = ({ sections }: Props) => {
     }, {} as Record<string, string>);
     try {
       const template = mustache.render(section.content, all_placehodlers);
-      html += template;
+      html += template.replace(/\n/g,'<br>')
     } catch (error) {
       console.warn(error)
     }
