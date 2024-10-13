@@ -61,7 +61,10 @@ const UpdateForm = ({ section, template_id }: UpdateFormProps) => {
   const handleCreate = () => {
     if (!validateTemplate()) return;
     if (!validatePlaceholders()) return;
-    const clean = DOMPurify.sanitize(content);
+    const clean = DOMPurify.sanitize(content, {
+      ADD_TAGS: ["style"],
+      FORCE_BODY: true,
+    });
     mutate({
       title,
       templateId: template_id,

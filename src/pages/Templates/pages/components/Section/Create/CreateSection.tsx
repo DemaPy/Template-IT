@@ -13,8 +13,11 @@ export const CreateSection = ({ template_id }: CreateSectionFormProps) => {
   });
 
   const handleCreate = (payload: PayloadProps) => {
-    const clean = DOMPurify.sanitize(payload.content);
-    const clearBrs = clean.replace(/\n/g, "")
+    const clean = DOMPurify.sanitize(payload.content, {
+      ADD_TAGS: ["style"],
+      FORCE_BODY: true,
+    });
+    const clearBrs = clean.replace(/\n/g, "");
     mutate({
       ...payload,
       templateId: template_id,

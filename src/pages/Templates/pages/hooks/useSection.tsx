@@ -32,6 +32,7 @@ export function useCreateSection({
   return useMutation({
     mutationFn: (section: CreateSection) => {
       for (const key in section) {
+        console.log(key)
         const value = section[key as keyof CreateSection];
         if (Array.isArray(value)) continue;
         isValid({ key, value });
