@@ -4,20 +4,9 @@ import { Label } from "@/components/ui/label";
 type Props = {
   placeholders: PlaceholderToCreate[];
   setPlaceholders: (placeholders: PlaceholderToCreate[]) => void;
-  setErrorFallback: (err: string) => void;
 };
-const Placehodlers = ({
-  setErrorFallback,
-  placeholders,
-  setPlaceholders,
-}: Props) => {
+const Placehodlers = ({ placeholders, setPlaceholders }: Props) => {
   const updatePlacehodler = ({ title, fallback }: PlaceholderToCreate) => {
-    if (fallback.length < 3) {
-      setErrorFallback("Fallback too short.");
-    } else {
-      setErrorFallback("");
-    }
-
     setPlaceholders(
       placeholders.map((item: PlaceholderToCreate) => {
         if (item.title.toLowerCase() === title.toLowerCase()) {

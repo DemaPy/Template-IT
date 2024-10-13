@@ -1,47 +1,30 @@
-import Heading from "@/components/Heading";
 import PageContainer from "@/components/PageContainer";
-import { Edit, Trash } from "lucide-react";
 import { useParams } from "react-router-dom";
 import TemplateHandler from "./components/TemplateHandler";
-import UpdateTemplate from "../components/Update/UpdateTemplate";
-import { useDeleteTemplate, useFetchTemplate } from "./hooks/useTemplate";
-import {ErrorPage} from "@/pages/Error/Error";
-import { useState } from "react";
 import TemplateSkeleton from "./components/TemplateSkeleton";
+import Flex from "@/components/Layout/Flex";
+import Title from "@/components/Title";
+import { Actions } from "./components/Actions";
+import { FetchTemplate } from "./components/FetchTemplate";
 
 const Template = () => {
   const params = useParams<{ id: string }>();
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-
-  const { isPending: isFetching, isError, data, error } = useFetchTemplate(params.id!)
-  const { isPending: isDeleting, mutate } = useDeleteTemplate()
-
-  if (isFetching) return <TemplateSkeleton />
-
-  if (isError) {
-    return <ErrorPage error={error} message={error.message} path="/templates" />
-  }
 
   return (
     <PageContainer>
-      <Heading
-        title={data.data.title}
-        action={{
-          isLoading: isDeleting,
-          icon: <Trash className="w-4 h-4 text-red-400" />,
-          onClick: () => mutate({ id: data.data.id }),
-        }}
-        actions={[
-          {
-            icon: <Edit className="w-4 h-4" />,
-            onClick: () => setIsOpen(true),
-          },
-        ]}
-      />
-      {isOpen && (
-        <UpdateTemplate isOpen={isOpen} setClose={() => setIsOpen(false)} template_id={data.data.id} />
-      )}
-      <TemplateHandler template={data.data} />
+      <FetchTemplate skeleton={<TemplateSkeleton />} template_id={params.id!}>
+        {(data) => (
+          <>
+            <Flex direction="row" align="center" justify="between">
+              <Title title={data.title} size="md" />
+              <Flex direction="row" align="center" justify="between">
+                <Actions template_id={data.id} />
+              </Flex>
+            </Flex>
+            <TemplateHandler template={data} />
+          </>
+        )}
+      </FetchTemplate>
     </PageContainer>
   );
 };

@@ -1,9 +1,9 @@
 import ListView from "@/components/List";
 import Section from "./Section/Section";
-import CreateSection from "./Section/CreateSection";
 import ComponentSelect from "../../../../components/ComponentSelect";
 import { FetchComponents } from "@/pages/Components/components/FetchComponents";
 import { SelectSkeleton } from "@/components/Skeletons/SelectSkeleton";
+import { CreateSection } from "./Section/Create/CreateSection";
 
 type Props = {
   sections: Section[] | null;

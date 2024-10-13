@@ -4,33 +4,36 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { useCampaignUpdate } from "../../pages/hooks/useCampaign";
 import { useState } from "react";
-import { FetchCampaign } from "./FetchCampaign";
+import { Button } from "@/components/ui/button";
+import { useTemplateUpdate } from "../../pages/hooks/useTemplate";
+import { Edit } from "lucide-react";
+import { FetchTemplate } from "../components/FetchTemplate";
 import InputSkeleton from "@/components/Skeletons/InputSkeleton";
 import Update from "@/components/Update";
-import type { UpdateCampaignProps } from "../../types/UpdateCampaign";
 
-const UpdateCampaign = ({
-  isOpen,
-  setClose,
-  campaign_id,
-}: UpdateCampaignProps) => {
-  const [title, setTitle] = useState("");
-  const { isPending, mutate } = useCampaignUpdate({
-    invalidate_key: campaign_id,
+export const UpdateTemplate = ({ template_id }: TUpdateTemplate) => {
+  const { isPending, mutate } = useTemplateUpdate({
+    invalidate_key: [template_id],
   });
 
+  const [title, setTitle] = useState("");
+
   return (
-    <Dialog open={isOpen} onOpenChange={setClose}>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size={"sm"}>
+          <Edit className="w-4 h-4" />
+        </Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Update campaign</DialogTitle>
+          <DialogTitle>Update template</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <FetchCampaign campaign_id={campaign_id} skeleton={<InputSkeleton />}>
+          <FetchTemplate skeleton={<InputSkeleton />} template_id={template_id}>
             {(data) => (
               <Update
                 fields={[
@@ -43,17 +46,12 @@ const UpdateCampaign = ({
                 ]}
               />
             )}
-          </FetchCampaign>
+          </FetchTemplate>
         </div>
         <DialogFooter>
           <Button
+            onClick={() => mutate({ title: title, id: template_id })}
             disabled={isPending}
-            onClick={() =>
-              mutate({
-                title: title,
-                id: campaign_id,
-              })
-            }
           >
             Save changes
           </Button>
@@ -62,5 +60,3 @@ const UpdateCampaign = ({
     </Dialog>
   );
 };
-
-export default UpdateCampaign;
