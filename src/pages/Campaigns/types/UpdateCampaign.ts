@@ -1,10 +1,13 @@
-type TUpdateCampaign = {
+import { ReactElement } from "react";
+
+export type UpdateCampaignProps = {
   isOpen: boolean;
   setClose: () => void;
   campaign_id: Campaign["id"];
 };
 
-type TFetchCampaignToUpdate = {
+export type FetchCampaignToUpdateProps = {
   campaign_id: Campaign["id"];
-  setTitle: (value: Campaign["title"]) => void;
+  children: (data: Campaign) => ReactElement;
+  skeleton: ReactElement;
 };

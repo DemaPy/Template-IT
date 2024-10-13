@@ -3,25 +3,27 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { FetchSectionToUpdate } from "./FetchSectionToUpdate";
-import { TUpdateSection } from "../../../types/UpdateSection";
+import type { UpdateSectionProps } from "../../../types/UpdateSection";
+import { Edit } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-const UpdateSection = ({
-  section_id,
-  template_id,
-  isOpen,
-  setClose,
-}: TUpdateSection) => {
+const UpdateSection = ({ section_id, template_id }: UpdateSectionProps) => {
   return (
-    <Dialog open={isOpen} onOpenChange={setClose}>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size={"sm"}>
+          <Edit className="w-4 h-4 text-yellow-400" />
+        </Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit section</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4">
           <FetchSectionToUpdate
-            setClose={setClose}
             section_id={section_id}
             template_id={template_id}
           />

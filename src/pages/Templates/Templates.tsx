@@ -9,6 +9,7 @@ import {
 import ListView from "@/components/List";
 import TemplateCard from "./components/TemplateCard/TemplateCard";
 import { FetchTemplates } from "./components/ListTempaltes/FetchTemplates";
+import { TemplatesSkeleton } from "./components/TemplateSkeleton";
 
 const Templates = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -26,10 +27,10 @@ const Templates = () => {
       {isOpen && (
         <CreateTemplate isOpen={isOpen} setClose={() => setIsOpen(false)} />
       )}
-      <FetchTemplates>
+      <FetchTemplates skeleton={<TemplatesSkeleton />}>
         {(data) => (
           <PageItemsWrapper>
-            <ListView items={data.data} component={TemplateCard} />
+            <ListView items={data} component={TemplateCard} />
           </PageItemsWrapper>
         )}
       </FetchTemplates>

@@ -1,7 +1,8 @@
-import { ErrorPage } from "@/pages/Error/Error";
 import UpdateForm from "./UpdateForm";
 import { useFetchComponent } from "../../pages/hooks/useComponent";
 import ComponentUpdateSkeleton from "./ComponentSkeleton";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 export function FetchComponentToUpdate({
   componet_id,
@@ -9,13 +10,14 @@ export function FetchComponentToUpdate({
 }: TFetchComponentToUpdate) {
   const { isPending, data, isError, error } = useFetchComponent(componet_id);
 
-  if (isPending) return <ComponentUpdateSkeleton />;
+  useEffect(() => {
+    if (isError) {
+      toast.error((error as Error).message);
+    }
+  }, [isError, error]);
 
-  if (isError) {
-    return (
-      <ErrorPage error={error} message={error.message} path="/templates" />
-    );
-  }
+  if (isPending) return <ComponentUpdateSkeleton />;
+  if (isError) return null;
 
   return <UpdateForm setClose={setClose} component={data.data} />;
 }

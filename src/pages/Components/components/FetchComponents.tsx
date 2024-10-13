@@ -1,15 +1,15 @@
 import { ReactElement, useEffect } from "react";
-import { useFetchTemplates } from "../../pages/hooks/useTemplate";
 import toast from "react-hot-toast";
+import { useFetchComponents } from "../pages/hooks/useComponent";
 
-export const FetchTemplates = ({
+export const FetchComponents = ({
   children,
   skeleton,
 }: {
   skeleton: ReactElement;
-  children: (data: Template[]) => ReactElement;
+  children: (data: Component[]) => ReactElement;
 }) => {
-  const { data, isError, error, isPending } = useFetchTemplates();
+  const { data, isPending, isError, error } = useFetchComponents();
   useEffect(() => {
     if (isError) {
       toast.error((error as Error).message);
@@ -18,6 +18,5 @@ export const FetchTemplates = ({
 
   if (isPending) return skeleton;
   if (isError) return null;
-
   return <>{children(data.data)}</>;
 };

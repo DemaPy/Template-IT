@@ -1,20 +1,13 @@
-import {ErrorPage} from "@/pages/Error/Error"
-import { SelectItem } from "./ui/select"
-import { useFetchTemplates } from "@/pages/Templates/pages/hooks/useTemplate";
-import ComponentsSkeleton from "@/pages/Components/components/ComponentsSkeleton";
+import { SelectItem } from "./ui/select";
 
-export function TemplatesToSelect() {
-    const { data, isError, error, isPending } = useFetchTemplates();
-
-    if (isPending) return <ComponentsSkeleton />
-
-    if (isError) {
-        return <ErrorPage error={error} message={error.message} path="/" />
-    }
-
-    return (
-        <>
-            {data.data.map((item, idx) => <SelectItem key={idx} value={item.id}>{item.title}</SelectItem>)}
-        </>
-    )
+export function TemplatesToSelect({ data }: { data: Template[] }) {
+  return (
+    <>
+      {data.map((item, idx) => (
+        <SelectItem key={idx} value={item.id}>
+          {item.title}
+        </SelectItem>
+      ))}
+    </>
+  );
 }

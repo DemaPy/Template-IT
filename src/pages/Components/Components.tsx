@@ -3,21 +3,12 @@ import { PlusCircle } from "lucide-react";
 import ComponentCard from "./components/ComponentCard";
 import CreateComponent from "./components/CreateComponent";
 import ComponentsSkeleton from "./components/ComponentsSkeleton";
-import { useFetchComponents } from "./pages/hooks/useComponent";
-import { ErrorPage } from "../Error/Error";
 import { useState } from "react";
 import { GridView, Heading, PageItemsWrapper } from "@/components";
+import { FetchComponents } from "./components/FetchComponents";
 
 const Components = () => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const { data, isPending, isError, error } = useFetchComponents();
-
-  if (isPending) return <ComponentsSkeleton />;
-
-  if (isError) {
-    return <ErrorPage error={error} message={error.message} path="/" />;
-  }
 
   return (
     <PageContainer>
@@ -32,9 +23,13 @@ const Components = () => {
       {isOpen && (
         <CreateComponent isOpen={isOpen} setClose={() => setIsOpen(false)} />
       )}
-      <PageItemsWrapper>
-        <GridView items={data.data} component={ComponentCard} />
-      </PageItemsWrapper>
+      <FetchComponents skeleton={<ComponentsSkeleton />}>
+        {(data) => (
+          <PageItemsWrapper>
+            <GridView items={data} component={ComponentCard} />
+          </PageItemsWrapper>
+        )}
+      </FetchComponents>
     </PageContainer>
   );
 };

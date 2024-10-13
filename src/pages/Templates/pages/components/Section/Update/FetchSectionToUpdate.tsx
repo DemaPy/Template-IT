@@ -1,23 +1,23 @@
-import { ErrorPage } from "@/pages/Error/Error";
 import { useFetchSection } from "../../../hooks/useSection";
 import UpdateForm from "./UpdateForm";
-import type { TFetchSectionToUpdate } from "../../../types/UpdateSection";
+import type { FetchSectionToUpdateProps } from "../../../types/UpdateSection";
 import SectionUpdateSkeleton from "./SectionSkeleton";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 export function FetchSectionToUpdate({
   section_id,
   template_id,
-  setClose
-}: TFetchSectionToUpdate) {
+}: FetchSectionToUpdateProps) {
   const { isPending, data, isError, error } = useFetchSection(section_id);
 
+  useEffect(() => {
+    if (isError) {
+      toast.error((error as Error).message);
+    }
+  }, [isError, error]);
   if (isPending) return <SectionUpdateSkeleton />;
+  if (isError) return null;
 
-  if (isError) {
-    return (
-      <ErrorPage error={error} message={error.message} path="/templates" />
-    );
-  }
-
-  return <UpdateForm setClose={setClose} section={data.data} template_id={template_id} />;
+  return <UpdateForm section={data.data} template_id={template_id} />;
 }

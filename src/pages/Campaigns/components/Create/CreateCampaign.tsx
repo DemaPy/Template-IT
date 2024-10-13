@@ -10,18 +10,17 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useCreateCampaign } from "../../pages/hooks/useCampaign";
 import { useState } from "react";
-import {ErrorPage} from "@/pages/Error/Error";
 import TemplateSelect from "@/components/TemplateSelect";
+import { FetchTemplates } from "@/pages/Templates/components/ListTempaltes/FetchTemplates";
+import { SelectSkeleton } from "@/components/Skeletons/SelectSkeleton";
 
 const CreateCampaign = ({ isOpen, setClose }: TCreateCampaign) => {
   const [title, setTitle] = useState("");
   const [template_id, setTemplateId] = useState<string>("");
 
-  const { isPending, isError, error, mutate } = useCreateCampaign();
+  const { isPending, isError, mutate } = useCreateCampaign();
 
-  if (isError) {
-    return <ErrorPage error={error} message={error.message} path="/campaigns" />;
-  }
+  if (isError) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={setClose}>
@@ -29,8 +28,8 @@ const CreateCampaign = ({ isOpen, setClose }: TCreateCampaign) => {
         <DialogHeader>
           <DialogTitle>Create campaign</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-2 flex-col">
             <Label htmlFor="name" className="text-left">
               Title
             </Label>
@@ -41,10 +40,21 @@ const CreateCampaign = ({ isOpen, setClose }: TCreateCampaign) => {
               onChange={(ev) => setTitle(ev.target.value)}
               className="col-span-4"
             />
+          </div>
+          <div className="flex gap-2 flex-col">
             <Label htmlFor="template_id" className="text-left">
               Template
             </Label>
-            <TemplateSelect template_id={template_id} isLoading={isPending} onSelect={(id) => setTemplateId(id)} />
+            <FetchTemplates skeleton={<SelectSkeleton />}>
+              {(data) => (
+                <TemplateSelect
+                  data={data}
+                  template_id={template_id}
+                  isLoading={isPending}
+                  onSelect={(id) => setTemplateId(id)}
+                />
+              )}
+            </FetchTemplates>
           </div>
         </div>
         <DialogFooter>
@@ -57,7 +67,7 @@ const CreateCampaign = ({ isOpen, setClose }: TCreateCampaign) => {
               })
             }
           >
-            Save changes
+            Create
           </Button>
         </DialogFooter>
       </DialogContent>

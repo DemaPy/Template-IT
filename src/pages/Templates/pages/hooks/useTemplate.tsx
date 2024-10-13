@@ -86,6 +86,6 @@ export function useTemplateUpdate({
 export function useFetchTemplates() {
     return useQuery({
         queryKey: TEMPLATES_KEY,
-        queryFn: () => TemplateServiceDB.getAll()
+        queryFn: () => TemplateServiceDB.getAll(),
     })
 }
