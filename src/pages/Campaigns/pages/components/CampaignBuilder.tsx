@@ -38,23 +38,22 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
       }
     }
     const all_placehodlers = section.placeholders.reduce((acc, item) => {
-
       if (!(section.id in campaign.data)) {
-        acc[item.title] = item.fallback
+        acc[item.title] = item.fallback;
       } else {
         const campaign_data = campaign.data[section.id];
 
         if (!(item.id in campaign_data)) {
-          acc[item.title] = item.fallback
+          acc[item.title] = item.fallback;
         }
         // In case of section has different amounts of slugs
         if (!(slug in campaign_data[item.id])) {
-          acc[item.title] = item.fallback
+          acc[item.title] = item.fallback;
         } else {
           if (campaign_data[item.id][slug].length === 0) {
-            acc[item.title] = item.fallback
+            acc[item.title] = item.fallback;
           } else {
-            acc[item.title] = campaign_data[item.id][slug]
+            acc[item.title] = campaign_data[item.id][slug];
           }
         }
       }
@@ -63,13 +62,11 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
     }, {} as Record<string, string>);
 
     try {
-      console.log(all_placehodlers);
-
       const template = mustache.render(section.content, all_placehodlers);
 
       html += template;
     } catch (error) {
-      console.warn(error)
+      console.warn(error);
     }
   }
 
@@ -82,26 +79,27 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
   }
 
   return (
-    <div className="overflow-hidden flex flex-col gap-2 relative bg-slate-50 p-2">
-      <TransformWrapper
-        smooth={true}
-        minScale={0.7}
-        maxScale={1.3}
-        initialScale={1}>
-        <NavbarBuilder
-          setDevice={(device: KeyDevices) => setDevice(device)}
-          html={decode(html)}
-          campaign={campaign}
-        />
-        <TransformComponent wrapperClass="!w-[900px] absolute inset-0 left-1/2 -translate-x-1/2" contentClass="!h-[100vh] overflow-y-auto overflow-x-hidden flex-col items-center">
-          <iframe
-            style={{ width: devices[device] }}
-            srcDoc={decode(html)}
-            className="grow"
-          ></iframe>
-        </TransformComponent>
-      </TransformWrapper>
-    </div >
+    <TransformWrapper
+      smooth={true}
+      minScale={0.7}
+      maxScale={1.3}
+      initialScale={1}
+    >
+      <NavbarBuilder
+        setDevice={(device: KeyDevices) => setDevice(device)}
+        html={decode(html)}
+        campaign={campaign}
+      />
+      <TransformComponent
+        wrapperClass="!w-full !h-screen bg-white rounded-md"
+        contentClass="pointer-events-none !w-full"
+      >
+        <iframe
+          style={{ width: devices[device] }}
+          srcDoc={decode(html)}
+        ></iframe>
+      </TransformComponent>
+    </TransformWrapper>
   );
 };
 
