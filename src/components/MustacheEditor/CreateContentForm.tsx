@@ -1,11 +1,4 @@
 import { useEffect, useState } from "react";
-import { UpdateFormProps } from "../../../types/UpdateSection";
-import { useUpdateSection } from "../../../hooks/useSection";
-import SectionSkeleton from "./SectionSkeleton";
-import toast from "react-hot-toast";
-import { FormTitle } from "@/components/MustacheEditor/FormTitle";
-import { FormContent } from "@/components/MustacheEditor/FormContent";
-import Mustache from "mustache";
 import {
   Dialog,
   DialogContent,
@@ -15,20 +8,32 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
+import { CreatePlaceholders } from "@/services/types/Placeholder";
+import toast from "react-hot-toast";
+import Mustache from "mustache";
+import { FormTitle } from "./FormTitle";
+import { FormContent } from "./FormContent";
 
-const UpdateForm = ({ section, template_id }: UpdateFormProps) => {
+export type PayloadProps = {
+  title: string;
+  content: string;
+  placeholders: CreatePlaceholders["placeholders"];
+};
+
+export const CreateContentForm = ({
+  onSubmit,
+  isPending,
+}: {
+  isPending: boolean;
+  onSubmit: (payload: PayloadProps) => void;
+}) => {
   const [err, setErr] = useState("");
 
-  const [title, setTitle] = useState(section.title);
-  const [content, setContent] = useState(section.content);
-  const [placeholders, setPlaceholders] = useState<PlaceholderToCreate[]>(
-    section.placeholders
-  );
-
-  const { isPending, mutate, isError, error } = useUpdateSection({
-    invalidate_key: template_id,
-  });
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [placeholders, setPlaceholders] = useState<
+    CreatePlaceholders["placeholders"]
+  >([]);
 
   const validateTemplate = () => {
     let isValid = true;
@@ -60,20 +65,13 @@ const UpdateForm = ({ section, template_id }: UpdateFormProps) => {
   const handleCreate = () => {
     if (!validateTemplate()) return;
     if (!validatePlaceholders()) return;
-    mutate({
-      title,
-      templateId: template_id,
+    const payload = {
       content,
+      title: title,
       placeholders,
-      id: section.id,
-    });
+    };
+    onSubmit(payload);
   };
-
-  useEffect(() => {
-    if (isError) {
-      toast.error((error as Error).message);
-    }
-  }, [isError, error]);
 
   useEffect(() => {
     if (err) {
@@ -81,14 +79,10 @@ const UpdateForm = ({ section, template_id }: UpdateFormProps) => {
     }
   }, [err]);
 
-  if (isPending) return <SectionSkeleton />;
-
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size={"sm"} variant={"default"}>
-          <Edit className="w-4 h-4 text-yellow-400" />
-        </Button>
+        <Button variant={"outline"}>Create</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -115,5 +109,3 @@ const UpdateForm = ({ section, template_id }: UpdateFormProps) => {
     </Dialog>
   );
 };
-
-export default UpdateForm;

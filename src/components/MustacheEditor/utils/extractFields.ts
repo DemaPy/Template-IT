@@ -1,11 +1,6 @@
 import Mustache from "mustache";
-import { ParsedTemplate } from "../types";
 
-export const extractFields = ({
-  template,
-}: {
-  template: string;
-}): ParsedTemplate | Error => {
+export const extractFields = ({ template }: { template: string }) => {
   try {
     const allTokens = Mustache.parse(template);
     const nameTokens = allTokens.filter((item) => item[0] === "name");
@@ -15,15 +10,8 @@ export const extractFields = ({
         fallback: "",
       };
     });
-    return {
-      template,
-      tokens: nameTokens,
-      placeholders: placeholders,
-    };
+    return placeholders;
   } catch (error) {
-    if (error instanceof Error || error instanceof TypeError) {
-      throw new Error(error.message);
-    }
-    throw new Error("Something went wrong");
+    return [];
   }
 };

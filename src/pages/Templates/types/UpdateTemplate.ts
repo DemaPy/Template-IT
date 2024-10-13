@@ -1,6 +1,4 @@
 type TUpdateTemplate = {
-    isOpen: boolean,
-    setClose: () => void,
     template_id: Template['id']
 }
 

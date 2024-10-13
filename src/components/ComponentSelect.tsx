@@ -39,7 +39,6 @@ const ComponentSelect = ({ data, template_id }: TComponentSelect) => {
   }, [isError, error]);
 
   if (isPending) return <SelectSkeleton />;
-  if (isError) return null;
 
   return (
     <Select
