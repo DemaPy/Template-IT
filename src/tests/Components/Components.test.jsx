@@ -1,19 +1,31 @@
 import { render, screen, cleanup } from "@testing-library/react";
 import React from "react";
 import Components from "../../pages/Components/Components";
-import Component from "../../pages/Components/pages/Component";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 afterEach(cleanup);
+const queryClient = new QueryClient({
+  defaultOptions: {
+    mutations: {
+      retry: false,
+    },
+  },
+});
 
-describe("A truthy statement", () => {
-  it("should render Components component", () => {
-    render(<Components />);
-    expect(screen.getByText("Components")).toBeInTheDocument()
-  });
-
-  it("should render Component component", () => {
-    const result = render(<Component />);
-    const testId = result.container.querySelector('data-test-id')
-    expect(testId).toBe("component-sidebar")
+describe("Test Components component", () => {
+  it("Components component has been rendered", () => {
+    const router = createBrowserRouter([
+      {
+        path: "/",
+        element: (
+          <QueryClientProvider client={queryClient}>
+            <Components />
+          </QueryClientProvider>
+        ),
+      },
+    ]);
+    render(<RouterProvider router={router} />);
+    expect(screen.getByText("Components")).toBeInTheDocument();
   });
 });

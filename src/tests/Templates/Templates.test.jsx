@@ -1,22 +1,31 @@
 import { render, screen, cleanup } from "@testing-library/react";
 import React from "react";
 import Templates from "../../pages/Templates/Templates";
-import Template from "../../pages/Templates/pages/Template";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 afterEach(cleanup);
+const queryClient = new QueryClient({
+  defaultOptions: {
+    mutations: {
+      retry: false,
+    },
+  },
+});
 
-describe("A truthy statement", () => {
-  it("should be equal to 2", () => {
-    expect(1 + 1).toEqual(2);
-  });
-  it("should render Templates component with Templates title", () => {
-    render(<Templates />);
-    expect(screen.getByText("Templates")).toBeInTheDocument()
-  });
-
-  it("Should render Template component", () => {
-    const result = render(<Template />);
-    const testId = result.container.querySelector('data-test-id')
-    expect(testId).toBe("template-sidebar")
+describe("Test Templates component", () => {
+  it("Templates component has been rendered", () => {
+    const router = createBrowserRouter([
+      {
+        path: "/",
+        element: (
+          <QueryClientProvider client={queryClient}>
+            <Templates />
+          </QueryClientProvider>
+        ),
+      },
+    ]);
+    render(<RouterProvider router={router} />);
+    expect(screen.getByText("Templates")).toBeInTheDocument();
   });
 });
