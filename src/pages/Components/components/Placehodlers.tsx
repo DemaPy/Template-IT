@@ -4,36 +4,31 @@ import { Label } from "@/components/ui/label";
 type Props = {
   placeholders: PlaceholderToCreate[];
   setPlaceholders: (placeholders: PlaceholderToCreate[]) => void;
-  placeholdersRef: {
-    current: Record<string, string>
-  }
+
 };
-const Placehodlers = ({ placeholdersRef, placeholders, setPlaceholders }: Props) => {
+const Placehodlers = ({ placeholders, setPlaceholders }: Props) => {
 
   const updatePlacehodler = ({ title, fallback }: PlaceholderToCreate) => {
     const new_placeholders = placeholders.map((item: PlaceholderToCreate) => {
       if (item.title.toLowerCase() === title.toLowerCase()) {
-        placeholdersRef.current[item.title] = fallback
         return {
           ...item,
           fallback: fallback,
         };
       }
-      placeholdersRef.current[item.title] = item.fallback
       return item;
     })
     setPlaceholders(new_placeholders);
   };
-  
+
   return (
     <>
       {placeholders.map((placeholder) => {
-        placeholdersRef.current[placeholder.title] = placeholder.fallback
         return <Placeholder
-        onUpdate={updatePlacehodler}
-        placeholder={placeholder}
-        key={placeholder.title}
-      />
+          onUpdate={updatePlacehodler}
+          placeholder={placeholder}
+          key={placeholder.title}
+        />
       })}
     </>
   );

@@ -39,7 +39,10 @@ const Section = ({ campaign, item }: Props) => {
         action={{ icon: isOpen ? <ChevronUpIcon className='w-4 h-4' /> : <ChevronDown className='w-4 h-4' />, onClick: () => setIsOpen(!isOpen) }} />
       {isOpen && (
         <>
-          <Textarea disabled={true} defaultValue={decode(item.content)} className='resize-none w-full min-h-60 max-h-72' />
+
+          <div className='min-h-72 max-h-72 overflow-y-auto relative'>
+            <iframe srcDoc={decode(item.content)} className='pointer-events-none absolute inset-0 w-full min-h-[500vh]' />
+          </div>
           <Placeholders placeholders={item.placeholders} />
         </>
       )}

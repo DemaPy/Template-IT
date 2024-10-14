@@ -10,7 +10,9 @@ const Placeholders = ({ placeholders }: Props) => {
     return (
         <div>
             <Title title={"Placeholders"} size='xs' />
-            <ListView component={Placeholder} items={placeholders} />
+            <div className='max-h-80 overflow-y-auto'>
+                <ListView component={Placeholder} items={placeholders} />
+            </div>
         </div>
     )
 }

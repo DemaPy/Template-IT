@@ -1,6 +1,5 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent } from 'react'
 import { Textarea } from '../ui/textarea'
-import { ParsedTemplate } from './types'
 
 type MustacheEditorProps = {
     setContent: (template: string) => void
@@ -14,7 +13,7 @@ const MustacheEditor = ({ value, setContent }: MustacheEditorProps) => {
     }
 
     return (
-        <Textarea value={value} rows={20} className='resize-none' onChange={handleChange}></Textarea>
+        <Textarea defaultValue={value} rows={20} className='resize-none' onBlur={handleChange}></Textarea>
     )
 }
 

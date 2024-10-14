@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MustacheEditor from "@/components/MustacheEditor/MustacheEditor";
 import Placehodlers from "@/pages/Components/components/Placehodlers";
 import { extractFields } from "@/components/MustacheEditor/utils/extractFields";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 type FormContentProps = {
@@ -18,27 +18,17 @@ export const FormContent = ({
   placeholders,
   setPlaceholders,
 }: FormContentProps) => {
-  const placeholdersRef = useRef<Record<string, string>>({})
-  const [isUnique, setUnique] = useState(true)
+  const [placeholdersInfo, setPlaceholdersInfo] = useState({
+    isUnique: true,
+    placeholders: [""]
+  })
 
   useEffect(() => {
-    if (!isUnique) {
-      toast.error("Placeholder already exist.")
+    if (!placeholdersInfo.isUnique) {
+      toast.error(`Placeholder ${placeholdersInfo.placeholders.join(", ")} already exist.`)
     }
-  }, [isUnique])
+  }, [placeholdersInfo])
 
-  
-  const preFulFillPlaceholders = placeholders.map(item => {
-    if (item.title in placeholdersRef.current) {
-      return {
-        ...item,
-        fallback: placeholdersRef.current[item.title]
-      }
-    }
-    return item
-  })
-  console.log(placeholdersRef);
-  
   return (
     <div className="grid grid-cols-4 items-center gap-4">
       <div className="col-span-4">
@@ -51,11 +41,21 @@ export const FormContent = ({
             <MustacheEditor
               value={content}
               setContent={(template) => {
-                const { placeholders, isAllUnique } = extractFields({ template })
-                setUnique(isAllUnique)
+                const { placeholders: new_placeholders, isAllUnique, repeated_placeholders } = extractFields({ template })
+                setPlaceholdersInfo({
+                  isUnique: isAllUnique,
+                  placeholders: repeated_placeholders
+                })
                 if (isAllUnique) {
                   setContent(template);
-                  setPlaceholders(placeholders);
+                  const placeholders_to_set = []
+                  for (const item of new_placeholders) {
+                    const candidate = placeholders.find(plc => plc.title.toLowerCase() === item.title.toLowerCase())
+                    if (!candidate) {
+                      placeholders_to_set.push(item)
+                    }
+                  }
+                  setPlaceholders([...placeholders_to_set, ...placeholders]);
                 }
               }}
             />
@@ -63,8 +63,7 @@ export const FormContent = ({
           <TabsContent value="placeholders">
             <div className="flex flex-col gap-2 max-h-[420px] h-full overflow-y-auto">
               <Placehodlers
-                placeholdersRef={placeholdersRef}
-                placeholders={preFulFillPlaceholders}
+                placeholders={placeholders}
                 setPlaceholders={(data) => setPlaceholders(data)}
               />
             </div>

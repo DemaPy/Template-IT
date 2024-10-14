@@ -10,6 +10,11 @@ body,
   background-color: #ececec;
 }
 
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
 .csv-reader-input {
   height: 100%;
   display: flex;

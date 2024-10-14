@@ -45,7 +45,7 @@ const Sidebar = ({ isLayoutChanged, setIsLayoutChanged, setSelectedSlug, layout,
 
 
   return (
-    <div className='lg:w-3/4 w-full overflow-auto max-h-[80vh]'>
+    <div className='w-full h-full overflow-y-auto'>
       <Tabs defaultValue="sections">
         <TabsList className='sticky top-0 flex items-center justify-between bg-transparent z-50'>
           <div>
