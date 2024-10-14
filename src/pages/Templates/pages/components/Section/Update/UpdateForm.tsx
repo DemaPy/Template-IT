@@ -69,7 +69,17 @@ const UpdateForm = ({ section, template_id }: UpdateFormProps) => {
       title,
       templateId: template_id,
       content: clean,
-      placeholders,
+      placeholders: placeholders.map(item => {
+        for (const placeholder of section.placeholders) {
+          if (item.title.toLowerCase() === placeholder.title.toLowerCase()) {
+            return {
+              ...item,
+              id: placeholder.id
+            }
+          }
+        }
+        return item
+      }),
       id: section.id,
     });
   };
@@ -97,7 +107,7 @@ const UpdateForm = ({ section, template_id }: UpdateFormProps) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create</DialogTitle>
+          <DialogTitle>Update</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4">
           <FormTitle setTitle={(title) => setTitle(title)} title={title} />

@@ -67,7 +67,17 @@ const UpdateForm = ({ component }: UpdateFormProps) => {
     mutate({
       title,
       content: clean,
-      placeholders,
+      placeholders: placeholders.map(item => {
+        for (const placeholder of component.placeholders) {
+          if (item.title.toLowerCase() === placeholder.title.toLowerCase()) {
+            return {
+              ...item,
+              id: placeholder.id
+            }
+          }
+        }
+        return item
+      }),
       id: component.id,
     });
   };
@@ -95,7 +105,7 @@ const UpdateForm = ({ component }: UpdateFormProps) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create</DialogTitle>
+          <DialogTitle>Update</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4">
           <FormTitle setTitle={(title) => setTitle(title)} title={title} />
