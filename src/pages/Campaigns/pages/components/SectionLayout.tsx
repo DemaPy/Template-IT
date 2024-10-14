@@ -1,13 +1,12 @@
 import Title from "@/components/Title";
 import type { Identifier, XYCoord } from "dnd-core";
 import { ChevronDown, ChevronUp, GripVertical } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Switchh } from "@/components/Switch";
 import { Button } from "@/components/ui/button";
 import SectionSlugs from "./SectionSlugs";
 import { useDrag, useDrop } from "react-dnd";
 import { useLayoutUpdate } from "../hooks/useLayout";
-import { ErrorPage } from "@/pages/Error/Error";
 
 type Props = {
   index: number;

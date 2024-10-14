@@ -17,7 +17,7 @@ const Component = ({ item }: Props) => {
         onClick: () => setIsOpen(!isOpen)
       }} />
       {isOpen && (
-        <Placeholders invalidate_key={item.id} service={"component"} placeholders={item.placeholders} />
+        <Placeholders placeholders={item.placeholders} />
       )}
     </li>
   )

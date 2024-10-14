@@ -1,5 +1,4 @@
 import Heading from '@/components/Heading'
-import { Textarea } from '@/components/ui/textarea'
 import { ChevronDown, ChevronUpIcon, ImportIcon } from 'lucide-react'
 import { useState } from 'react'
 import Placeholders from './Placeholders'
