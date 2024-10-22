@@ -22,7 +22,7 @@ CI/CD
 Docker
 Jest
 
-🚩 Tech stack Backend:
+## Tech stack Backend:
 Express
 Prisma
 Postgres
