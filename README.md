@@ -24,6 +24,7 @@ Jest
 
 ## Tech stack Backend:
 Express
+Typescript
 Prisma
 Postgres
 Vercel
