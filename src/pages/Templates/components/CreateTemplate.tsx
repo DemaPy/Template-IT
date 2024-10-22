@@ -24,7 +24,7 @@ const CreateTemplate = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
+        <Button size={"sm"}>
           <CirclePlus className="w-4 h-4" />
         </Button>
       </DialogTrigger>

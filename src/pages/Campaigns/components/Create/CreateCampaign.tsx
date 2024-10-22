@@ -25,7 +25,7 @@ const CreateCampaign = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
+        <Button size={"sm"}>
           <PlusCircle className="w-4 h-4" />
         </Button>
       </DialogTrigger>
