@@ -13,18 +13,14 @@ import InputSkeleton from "@/components/Skeletons/InputSkeleton";
 import Update from "@/components/Update";
 import type { UpdateCampaignProps } from "../../types/UpdateCampaign";
 
-const UpdateCampaign = ({
-  isOpen,
-  setClose,
-  campaign_id,
-}: UpdateCampaignProps) => {
+const UpdateCampaign = ({ campaign_id }: UpdateCampaignProps) => {
   const [title, setTitle] = useState("");
   const { isPending, mutate } = useCampaignUpdate({
-    invalidate_key: campaign_id,
+    invalidate_key: [campaign_id],
   });
 
   return (
-    <Dialog open={isOpen} onOpenChange={setClose}>
+    <Dialog>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Update campaign</DialogTitle>

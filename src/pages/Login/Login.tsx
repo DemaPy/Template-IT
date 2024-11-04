@@ -16,7 +16,7 @@ import { Auth } from "@/services/Auth";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import toast, { Toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 
 type FormValues = {
