@@ -45,9 +45,9 @@ const Sidebar = ({ isLayoutChanged, setIsLayoutChanged, setSelectedSlug, layout,
 
 
   return (
-    <div className='w-full h-full overflow-y-auto'>
+    <div className='w-full overflow-y-auto'>
       <Tabs defaultValue="sections">
-        <TabsList className='sticky top-0 flex items-center justify-between bg-transparent z-50'>
+        <TabsList className='sticky top-0 flex items-center justify-between z-50 bg-[#ececec]'>
           <div>
             <TabsTrigger value="sections">Sections</TabsTrigger>
             <TabsTrigger value="layout">Layout</TabsTrigger>

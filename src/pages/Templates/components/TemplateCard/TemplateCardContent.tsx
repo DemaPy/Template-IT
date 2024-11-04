@@ -7,7 +7,7 @@ const TemplateCardContent = ({ sections }: TemplateCardContentProps) => {
   return (
     <div className="flex flex-col gap-1">
       <Tabs defaultValue="preview">
-        <div className="flex justify-between items-end">
+        <div className="flex justify-between items-center">
           <Label htmlFor="content">Content</Label>
           <TabsList>
             <TabsTrigger value="preview">Preview</TabsTrigger>

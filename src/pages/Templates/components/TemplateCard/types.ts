@@ -8,6 +8,7 @@ export interface TemplateCardFormValues {
   title: Template["title"];
 }
 export interface TemplateCardTitleProps {
+  item: Template;
   errors: FieldErrors<TemplateCardFormValues>;
   register: UseFormRegister<TemplateCardFormValues>;
 }
