@@ -1,9 +1,3 @@
-type TUpdateTemplate = {
+export type UpdateTemplateProps = {
     template_id: Template['id']
-}
-
-
-type TFetchTemplateToUpdate = {
-    template_id: Template['id']
-    setTitle: (value: Template['title']) => void
 }

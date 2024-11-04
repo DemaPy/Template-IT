@@ -1,9 +1,9 @@
 import { useFetchSection } from "../../../hooks/useSection";
-import UpdateForm from "./UpdateForm";
 import type { FetchSectionToUpdateProps } from "../../../types/UpdateSection";
 import SectionUpdateSkeleton from "./SectionSkeleton";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import UpdateForm from "./UpdateForm";
 
 export function FetchSectionToUpdate({
   section_id,
@@ -16,8 +16,9 @@ export function FetchSectionToUpdate({
       toast.error((error as Error).message);
     }
   }, [isError, error]);
+
   if (isPending) return <SectionUpdateSkeleton />;
   if (isError) return null;
 
-  return <UpdateForm section={data.data} template_id={template_id} />;
+  return <UpdateForm template_id={template_id} data={data.data} />;
 }

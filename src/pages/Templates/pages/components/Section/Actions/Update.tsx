@@ -1,4 +1,4 @@
-import UpdateSection from "../Update/UpdateSection";
+import UpdateDialog from "../Update/UpdateDialog";
 
 type UpdateProps = {
   template_id: Template["id"];
@@ -6,5 +6,5 @@ type UpdateProps = {
 };
 
 export const Update = ({ template_id, section_id }: UpdateProps) => {
-  return <UpdateSection section_id={section_id} template_id={template_id} />;
+  return <UpdateDialog section_id={section_id} template_id={template_id} />;
 };

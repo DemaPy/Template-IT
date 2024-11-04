@@ -32,8 +32,8 @@ const Section = ({ campaign, item }: Props) => {
         title={item.title}
         size='xs'
         actions={[
-          { title: "Add data", onClick: () => setIsOpenData(true), icon: <ImportIcon className='w-4 h-4 mr-2' />, isLoading: item.placeholders.length === 0 },
-          { icon: isDataOpen ? <ChevronUpIcon className='w-4 h-4 mr-2' /> : <ChevronDown className='w-4 h-4 mr-2' />, title: "Show data", onClick: () => setIsDataOpen(!isDataOpen) }
+          { title: "Add data", onClick: () => setIsOpenData(true), icon: <ImportIcon className='w-4 h-4' />, isLoading: item.placeholders.length === 0 },
+          { icon: isDataOpen ? <ChevronUpIcon className='w-4 h-4' /> : <ChevronDown className='w-4 h-4' />, title: "Show data", onClick: () => setIsDataOpen(!isDataOpen) }
         ]}
         action={{ icon: isOpen ? <ChevronUpIcon className='w-4 h-4' /> : <ChevronDown className='w-4 h-4' />, onClick: () => setIsOpen(!isOpen) }} />
       {isOpen && (

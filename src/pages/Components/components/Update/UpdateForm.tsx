@@ -1,23 +1,18 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
-import Mustache from "mustache";
-import ComponentUpdateSkeleton from "./ComponentSkeleton";
-import { Edit } from "lucide-react";
 import { FormTitle } from "@/components/MustacheEditor/FormTitle";
 import { FormContent } from "@/components/MustacheEditor/FormContent";
+import { useEffect, useState } from "react";
+import Mustache from "mustache";
 import { useComponentUpdate } from "../../pages/hooks/useComponent";
 import DOMPurify from "dompurify";
+import toast from "react-hot-toast";
+import { DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
-const UpdateForm = ({ component }: UpdateFormProps) => {
+type Props = {
+  component: Component;
+};
+
+const UpdateForm = ({ component }: Props) => {
   const [err, setErr] = useState("");
 
   const [title, setTitle] = useState(component.title);
@@ -67,26 +62,20 @@ const UpdateForm = ({ component }: UpdateFormProps) => {
     mutate({
       title,
       content: clean,
-      placeholders: placeholders.map(item => {
+      placeholders: placeholders.map((item) => {
         for (const placeholder of component.placeholders) {
           if (item.title.toLowerCase() === placeholder.title.toLowerCase()) {
             return {
               ...item,
-              id: placeholder.id
-            }
+              id: placeholder.id,
+            };
           }
         }
-        return item
+        return item;
       }),
       id: component.id,
     });
   };
-
-  useEffect(() => {
-    if (isError) {
-      toast.error((error as Error).message);
-    }
-  }, [isError, error]);
 
   useEffect(() => {
     if (err) {
@@ -94,38 +83,30 @@ const UpdateForm = ({ component }: UpdateFormProps) => {
     }
   }, [err]);
 
-  if (isPending) return <ComponentUpdateSkeleton />;
+  useEffect(() => {
+    if (isError) {
+      toast.error((error as Error).message);
+    }
+  }, [isError, error]);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button size={"sm"} variant={"default"}>
-          <Edit className="w-4 h-4 text-yellow-400" />
+    <div className="grid gap-4">
+      <FormTitle setTitle={(title) => setTitle(title)} title={title} />
+      <FormContent
+        content={content}
+        setContent={(content) => setContent(content)}
+        placeholders={placeholders}
+        setPlaceholders={(placeholders) => {
+          setPlaceholders(placeholders);
+          setErr("");
+        }}
+      />
+      <DialogFooter>
+        <Button disabled={isPending} onClick={handleCreate}>
+          Update
         </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Update</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-4">
-          <FormTitle setTitle={(title) => setTitle(title)} title={title} />
-          <FormContent
-            content={content}
-            setContent={(content) => setContent(content)}
-            placeholders={placeholders}
-            setPlaceholders={(placeholders) => {
-              setPlaceholders(placeholders);
-              setErr("");
-            }}
-          />
-        </div>
-        <DialogFooter>
-          <Button disabled={isPending} onClick={handleCreate}>
-            Update
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      </DialogFooter>
+    </div>
   );
 };
 

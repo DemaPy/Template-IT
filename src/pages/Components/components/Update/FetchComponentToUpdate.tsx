@@ -1,8 +1,8 @@
-import UpdateForm from "./UpdateForm";
 import { useFetchComponent } from "../../pages/hooks/useComponent";
 import ComponentUpdateSkeleton from "./ComponentSkeleton";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import UpdateForm from "./UpdateForm";
 
 export function FetchComponentToUpdate({
   componet_id,

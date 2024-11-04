@@ -8,16 +8,16 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useTemplateUpdate } from "../../pages/hooks/useTemplate";
 import { Edit } from "lucide-react";
-import { FetchTemplate } from "../components/FetchTemplate";
 import InputSkeleton from "@/components/Skeletons/InputSkeleton";
 import Update from "@/components/Update";
-import type { UpdateTemplateProps } from "../../types/UpdateTemplate";
+import { useCampaignUpdate } from "../pages/hooks/useCampaign";
+import { FetchCampaign } from "../components/FetchCampaign";
+import { UpdateCampaignProps } from "../types/UpdateCampaign";
 
-export const UpdateTemplate = ({ template_id }: UpdateTemplateProps) => {
-  const { isPending, mutate } = useTemplateUpdate({
-    invalidate_key: [template_id],
+export const UpdateCampaign = ({ campaign_id }: UpdateCampaignProps) => {
+  const { isPending, mutate } = useCampaignUpdate({
+    invalidate_key: [campaign_id],
   });
 
   const [title, setTitle] = useState("");
@@ -34,7 +34,7 @@ export const UpdateTemplate = ({ template_id }: UpdateTemplateProps) => {
           <DialogTitle>Update template</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <FetchTemplate skeleton={<InputSkeleton />} template_id={template_id}>
+          <FetchCampaign skeleton={<InputSkeleton />} campaign_id={campaign_id}>
             {(data) => (
               <Update
                 fields={[
@@ -47,11 +47,11 @@ export const UpdateTemplate = ({ template_id }: UpdateTemplateProps) => {
                 ]}
               />
             )}
-          </FetchTemplate>
+          </FetchCampaign>
         </div>
         <DialogFooter>
           <Button
-            onClick={() => mutate({ title: title, id: template_id })}
+            onClick={() => mutate({ title: title, id: campaign_id })}
             disabled={isPending}
           >
             Save changes

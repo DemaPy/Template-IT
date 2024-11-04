@@ -3,7 +3,7 @@ type TUpdateComponent = {
 };
 
 type UpdateFormProps = {
-  component: Component;
+  component_id: Component["id"];
 };
 
 type TFetchComponentToUpdate = {

@@ -8,7 +8,7 @@ type FormTitleProps = {
 
 export const FormTitle = ({ title, setTitle }: FormTitleProps) => {
   return (
-    <div className="grid grid-cols-4 items-center gap-4">
+    <div className="flex flex-col gap-2">
       <Label htmlFor="name" className="text-left">
         Name
       </Label>

@@ -1,8 +1,6 @@
 import { ReactElement } from "react";
 
 export type UpdateCampaignProps = {
-  isOpen: boolean;
-  setClose: () => void;
   campaign_id: Campaign["id"];
 };
 

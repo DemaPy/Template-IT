@@ -3,8 +3,8 @@ import { PropsWithChildren } from "react";
 
 type FlexProps = {
   direction: "row" | "col";
-  justify: "between";
-  align: "center";
+  justify: "between" | "normal"
+  align: "center" | "start"
   gap?: "2" | "4" | "6";
 };
 
@@ -21,6 +21,7 @@ const Flex = ({
         ["flex-row"]: direction === "row",
         ["flex-col"]: direction === "col",
         ["justify-between"]: justify === "between",
+        ["justify-normal"]: justify === "normal",
         ["items-center"]: align === "center",
         ["gap-2"]: gap === "2",
         ["gap-4"]: gap === "4",

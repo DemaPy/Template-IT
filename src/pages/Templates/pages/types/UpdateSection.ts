@@ -8,7 +8,7 @@ export type FetchSectionToUpdateProps = {
   template_id: Template["id"];
 };
 
-export type UpdateFormProps = {
-  section: Section;
+export type UpdateDialogProps = {
+  section_id: Section["id"];
   template_id: Template["id"];
 };

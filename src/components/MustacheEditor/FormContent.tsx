@@ -20,56 +20,63 @@ export const FormContent = ({
 }: FormContentProps) => {
   const [placeholdersInfo, setPlaceholdersInfo] = useState({
     isUnique: true,
-    placeholders: [""]
-  })
+    placeholders: [""],
+  });
 
   useEffect(() => {
     if (!placeholdersInfo.isUnique) {
-      toast.error(`Placeholder ${placeholdersInfo.placeholders.join(", ")} already exist.`)
+      toast.error(
+        `Placeholder ${placeholdersInfo.placeholders.join(", ")} already exist.`
+      );
     }
-  }, [placeholdersInfo])
+  }, [placeholdersInfo]);
 
   return (
-    <div className="grid grid-cols-4 items-center gap-4">
-      <div className="col-span-4">
-        <Tabs defaultValue="content">
-          <TabsList>
-            <TabsTrigger value="content">Content</TabsTrigger>
-            <TabsTrigger value="placeholders">Placeholders</TabsTrigger>
-          </TabsList>
-          <TabsContent value="content">
-            <MustacheEditor
-              value={content}
-              setContent={(template) => {
-                const { placeholders: new_placeholders, isAllUnique, repeated_placeholders } = extractFields({ template })
-                setPlaceholdersInfo({
-                  isUnique: isAllUnique,
-                  placeholders: repeated_placeholders
-                })
-                if (isAllUnique) {
-                  setContent(template);
-                  const placeholders_to_set = []
-                  for (const item of new_placeholders) {
-                    const candidate = placeholders.find(plc => plc.title.toLowerCase() === item.title.toLowerCase())
-                    if (!candidate) {
-                      placeholders_to_set.push(item)
-                    }
+    <div className="flex flex-col gap-4">
+      <Tabs defaultValue="content">
+        <TabsList>
+          <TabsTrigger value="content">Content</TabsTrigger>
+          <TabsTrigger value="placeholders">Placeholders</TabsTrigger>
+        </TabsList>
+        <TabsContent value="content">
+          <MustacheEditor
+            value={content}
+            setContent={(template) => {
+              const {
+                placeholders: new_placeholders,
+                isAllUnique,
+                repeated_placeholders,
+              } = extractFields({ template });
+              setPlaceholdersInfo({
+                isUnique: isAllUnique,
+                placeholders: repeated_placeholders,
+              });
+              if (isAllUnique) {
+                setContent(template);
+                const placeholders_to_set = [];
+                for (const item of new_placeholders) {
+                  const candidate = placeholders.find(
+                    (plc) =>
+                      plc.title.toLowerCase() === item.title.toLowerCase()
+                  );
+                  if (!candidate) {
+                    placeholders_to_set.push(item);
                   }
-                  setPlaceholders([...placeholders_to_set, ...placeholders]);
                 }
-              }}
+                setPlaceholders([...placeholders_to_set, ...placeholders]);
+              }
+            }}
+          />
+        </TabsContent>
+        <TabsContent value="placeholders">
+          <div className="flex flex-col gap-2 max-h-[420px] h-full overflow-y-auto">
+            <Placehodlers
+              placeholders={placeholders}
+              setPlaceholders={(data) => setPlaceholders(data)}
             />
-          </TabsContent>
-          <TabsContent value="placeholders">
-            <div className="flex flex-col gap-2 max-h-[420px] h-full overflow-y-auto">
-              <Placehodlers
-                placeholders={placeholders}
-                setPlaceholders={(data) => setPlaceholders(data)}
-              />
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

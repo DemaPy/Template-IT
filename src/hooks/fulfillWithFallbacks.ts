@@ -6,7 +6,8 @@ type Props = {
 };
 
 const fulfillWithFallbacks = ({ sections }: Props) => {
-  let html = "";
+  let raw_html = "";
+  let html = ""
   for (const section of sections) {
     const all_placehodlers = section.placeholders.reduce((acc, item) => {
       acc[item.title] = item.fallback;
@@ -14,14 +15,16 @@ const fulfillWithFallbacks = ({ sections }: Props) => {
     }, {} as Record<string, string>);
     try {
       const template = mustache.render(section.content, all_placehodlers);
-      html += template.replace(/\n/g,'<br>')
+      raw_html += template.replace(/\n/g,'<br>')
+      html += section.content.replace(/\n/g,'<br>')
     } catch (error) {
       console.warn(error)
     }
   }
   return {
-    decoded: decode(html),
-    raw: html,
+    decoded: decode(raw_html),
+    raw: raw_html,
+    html
   };
 };
 

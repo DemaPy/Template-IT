@@ -1,7 +1,7 @@
-import { FetchComponentToUpdate } from "./FetchComponentToUpdate";
+import { UpdateDialog } from "./UpdateDialog";
 
 const UpdateComponent = ({ component_id }: TUpdateComponent) => {
-  return <FetchComponentToUpdate componet_id={component_id} />;
+  return <UpdateDialog component_id={component_id} />;
 };
 
 export default UpdateComponent;

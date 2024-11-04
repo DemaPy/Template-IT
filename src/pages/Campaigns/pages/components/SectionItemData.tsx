@@ -26,10 +26,10 @@ const SectionItemData = ({ placeholder }: Props) => {
     return (
         <div>
             <Heading
-                title={placeholder.title} size='xs'
+                title={placeholder.title} size='xxs'
                 action={{
                     isLoading: !placeholder.data,
-                    icon: isOpen ? <ChevronUpIcon className='w-4 h-4 mr-2' /> : <ChevronDown className='w-4 h-4 mr-2' />,
+                    icon: isOpen ? <ChevronUpIcon className='w-4 h-4' /> : <ChevronDown className='w-4 h-4' />,
                     title: "Show content",
                     onClick: () => setIsOpen(!isOpen)
                 }} />

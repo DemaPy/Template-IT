@@ -13,6 +13,10 @@ const TemplateCardTitle = ({ register, errors }: TemplateCardTitleProps) => {
             value: 4,
             message: "Title too short.",
           },
+          maxLength: {
+            value: 30,
+            message: "Title too long.",
+          }
         })}
         id="title"
         type="text"

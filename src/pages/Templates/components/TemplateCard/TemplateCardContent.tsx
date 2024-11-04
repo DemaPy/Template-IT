@@ -1,18 +1,9 @@
 import { Label } from "@/components/ui/label";
 import { TemplateCardContentProps } from "./types";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TemplateBuilder from "../../pages/components/TemplateBuilder";
 
-
-const TemplateCardContent = ({
-  sections
-}: TemplateCardContentProps) => {
-
+const TemplateCardContent = ({ sections }: TemplateCardContentProps) => {
   return (
     <div className="flex flex-col gap-1">
       <Tabs defaultValue="preview">
@@ -27,7 +18,7 @@ const TemplateCardContent = ({
           <TemplateBuilder sections={sections} />
         </TabsContent>
         <TabsContent value="placeholders">
-          <div dangerouslySetInnerHTML={{ __html: sections.map(item => item.content).join("") }} />
+          <TemplateBuilder sections={sections} isHtml={true} />
         </TabsContent>
       </Tabs>
     </div>
