@@ -13,7 +13,7 @@ const MustacheEditor = ({ value, setContent }: MustacheEditorProps) => {
     }
 
     return (
-        <Textarea defaultValue={value} rows={20} className='resize-none' onChange={handleChange}></Textarea>
+        <Textarea defaultValue={value} rows={12} className='resize-none' onChange={handleChange}></Textarea>
     )
 }
 
