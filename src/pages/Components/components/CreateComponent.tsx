@@ -3,7 +3,6 @@ import {
   CreateContentForm,
   PayloadProps,
 } from "@/components/MustacheEditor/CreateContentForm";
-import ComponentUpdateSkeletonCreate from "./ComponentCreateSkeleton";
 import DOMPurify from "dompurify";
 
 const CreateComponent = () => {
@@ -20,8 +19,6 @@ const CreateComponent = () => {
       content: clearBrs,
     });
   };
-
-  if (isPending) return <ComponentUpdateSkeletonCreate />;
 
   return <CreateContentForm isPending={isPending} onSubmit={handleCreate} />;
 };
