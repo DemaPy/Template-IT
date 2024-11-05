@@ -1,6 +1,7 @@
 import { ReactElement, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useFetchComponents } from "../pages/hooks/useComponent";
+import { ErrorPage } from "@/pages/Error/Error";
 
 export const FetchComponents = ({
   children,
@@ -17,6 +18,7 @@ export const FetchComponents = ({
   }, [isError, error]);
 
   if (isPending) return skeleton;
-  if (isError) return null;
+  if (isError) return <ErrorPage path="/components" message={error?.message}/>;
+
   return <>{children(data.data)}</>;
 };

@@ -6,7 +6,7 @@ type FormTitleProps = {
   setTitle: (title: Section["title"]) => void;
 };
 
-export const FormTitle = ({ title, setTitle }: FormTitleProps) => {
+const FormTitle = ({ title, setTitle }: FormTitleProps) => {
   return (
     <div className="flex flex-col gap-2">
       <Label htmlFor="name" className="text-left">
@@ -22,3 +22,5 @@ export const FormTitle = ({ title, setTitle }: FormTitleProps) => {
     </div>
   );
 };
+
+export default FormTitle

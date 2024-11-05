@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,9 +11,10 @@ import { Button } from "@/components/ui/button";
 import { CreatePlaceholders } from "@/services/types/Placeholder";
 import toast from "react-hot-toast";
 import Mustache from "mustache";
-import { FormTitle } from "./FormTitle";
 import { FormContent } from "./FormContent";
 import { CirclePlus } from "lucide-react";
+
+const FormTitle = lazy(() => import("@/components/MustacheEditor/FormTitle"));
 
 export type PayloadProps = {
   title: string;

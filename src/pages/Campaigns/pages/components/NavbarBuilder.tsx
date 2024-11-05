@@ -38,7 +38,7 @@ const NavbarBuilder = ({ html, campaign, setDevice }: Props) => {
   };
 
   return (
-    <div className="sticky flex gap-2 items-center left-0 top-0 overflow-x-auto mb-2">
+    <div className="sticky flex gap-2 items-center left-0 top-0 overflow-x-auto min-h-14">
       <Button
         onClick={() => setClose()}
         asChild

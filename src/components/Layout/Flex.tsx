@@ -3,16 +3,16 @@ import { PropsWithChildren } from "react";
 
 type FlexProps = {
   direction: "row" | "col";
-  justify: "between" | "normal"
-  align: "center" | "start"
+  justify?: "between" | "normal"
+  align?: "center" | "start" | "base"
   gap?: "2" | "4" | "6";
 };
 
 const Flex = ({
   direction,
   children,
-  justify,
-  align,
+  justify = "normal",
+  align = "base",
   gap = "2",
 }: FlexProps & PropsWithChildren) => {
   return (

@@ -52,7 +52,7 @@ const CampaignTemplateHandler = ({ campaign }: {
   }, [layout, campaign])
 
   return (
-    <div className="flex gap-4 mt-6 lg:flex-row flex-col flex-grow items-stretch h-full">
+    <div className="flex lg:flex-row flex-col flex-grow gap-4">
       <Sidebar
         isLayoutChanged={isLayoutChanged}
         setIsLayoutChanged={setIsLayoutChanged}

@@ -17,7 +17,7 @@ const TemplateBuilder = ({ sections, isHtml = false }: Props) => {
   }
 
   return (
-    <div className="w-full min-h-80 flex flex-col gap-2 relative bg-slate-50 grow rounded-md">
+    <div className="w-full lg:min-h-80 min-h-40 flex flex-col gap-2 relative bg-white grow rounded-md">
       <iframe
         srcDoc={isHtml ? html : decoded}
         className="h-full w-full grow"

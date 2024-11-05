@@ -26,7 +26,7 @@ export const UpdateCampaign = ({ campaign_id }: UpdateCampaignProps) => {
     <Dialog>
       <DialogTrigger asChild>
         <Button size={"sm"}>
-          <Edit className="w-4 h-4" />
+          <Edit className="w-4 h-4 text-yellow-300" />
         </Button>
       </DialogTrigger>
       <DialogContent>

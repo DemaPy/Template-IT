@@ -36,7 +36,7 @@ const TemplateCard = ({ item }: TemplateCardProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="p-4 flex flex-col gap-3 border rounded-md bg-blue-100 border-blue-300"
+      className="lg:p-4 p-2 flex flex-col gap-3 border rounded-md bg-blue-100 border-blue-300"
     >
       <TemplateCardHeader>
         <TemplateCardTitle item={item} register={register} errors={errors} />

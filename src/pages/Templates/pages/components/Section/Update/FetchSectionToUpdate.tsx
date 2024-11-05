@@ -4,6 +4,7 @@ import SectionUpdateSkeleton from "./SectionSkeleton";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import UpdateForm from "./UpdateForm";
+import SectionFetchError from "./SectionFetchError";
 
 export function FetchSectionToUpdate({
   section_id,
@@ -18,7 +19,7 @@ export function FetchSectionToUpdate({
   }, [isError, error]);
 
   if (isPending) return <SectionUpdateSkeleton />;
-  if (isError) return null;
+  if (isError) return <SectionFetchError />;
 
   return <UpdateForm template_id={template_id} data={data.data} />;
 }

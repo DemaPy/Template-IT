@@ -1,6 +1,7 @@
 import { ReactElement, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useFetchCampaigns } from "../pages/hooks/useCampaign";
+import { ErrorPage } from "@/pages/Error/Error";
 
 export const FetchCampaigns = ({
   children,
@@ -17,6 +18,7 @@ export const FetchCampaigns = ({
   }, [isError, error]);
 
   if (isPending) return skeleton;
-  if (isError) return null;
+  if (isError)
+    return <ErrorPage path="/" message={error?.message} />;
   return <>{children(data.data)}</>;
 };

@@ -1,6 +1,7 @@
 import { ReactElement, useEffect } from "react";
 import { useFetchTemplates } from "../../pages/hooks/useTemplate";
 import toast from "react-hot-toast";
+import { ErrorPage } from "@/pages/Error/Error";
 
 export const FetchTemplates = ({
   children,
@@ -17,7 +18,7 @@ export const FetchTemplates = ({
   }, [isError, error]);
 
   if (isPending) return skeleton;
-  if (isError) return null;
+  if (isError) return <ErrorPage path="/" message={error?.message} />
 
   return <>{children(data.data)}</>;
 };

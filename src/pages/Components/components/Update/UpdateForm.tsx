@@ -1,12 +1,13 @@
-import { FormTitle } from "@/components/MustacheEditor/FormTitle";
 import { FormContent } from "@/components/MustacheEditor/FormContent";
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import Mustache from "mustache";
 import { useComponentUpdate } from "../../pages/hooks/useComponent";
 import DOMPurify from "dompurify";
 import toast from "react-hot-toast";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+
+const FormTitle = lazy(() => import("@/components/MustacheEditor/FormTitle"));
 
 type Props = {
   component: Component;

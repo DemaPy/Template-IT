@@ -1,53 +1,50 @@
-import PageContainer from "@/components/PageContainer"
-import Title from "@/components/Title"
-import { Button } from "@/components/ui/button"
-import { AuthError } from "@/services/Errors/AuthError"
-import { useEffect } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import PageContainer from "@/components/PageContainer";
+import Title from "@/components/Title";
+import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
-type Props = {
-    message: string
-    path: string
-    error: Error | null
-}
+type ErrorPageProps = {
+  message: string | null;
+  path: string;
+};
 
 class ErrorItem {
-    timestamp: number
-    token: string
-    message: string
+  timestamp: number;
+  token: string;
+  message: string;
 
-    constructor({ message }: { message: string }) {
-        this.timestamp = Date.now()
-        this.token = localStorage.getItem("token") || "Token not found"
-        this.message = message
+  constructor({ message }: { message: string }) {
+    this.timestamp = Date.now();
+    this.token = localStorage.getItem("token") || "Token not found";
+    this.message = message;
+  }
+}
+
+export const ErrorPage = ({ message, path }: ErrorPageProps) => {
+  useEffect(() => {
+    try {
+      toast.error(message || "Something went wrong.");
+      const errors = JSON.parse(localStorage.getItem("errors") || "[]");
+      const err = new ErrorItem({
+        message: message || "Something went wrong.",
+      });
+      localStorage.setItem("errors", JSON.stringify([...errors, err]));
+    } catch (error) {
+      const err = new ErrorItem({
+        message: localStorage.getItem("errors") || "Error storage empty",
+      });
+      localStorage.setItem("critical-errors", JSON.stringify(err));
     }
-}
+  }, []);
 
-export const ErrorPage = ({ error, message, path }: Props) => {
-    const navigate = useNavigate()
-    useEffect(() => {
-        try {
-            toast.error(message);
-            const errors = JSON.parse(localStorage.getItem("errors") || "[]")
-            const err = new ErrorItem({ message: message })
-            localStorage.setItem("errors", JSON.stringify([...errors, err]))
-            if (error && error instanceof AuthError) {
-                navigate("/login")
-            }
-        } catch (error) {
-            const err = new ErrorItem({ message: localStorage.getItem("errors") || "Error storage empty" })
-            localStorage.setItem("critical-errors", JSON.stringify(err))
-            localStorage.clear()
-        }
-    }, [])
-
-    return (
-        <PageContainer>
-            <Title title={message} />
-            <Button variant={"outline"} asChild>
-                <Link to={path}>Go to {path}</Link>
-            </Button>
-        </PageContainer>
-    )
-}
+  return (
+    <PageContainer>
+      <Title title={message} />
+      <Button variant={"outline"} asChild>
+        <Link to={path}>Go to {path.replace("/", "") === "" ? "Return to home" : "Go to" + path.replace("/", "")}</Link>
+      </Button>
+    </PageContainer>
+  );
+};

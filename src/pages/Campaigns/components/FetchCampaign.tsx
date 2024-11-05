@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import type { FetchCampaignProps } from "../types/FetchCampaign";
 import { useFetchCampaign } from "../pages/hooks/useCampaign";
+import { ErrorPage } from "@/pages/Error/Error";
 
 export function FetchCampaign({
   children,
@@ -16,7 +17,7 @@ export function FetchCampaign({
   }, [isError, error]);
 
   if (isPending) return skeleton;
-  if (isError) return null;
+  if (isError) return <ErrorPage path="/campaigns" message={error?.message}/>
 
   return <>{children(data.data)}</>;
 }

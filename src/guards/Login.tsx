@@ -1,22 +1,21 @@
-import { useAuth } from '@/store/login'
-import { PropsWithChildren, useEffect } from 'react'
+import { useAuth } from "@/store/login";
+import { PropsWithChildren, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LoginGuard = ({ children }: PropsWithChildren) => {
-    const login = useAuth(store => store.setIsLoggedIn)
+  const login = useAuth((store) => store.setIsLoggedIn);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const token = localStorage.getItem("token")
-        if (token) {
-            login()
-        }
-    }, [])
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      login();
+    } else {
+      navigate("/login");
+    }
+  }, []);
 
+  return <>{children}</>;
+};
 
-    return (
-        <div className="container max-w-screen-xl mx-auto md:px-6 px-2 pt-16 md:pt-24 min-h-screen flex flex-col items-stretch h-full">
-            {children}
-        </div>
-    )
-}
-
-export default LoginGuard
+export default LoginGuard;

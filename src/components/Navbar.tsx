@@ -12,8 +12,11 @@ import {
 import { Menu } from "lucide-react";
 import Flex from "./Layout/Flex";
 import Title from "./Title";
+import { useState } from "react";
 
 export const Navbar = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const navigate = useNavigate();
   const { isLogged, setIsLoggedOut } = useAuth();
 
@@ -26,7 +29,7 @@ export const Navbar = () => {
   return (
     <>
       {isLogged && (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button variant={"default"} size={"sm"}>
               <Menu className="w-4 h-4" /> Menu
@@ -38,7 +41,9 @@ export const Navbar = () => {
               <Title size="md" title="Navigation" />
               <ol className="flex flex-col gap-2">
                 {ROUTES.map((item) => (
-                  <NavItem key={item.path} route={item} />
+                  <li key={item.path} onClick={() => setIsOpen(false)}>
+                    <NavItem route={item} />
+                  </li>
                 ))}
               </ol>
             </Flex>

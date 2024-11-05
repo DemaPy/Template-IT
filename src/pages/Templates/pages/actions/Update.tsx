@@ -1,63 +1,23 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { useState } from "react";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Suspense, lazy } from "react";
 import { Button } from "@/components/ui/button";
-import { useTemplateUpdate } from "../../pages/hooks/useTemplate";
 import { Edit } from "lucide-react";
-import { FetchTemplate } from "../components/FetchTemplate";
-import InputSkeleton from "@/components/Skeletons/InputSkeleton";
-import Update from "@/components/Update";
 import type { UpdateTemplateProps } from "../../types/UpdateTemplate";
+import InputSkeleton from "@/components/Skeletons/InputSkeleton";
+
+const LazyUpdateContent = lazy(() => import("./LazyUpdateContent"));
 
 export const UpdateTemplate = ({ template_id }: UpdateTemplateProps) => {
-  const { isPending, mutate } = useTemplateUpdate({
-    invalidate_key: [template_id],
-  });
-
-  const [title, setTitle] = useState("");
-
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button size={"sm"}>
-          <Edit className="w-4 h-4" />
+          <Edit className="w-4 h-4 text-yellow-300" />
         </Button>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Update template</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <FetchTemplate skeleton={<InputSkeleton />} template_id={template_id}>
-            {(data) => (
-              <Update
-                fields={[
-                  {
-                    title: "Title",
-                    defaultValue: data.title,
-                    name: "name",
-                    onChange: (title) => setTitle(title),
-                  },
-                ]}
-              />
-            )}
-          </FetchTemplate>
-        </div>
-        <DialogFooter>
-          <Button
-            onClick={() => mutate({ title: title, id: template_id })}
-            disabled={isPending}
-          >
-            Save changes
-          </Button>
-        </DialogFooter>
-      </DialogContent>
+      <Suspense fallback={<InputSkeleton />}>
+        <LazyUpdateContent template_id={template_id} />
+      </Suspense>
     </Dialog>
   );
 };

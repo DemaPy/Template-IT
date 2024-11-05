@@ -7,7 +7,10 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
-import { FetchComponentToUpdate } from "./FetchComponentToUpdate";
+import { FetchComponent } from "../FetchComponent";
+import ComponentUpdateSkeleton from "./ComponentSkeleton";
+import UpdateForm from "./UpdateForm";
+import ComponentFetchError from "./ComponentFetchError";
 
 export const UpdateDialog = ({ component_id }: UpdateFormProps) => {
   return (
@@ -21,7 +24,15 @@ export const UpdateDialog = ({ component_id }: UpdateFormProps) => {
         <DialogHeader>
           <DialogTitle>Update</DialogTitle>
         </DialogHeader>
-        <FetchComponentToUpdate componet_id={component_id} />
+        <FetchComponent
+          component_id={component_id}
+          errorSkeleton={<ComponentFetchError />}
+          loadingSkeleton={<ComponentUpdateSkeleton />}
+        >
+          {(data) => {
+            return <UpdateForm component={data} />;
+          }}
+        </FetchComponent>
       </DialogContent>
     </Dialog>
   );

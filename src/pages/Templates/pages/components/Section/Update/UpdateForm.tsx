@@ -1,12 +1,13 @@
-import { FormTitle } from "@/components/MustacheEditor/FormTitle";
 import { FormContent } from "@/components/MustacheEditor/FormContent";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useUpdateSection } from "../../../hooks/useSection";
 import Mustache from "mustache";
 import DOMPurify from "dompurify";
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+
+const FormTitle = lazy(() => import("@/components/MustacheEditor/FormTitle"));
 
 type UpdateFormProps = {
   template_id: Template["id"];

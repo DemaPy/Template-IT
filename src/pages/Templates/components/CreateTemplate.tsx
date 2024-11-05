@@ -7,10 +7,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useCreateTemplate } from "../pages/hooks/useTemplate";
 import { CirclePlus } from "lucide-react";
-import { FormTitle } from "@/components/MustacheEditor/FormTitle";
+import { lazy } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const FormTitle = lazy(() => import("@/components/MustacheEditor/FormTitle"));
 
 const CreateTemplate = () => {
   const [title, setTitle] = useState("");
@@ -33,7 +36,9 @@ const CreateTemplate = () => {
           <DialogTitle>Create template</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <FormTitle setTitle={(title) => setTitle(title)} title={title} />
+          <Suspense fallback={<Skeleton className="h-[40px] w-full" />}>
+            <FormTitle setTitle={(title) => setTitle(title)} title={title} />
+          </Suspense>
         </div>
         <DialogFooter>
           <Button disabled={isPending} onClick={handleCreate}>

@@ -80,7 +80,7 @@ const CampaignBuilder = ({ layout, slug, sortedSections, campaign }: Props) => {
   }
 
   return (
-    <div className='w-full overflow-y-auto'>
+    <div className='w-full overflow-y-auto flex flex-col gap-2'>
       <TransformWrapper
         smooth={true}
         minScale={0.7}
