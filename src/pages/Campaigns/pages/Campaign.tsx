@@ -4,10 +4,10 @@ import CampaignTemplateHandler from "./components/CampaignTemplateHandler";
 import { usePreview } from "@/store/preview";
 import PreviewPage from "./components/PreviewPage";
 import CampaignSkeleton from "../components/CampaignSkeleton";
-import { FetchCampaign } from "../components/FetchCampaign";
 import Flex from "@/components/Layout/Flex";
 import Title from "@/components/Title";
 import { Actions } from "../Actions/Actions";
+import { FetchCampaign } from "../components/Update/FetchCampaign";
 
 const Campaign = () => {
   const isPreviewOpen = usePreview((store) => store.isOpen);
