@@ -12,8 +12,8 @@ import { Edit } from "lucide-react";
 import InputSkeleton from "@/components/Skeletons/InputSkeleton";
 import Update from "@/components/Update";
 import { useCampaignUpdate } from "../pages/hooks/useCampaign";
-import { FetchCampaign } from "../components/FetchCampaign";
 import { UpdateCampaignProps } from "../types/UpdateCampaign";
+import { FetchCampaign } from "../components/Update/FetchCampaign";
 
 export const UpdateCampaign = ({ campaign_id }: UpdateCampaignProps) => {
   const { isPending, mutate } = useCampaignUpdate({

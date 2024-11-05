@@ -43,7 +43,7 @@ export const ErrorPage = ({ message, path }: ErrorPageProps) => {
     <PageContainer>
       <Title title={message} />
       <Button variant={"outline"} asChild>
-        <Link to={path}>Go to {path.replace("/", "") === "" ? "Return to home" : "Go to" + path.replace("/", "")}</Link>
+        <Link to={path}>{path.replace("/", "") === "" ? "Return to home" : "Go to" + path.replace("/", "")}</Link>
       </Button>
     </PageContainer>
   );

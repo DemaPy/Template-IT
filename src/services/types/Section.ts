@@ -2,7 +2,7 @@ import { AccessError } from "../Errors/AccessError";
 import { AuthError } from "../Errors/AuthError";
 import { ValidationError } from "../Errors/ValidationError";
 
-export type UpdateSection = {
+export type UpdateSectionProps = {
   id: Section["id"];
   title: Section["title"];
   content: Section["content"];

@@ -1,11 +1,11 @@
 import { BASE_URL } from "@/config";
 import { UpdatePlaceholder } from "./types/Placeholder";
-import {
+import type {
   CreateSection,
   CreateSectionFromComponent,
   DeleteSection,
   DuplicateSection,
-  UpdateSection,
+  UpdateSectionProps,
 } from "./types/Section";
 import { handleResponseDB } from "@/utils/handleResponse";
 
@@ -93,7 +93,7 @@ export class SectionServiceDB {
     }
   }
 
-  static async update(section: UpdateSection) {
+  static async update(section: UpdateSectionProps) {
     try {
       const response = await fetch(BASE_URL + `/sections/`, {
         method: "PATCH",

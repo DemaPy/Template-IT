@@ -6,6 +6,7 @@ import Mustache from "mustache";
 import DOMPurify from "dompurify";
 import { lazy, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useDialogContext } from "../Actions/Update";
 
 const FormTitle = lazy(() => import("@/components/MustacheEditor/FormTitle"));
 
@@ -16,6 +17,7 @@ type UpdateFormProps = {
 
 const UpdateForm = ({ template_id, data }: UpdateFormProps) => {
   const [err, setErr] = useState("");
+  const {setClose} = useDialogContext()
 
   const { isPending, mutate, isError, error } = useUpdateSection({
     invalidate_key: template_id,
@@ -90,6 +92,7 @@ const UpdateForm = ({ template_id, data }: UpdateFormProps) => {
       }),
       id: data.id,
     });
+    setClose()
   };
 
   return (

@@ -5,7 +5,7 @@ import {
   CreateSectionFromComponent,
   DeleteSection,
   DuplicateSection,
-  UpdateSection,
+  UpdateSectionProps,
 } from "@/services/types/Section";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -56,9 +56,9 @@ export function useUpdateSection({
 }) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (section: UpdateSection) => {
+    mutationFn: (section: UpdateSectionProps) => {
       for (const key in section) {
-        const value = section[key as keyof UpdateSection];
+        const value = section[key as keyof UpdateSectionProps];
         if (Array.isArray(value)) continue;
         isValid({ key, value });
       }

@@ -1,5 +1,5 @@
 import { useFetchSection } from "../../../hooks/useSection";
-import type { FetchSectionToUpdateProps } from "../../../types/UpdateSection";
+import type { FetchSectionToUpdateProps } from "../../../types/UpdateSectionTypes";
 import SectionUpdateSkeleton from "./SectionSkeleton";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
